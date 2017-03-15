@@ -1,47 +1,29 @@
 package game.cli;
 import java.util.*;
-
-import game.logic.Game;
+import game.logic.*;
 
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// Start a new game
 		Game game = new Game();
 		game.start();
 
-		while(game.getEnded() != true){
-			String typed;
+		// Start user input scanner
+		Scanner user_input = new Scanner( System.in );
+		String typed;	
+		
+		//	Game Loop
+		while(game.getState() != GameState.ended){
 			// Ask for user input
-			// Start scanner
-			Scanner user_input = new Scanner( System.in );
-			//	Ask user inputs
 			typed = user_input.next();
-
 			//  Update game
 			game.updateGame(typed);
 			//	Print game
 			game.printGame();
-
-			//	close scanner
-			user_input.close();
 		}
-	}
 
-	public String askUserInput(){
-		//		Start scanner
-		Scanner user_input = new Scanner( System.in );
-		String typed;
-
-		//		Ask user inputs
-		typed = user_input.next();
-
-
-
-		//	End game
+		//		close scanner
 		user_input.close();
-
-		return typed;
 	}
-
 }

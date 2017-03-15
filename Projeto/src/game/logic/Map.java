@@ -1,10 +1,9 @@
 package game.logic;
 
 public class Map {
-	int numberCellsForLine;
-	int numberLines;
-	
-	Cell[][] cells;
+	private int numberCellsForLine;
+	private int numberLines;
+	private Cell[][] cells;
 	
 	public Map(int numberCellsForLine, int numberLines){
 		//	Initialize variables
@@ -14,7 +13,7 @@ public class Map {
 	}
 	
 	public void addHero(Hero hero){
-		this.cells[hero.y][hero.x] = hero;
+		this.cells[hero.getY()][hero.getX()] = hero;
 	}
 	
 	public void addWall(int x, int y){
@@ -22,14 +21,14 @@ public class Map {
 	}
 	
 	/// Adds a lever to map
-	public void addLever(int x,int y){
+	public void addLever(Lever lever){
 		//Create lever
-		this.cells[y][x] = new Lever();
+		this.cells[lever.getY()][lever.getX()] = lever;
 	}
 	
 	///	Adds a door to map
 	public void addDoor(int x, int y, boolean isExit){
-		this.cells[y][x] = new Door(isExit);
+		this.cells[y][x] = new Door(isExit, x,y);
 	}
 	
 	public void addGuard(Guard guard){
@@ -50,5 +49,70 @@ public class Map {
 				}
 			}
 		}
+	}
+	
+	public String toString(){
+		String string = "";
+		int i, j;
+		for(i = 0; i < numberLines; i++){
+			String line = "|";
+			for(j = 0; j < numberCellsForLine; j++){
+				if (cells[i][j] != null){
+					//	Has something in the cell
+					Cell cell = cells[i][j];
+					//	Add to line
+					line += cell.getLetter();
+					line += "|";
+				} else {
+					//	Empty cell
+					line += " |";
+				}
+			}
+			//	Add line
+			string += line + "\n";
+		}
+		return string;
+	}
+
+	/**
+	 * @return the numberCellsForLine
+	 */
+	public int getNumberCellsForLine() {
+		return numberCellsForLine;
+	}
+
+	/**
+	 * @param numberCellsForLine the numberCellsForLine to set
+	 */
+	public void setNumberCellsForLine(int numberCellsForLine) {
+		this.numberCellsForLine = numberCellsForLine;
+	}
+
+	/**
+	 * @return the numberLines
+	 */
+	public int getNumberLines() {
+		return numberLines;
+	}
+
+	/**
+	 * @param numberLines the numberLines to set
+	 */
+	public void setNumberLines(int numberLines) {
+		this.numberLines = numberLines;
+	}
+
+	/**
+	 * @return the cells
+	 */
+	public Cell[][] getCells() {
+		return cells;
+	}
+
+	/**
+	 * @param cells the cells to set
+	 */
+	public void setCells(Cell[][] cells) {
+		this.cells = cells;
 	}
 }

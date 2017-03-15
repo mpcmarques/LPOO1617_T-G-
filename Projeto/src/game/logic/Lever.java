@@ -3,8 +3,8 @@ public class Lever extends Cell {
 	private boolean pressed;
 
 	///	Constructor
-	Lever() {
-		super("k");
+	Lever(int x, int y) {
+		super("k", x, y);
 		setPressed(false);
 		// TODO Auto-generated constructor stub
 	}

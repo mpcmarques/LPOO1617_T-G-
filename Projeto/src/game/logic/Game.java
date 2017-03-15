@@ -1,37 +1,38 @@
 package game.logic;
 
-public class Game {
-	static Map map = new Map(10,10);
-	static Hero hero = new Hero(1,1);
-	static Guard guard = new Guard(8,1);
-	static int guardMovesCounter = 0;
-	private boolean ended;
+public class Game extends Object {
+	private Map map;
+	private Hero hero;
+	private Guard guard;
+	private int guardMovesCounter;
+	private GameState state;
+	private Lever lever;
 
 	public Game(){
-		this.ended = false;
-	}
-
-	public boolean getEnded(){
-		return this.ended;
+		setState(GameState.running);
+		map = new Map(10,10);
+		hero = new Hero(1,1);
+		guard = new Guard(8,1);
+		lever = new Lever(6,8);
+		guardMovesCounter = 0;
 	}
 
 	/// Starts the game
 	public void start(){
-		//	Add hero to kmap
-		map.addHero(hero);
-		//	Add walls to map
+		//	 Create map layout
+		//		Add walls to map
 		createWalls();
 		//	Add  doors to map
 		createDoors();
+		//	Add hero to map
+		map.addHero(hero);
 		//	Add lever to map
-		map.addLever(6, 8);
+		map.addLever(lever);
 		//	Add guard to map
 		map.addGuard(guard);
 	}
 
 	public void updateGame(String typed){
-		//	Move guard
-		moveGuard();
 
 		// Checked typed key
 		switch (typed) {
@@ -49,27 +50,36 @@ public class Game {
 			break;
 		case "0":
 			//	End game
-			ended = true;
+			setState(GameState.ended);
+			break;
 		default:
 			break;
+		}
+		//		Move guard
+		moveGuard();
+
+		//		Check if moving to a guard
+		if(isGuardNear() == true){
+			// END GAME, GAME Over
+			System.out.println("Game Over!");
 		}
 	}
 
 	///	Moves hero
-	public static void moveHero(int x, int y){
+	public void moveHero(int x, int y){
 		//	BEFORE MOVING
 		// Check if out of bounds
-		if (hero.x + x >= 0 
-				&& hero.x + x <= map.numberCellsForLine 
-				&& hero.y + y >= 0 
-				&& hero.y + y <= map.numberLines){
+		if (hero.getX() + x >= 0 
+				&& hero.getX() + x <= map.getNumberCellsForLine()
+				&& hero.getY() + y >= 0 
+				&& hero.getY() + y <= map.getNumberLines()){
 			//	Check if moving to a wall
-			if(map.cells[hero.y+y][hero.x+x] instanceof Wall){
+			if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Wall){
 				return;
 			}
 			//	Check if moving to door
-			if(map.cells[hero.y+y][hero.x+x] instanceof Door){
-				Door door = (Door) map.cells[hero.y+y][hero.x+x];
+			if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Door){
+				Door door = (Door) map.getCells()[hero.getY()+y][hero.getX()+x];
 				// Check if door is closed
 				if (door.isOpen() == false){
 					return;
@@ -84,7 +94,7 @@ public class Game {
 			}
 
 			//	Check if moving to a lever
-			if(map.cells[hero.y+y][hero.x+x] instanceof Lever){
+			if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Lever){
 				System.out.println("Lever pressed!");
 				map.openAllDoors();
 			}
@@ -92,22 +102,16 @@ public class Game {
 			// MOVE
 
 			// Clean previous cell
-			map.cells[hero.y][hero.x] = null;
+			map.getCells()[hero.getY()][hero.getX()] = null;
 			// Update hero y;
-			hero.x += x;
-			hero.y += y;
+			hero.setX(hero.getX() + x);
+			hero.setY(hero.getY() + y);;
 			//	Show in next cell
-			map.cells[hero.y][hero.x] = hero;
-
-			//	Check if moving to a guard
-			if(guardIsNear() == true){
-				// END GAME, GAME Over
-				System.out.println("Game Over!");
-			}
+			map.getCells()[hero.getY()][hero.getX()] = hero;
 		}
 	}
 
-	static public void moveGuard(){
+	public void moveGuard(){
 		//		BEFORE MOVING
 		// Check if out of bounds
 		int x = 0,y = 0;
@@ -146,12 +150,12 @@ public class Game {
 		// MOVE
 
 		// Clean previous cell
-		map.cells[guard.getY()][guard.getX()] = null;
+		map.getCells()[guard.getY()][guard.getX()] = null;
 		// Update guard position
 		guard.setX(guard.getX()+x);
 		guard.setY(guard.getY()+y);
 		//	Show in next cell
-		map.cells[guard.getY()][guard.getX()] = guard;
+		map.getCells()[guard.getY()][guard.getX()] = guard;
 
 		// Check if original cell
 		if(guard.getMoveCounter() == 24){
@@ -165,32 +169,28 @@ public class Game {
 	/** 
 	 * Check if the hero is on a lever
 	 * */
-	static boolean isOnLever(){
-		if (map.cells[hero.y][hero.x] instanceof Lever){
+	public boolean isOnLever(){
+		if (map.getCells()[hero.getY()][hero.getX()] instanceof Lever){
 			return true;
 		}
 		return false;
 	}
 
-	static boolean guardIsNear(){
-		// Check if the guard is above
-		if (map.cells[hero.y - 1][hero.x] != null 
-				&& map.cells[hero.y - 1][hero.x] instanceof Guard){
+	public boolean isGuardNear(){
+		// Check if the guard is above hero
+		if (guard.getX() == hero.getX() && guard.getY() == hero.getY()-1){
 			return true;
 		}
 		// Check if the guard is down
-		if (map.cells[hero.y + 1][hero.x] != null 
-				&& map.cells[hero.y + 1][hero.x] instanceof Guard){
+		if (guard.getX() == hero.getX() && guard.getY() == hero.getY()+1){
 			return true;
 		}
 		// Check if the guard is on the right
-		if (map.cells[hero.y][hero.x + 1] != null 
-				&& map.cells[hero.y][hero.x + 1] instanceof Guard){
+		if (guard.getX() == hero.getX()+1 && guard.getY() == hero.getY()){
 			return true;
 		}
 		//	Check if the guard is on the left
-		if (map.cells[hero.y][hero.x - 1] != null 
-				&& map.cells[hero.y][hero.x - 1] instanceof Guard){
+		if (guard.getX() == hero.getX()+1 && guard.getY() == hero.getY()){
 			return true;
 		}
 
@@ -275,24 +275,84 @@ public class Game {
 	}
 
 	public void printGame(){
-		int i, j;
-		for(i = 0; i < map.numberLines; i++){
-			String line = "|";
-			for(j = 0; j < map.numberCellsForLine; j++){
-				if (map.cells[i][j] != null){
-					//	Has something in the cell
-					Cell cell = map.cells[i][j];
-					//	Add to line
-					line += cell.letter;
-					line += "|";
-				} else {
-					//	Empty cell
-					line += " |";
-				}
-			}
-			//	Print line
-			System.out.println(line);
-		}
-		System.out.println("");
+		System.out.println(map);
+	}
+
+	//	MARK: Getters and Setters
+	/**
+	 * @return the map
+	 */
+	public Map getMap() {
+		return map;
+	}
+	/**
+	 * @param map the map to set
+	 */
+	public void setMap(Map map) {
+		this.map = map;
+	}
+	/**
+	 * @return the hero
+	 */
+	public Hero getHero() {
+		return hero;
+	}
+	/**
+	 * @param hero the hero to set
+	 */
+	public void setHero(Hero hero) {
+		this.hero = hero;
+	}
+	/**
+	 * @return the guard
+	 */
+	public Guard getGuard() {
+		return guard;
+	}
+	/**
+	 * @param guard the guard to set
+	 */
+	public void setGuard(Guard guard) {
+		this.guard = guard;
+	}
+	/**
+	 * @return the guardMovesCounter
+	 */
+	public int getGuardMovesCounter() {
+		return guardMovesCounter;
+	}
+	/**
+	 * @param guardMovesCounter the guardMovesCounter to set
+	 */
+	public void setGuardMovesCounter(int guardMovesCounter) {
+		this.guardMovesCounter = guardMovesCounter;
+	}
+
+	/**
+	 * @return the state
+	 */
+	public GameState getState() {
+		return state;
+	}
+
+	/**
+	 * @param state the state to set
+	 */
+	public void setState(GameState state) {
+		this.state = state;
+	}
+
+	/**
+	 * @return the lever
+	 */
+	public Lever getLever() {
+		return lever;
+	}
+
+	/**
+	 * @param lever the lever to set
+	 */
+	public void setLever(Lever lever) {
+		this.lever = lever;
 	}
 }

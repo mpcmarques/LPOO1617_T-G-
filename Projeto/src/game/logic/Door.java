@@ -4,8 +4,8 @@ public class Door extends Cell {
 	private boolean isExit;
 
 	///	Constructor
-	Door(boolean isExit) {
-		super("I");
+	Door(boolean isExit, int x, int y) {
+		super("I", x, y);
 		setOpen(false);
 		setExit(isExit);
 	}
@@ -21,7 +21,7 @@ public class Door extends Cell {
 	//	Opens the door
 	public void openDoor(){
 		this.setOpen(true);
-		this.letter = "S";
+		this.setLetter("S");
 	}
 
 	public boolean isExit() {
