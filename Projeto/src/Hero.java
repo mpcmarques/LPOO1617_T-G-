@@ -10,3 +10,4 @@ public class Hero extends Cell {
 		this.y = y;
 	}
 }
+

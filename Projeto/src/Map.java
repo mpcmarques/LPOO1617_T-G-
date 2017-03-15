@@ -30,4 +30,8 @@ public class Map {
 	public void addDoor(int x, int y){
 		this.cells[y][x] = new Door();
 	}
+	
+	public void addGuard(Guard guard){
+		this.cells[guard.y][guard.x] = guard;
+	}
 }
