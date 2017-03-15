@@ -4,6 +4,8 @@ public class Game {
 	static Map map = new Map(10,10);
 	static Hero hero = new Hero(1,1);
 	static Guard guard = new Guard(8,1);
+	static int guardMovesCounter = 0;
+	static boolean ended = false;
 
 	/// Starts the game
 	void start(){
@@ -21,8 +23,7 @@ public class Game {
 		//	Start scanner
 		Scanner user_input = new Scanner( System.in );
 		String typed;
-		//	
-		boolean ended = false;
+
 		//	Game loop
 		while(!ended){
 			printGame();
@@ -58,6 +59,7 @@ public class Game {
 
 	///	Moves hero
 	public static void moveHero(int x, int y){
+		//	BEFORE MOVING
 		// Check if out of bounds
 		if (hero.x + x >= 0 
 				&& hero.x + x <= map.numberCellsForLine 
@@ -67,15 +69,29 @@ public class Game {
 			if(map.cells[hero.y+y][hero.x+x] instanceof Wall){
 				return;
 			}
-			//	Check if moving to a closed door
+			//	Check if moving to door
 			if(map.cells[hero.y+y][hero.x+x] instanceof Door){
 				Door door = (Door) map.cells[hero.y+y][hero.x+x];
 				// Check if door is closed
-				if (door.isOpen == false){
+				if (door.isOpen() == false){
 					return;
+				} else {
+					//	If it is open and exit, finish map
+					if(door.isExit()){
+						System.out.println("Game ended!");
+						ended = true;
+						return;
+					}
 				}
 			}
-			// Move
+
+			//	Check if moving to a lever
+			if(map.cells[hero.y+y][hero.x+x] instanceof Lever){
+				System.out.println("Lever pressed!");
+				map.openAllDoors();
+			}
+
+			// MOVE
 
 			// Clean previous cell
 			map.cells[hero.y][hero.x] = null;
@@ -89,8 +105,75 @@ public class Game {
 			if(guardIsNear() == true){
 				// END GAME, GAME Over
 				System.out.println("Game Over!");
+			} else {
+				moveGuard();
 			}
 		}
+	}
+
+	static public void moveGuard(){
+		//		BEFORE MOVING
+		// Check if out of bounds
+		int x = 0,y = 0;
+
+		if(guard.getMoveCounter() == 0){
+			// MOVE LEFT
+			y = 0;
+			x = -1;
+		}
+		else if (guard.getMoveCounter() < 5){
+			// MOVE DOWN
+			y = +1;
+			x = 0;
+		} 
+		else if (guard.getMoveCounter() < 11){
+			// MOVE LEFT
+			y = 0;
+			x = -1;
+		}
+		else if (guard.getMoveCounter() == 11){
+			// MOVE DOWN
+			y = 1;
+			x = 0;
+		}
+		else if (guard.getMoveCounter() < 19){
+			// MOVE RIGHT
+			y = 0;
+			x = 1;
+		}
+		else if(guard.getMoveCounter() < 24) {
+			//	MOVE UP
+			y = -1;
+			x = 0;
+		}
+
+		// MOVE
+
+		// Clean previous cell
+		map.cells[guard.getY()][guard.getX()] = null;
+		// Update guard position
+		guard.setX(guard.getX()+x);
+		guard.setY(guard.getY()+y);
+		//	Show in next cell
+		map.cells[guard.getY()][guard.getX()] = guard;
+
+		// Check if original cell
+		if(guard.getMoveCounter() == 24){
+			//	RESET GUARD COUNTER
+			guard.setMoveCounter(0);
+		} else {
+			guard.setMoveCounter(guard.getMoveCounter() + 1);
+		}
+	}
+
+	/** 
+	 * Check if the hero is on a lever
+	 * */
+	static boolean isOnLever(){
+		if (map.cells[hero.y][hero.x] instanceof Lever){
+			return true;
+		}
+		return false;
 	}
 
 	static boolean guardIsNear(){
@@ -114,19 +197,19 @@ public class Game {
 				&& map.cells[hero.y][hero.x - 1] instanceof Guard){
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	///	Create doors
 	void createDoors(){
-		map.addDoor(4, 1);
-		map.addDoor(4, 3);
-		map.addDoor(2, 3);
-		map.addDoor(0, 5);
-		map.addDoor(0, 6);
-		map.addDoor(2, 8);
-		map.addDoor(4, 8);
+		map.addDoor(4, 1, false);
+		map.addDoor(4, 3, false);
+		map.addDoor(2, 3, false);
+		map.addDoor(0, 5, true);
+		map.addDoor(0, 6, true);
+		map.addDoor(2, 8, false);
+		map.addDoor(4, 8, false);
 	}
 
 	/// Adds walls

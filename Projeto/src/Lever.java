@@ -1,10 +1,18 @@
 public class Lever extends Cell {
-	boolean pressed;
+	private boolean pressed;
 
 	///	Constructor
 	Lever() {
 		super("k");
-		pressed = false;
+		setPressed(false);
 		// TODO Auto-generated constructor stub
+	}
+
+	public boolean isPressed() {
+		return pressed;
+	}
+
+	public void setPressed(boolean pressed) {
+		this.pressed = pressed;
 	}
 }
