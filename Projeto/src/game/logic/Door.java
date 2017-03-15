@@ -1,3 +1,4 @@
+package game.logic;
 public class Door extends Cell {
 	private boolean isOpen;
 	private boolean isExit;

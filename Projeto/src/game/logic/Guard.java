@@ -1,3 +1,4 @@
+package game.logic;
 public class Guard extends Cell {
 	private int x;
 	private int y;

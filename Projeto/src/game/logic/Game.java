@@ -1,14 +1,22 @@
-import java.util.Scanner;
+package game.logic;
 
 public class Game {
 	static Map map = new Map(10,10);
 	static Hero hero = new Hero(1,1);
 	static Guard guard = new Guard(8,1);
 	static int guardMovesCounter = 0;
-	static boolean ended = false;
+	private boolean ended;
+
+	public Game(){
+		this.ended = false;
+	}
+
+	public boolean getEnded(){
+		return this.ended;
+	}
 
 	/// Starts the game
-	void start(){
+	public void start(){
 		//	Add hero to kmap
 		map.addHero(hero);
 		//	Add walls to map
@@ -19,42 +27,32 @@ public class Game {
 		map.addLever(6, 8);
 		//	Add guard to map
 		map.addGuard(guard);
+	}
 
-		//	Start scanner
-		Scanner user_input = new Scanner( System.in );
-		String typed;
+	public void updateGame(String typed){
+		//	Move guard
+		moveGuard();
 
-		//	Game loop
-		while(!ended){
-			printGame();
-
-			//	Ask user inputs
-			typed = user_input.next();
-
-			// Checked typed key
-			switch (typed) {
-			case "w": // Up
-				moveHero(0,-1);
-				break;
-			case "s": // Down
-				moveHero(0,1);
-				break;
-			case "a": // Left
-				moveHero(-1,0);
-				break;
-			case "d": // Right
-				moveHero(1,0);
-				break;
-			case "0":
-				//	End game
-				ended = true;
-			default:
-				break;
-			}
+		// Checked typed key
+		switch (typed) {
+		case "w": // Up
+			moveHero(0,-1);
+			break;
+		case "s": // Down
+			moveHero(0,1);
+			break;
+		case "a": // Left
+			moveHero(-1,0);
+			break;
+		case "d": // Right
+			moveHero(1,0);
+			break;
+		case "0":
+			//	End game
+			ended = true;
+		default:
+			break;
 		}
-
-		//	End game
-		user_input.close();
 	}
 
 	///	Moves hero
@@ -79,7 +77,7 @@ public class Game {
 					//	If it is open and exit, finish map
 					if(door.isExit()){
 						System.out.println("Game ended!");
-						ended = true;
+						//ended = true;
 						return;
 					}
 				}
@@ -105,8 +103,6 @@ public class Game {
 			if(guardIsNear() == true){
 				// END GAME, GAME Over
 				System.out.println("Game Over!");
-			} else {
-				moveGuard();
 			}
 		}
 	}
@@ -278,7 +274,7 @@ public class Game {
 		map.addWall(9, 9);
 	}
 
-	public static void printGame(){
+	public void printGame(){
 		int i, j;
 		for(i = 0; i < map.numberLines; i++){
 			String line = "|";

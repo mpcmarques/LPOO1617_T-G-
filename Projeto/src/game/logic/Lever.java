@@ -1,3 +1,4 @@
+package game.logic;
 public class Lever extends Cell {
 	private boolean pressed;
 

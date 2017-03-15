@@ -1,3 +1,4 @@
+package game.logic;
 
 public class Map {
 	int numberCellsForLine;
