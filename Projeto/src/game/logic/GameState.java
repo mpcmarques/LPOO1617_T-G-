@@ -5,5 +5,5 @@ package game.logic;
 
 
 public enum GameState {
-	ended, running
+	ended, started, firstlvl, secondlvl
 }

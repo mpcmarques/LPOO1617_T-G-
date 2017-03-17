@@ -1,4 +1,5 @@
 package game.logic;
+import java.util.*;
 
 public class Game extends Object {
 	private Map map;
@@ -7,31 +8,18 @@ public class Game extends Object {
 	private int guardMovesCounter;
 	private GameState state;
 	private Lever lever;
+	private Ogre ogre;
 
 	public Game(){
-		setState(GameState.running);
+		setState(GameState.started);
 		map = new Map(10,10);
 		hero = new Hero(1,1);
 		guard = new Guard(8,1);
+		setOgre(null);
 		lever = new Lever(6,8);
 		guardMovesCounter = 0;
 	}
-
-	/// Starts the game
-	public void start(){
-		//	 Create map layout
-		//		Add walls to map
-		createWalls();
-		//	Add  doors to map
-		createDoors();
-		//	Add hero to map
-		map.addHero(hero);
-		//	Add lever to map
-		map.addLever(lever);
-		//	Add guard to map
-		map.addGuard(guard);
-	}
-
+	
 	public void updateGame(String typed){
 
 		// Checked typed key
@@ -55,14 +43,75 @@ public class Game extends Object {
 		default:
 			break;
 		}
-		//		Move guard
-		moveGuard();
-
-		//		Check if moving to a guard
-		if(isGuardNear() == true){
-			// END GAME, GAME Over
-			System.out.println("Game Over!");
+		
+		// First level logic
+		if (this.getState() == GameState.firstlvl){
+			//		Move guard
+			moveGuard();
+			//		Check if moving to a guard
+			if(isGuardNear() == true){
+				// END GAME, GAME Over
+				setState(GameState.ended);
+				System.out.println("Game Over!");
+			}
 		}
+		//	Second level logic
+		else if (this.getState() == GameState.secondlvl){
+			//	Move ogre
+			moveOgre();
+			//	Check if moving to ogre
+			if(isOgreNear() == true){
+				// END GAME, GAME Over
+				setState(GameState.ended);
+				System.out.println("Game Over!");
+			}
+		}
+	}
+
+	/// Starts the game
+	public void startFirstLevel(){
+		//	Start new map
+		this.map = new Map(10,10);
+		//	Set game state
+		setState(GameState.firstlvl);
+		//	 Create map layout
+		//		Add walls to map
+		createWallsFirstLevel();
+		//	Add  doors to map
+		createDoorsFirstLevel();
+		//	Add hero to map
+		map.addCell(hero);
+		//	Add lever to map
+		map.addCell(lever);
+		//	Add guard to map
+		guard = new Guard(8,1);
+		map.addCell(guard);
+	}
+	///	Finishes first level and starts second level
+	public void startSecondLevel(){
+		//		Start new map
+		this.map = new Map(10,10);
+		//		Set game state
+		setState(GameState.secondlvl);
+		//	Create map layout
+		//	Add walls to map
+		createWallsSecondLevel();
+		//	Add  doors to map
+		createDoorsSecondLevel();
+		//	Change hero coordinates
+		hero.setX(1);
+		hero.setY(8);
+		//	Add hero to map
+		map.addCell(hero);
+		//	Create new lever
+		this.lever = new Lever(8,1);
+		//	Add lever to map
+		map.addCell(lever);
+		//	Remove guard
+		guard = null;
+		//	Add ogre to map
+		ogre = new Ogre(4,1);
+		map.addCell(ogre);
 	}
 
 	///	Moves hero
@@ -86,8 +135,14 @@ public class Game extends Object {
 				} else {
 					//	If it is open and exit, finish map
 					if(door.isExit()){
-						System.out.println("Game ended!");
-						//ended = true;
+						//	End first level 
+						if (this.getState() == GameState.firstlvl){
+							startSecondLevel();
+						}
+						// End second level
+						else if (this.getState() == GameState.secondlvl){
+							setState(GameState.ended);
+						}
 						return;
 					}
 				}
@@ -165,6 +220,45 @@ public class Game extends Object {
 			guard.setMoveCounter(guard.getMoveCounter() + 1);
 		}
 	}
+	
+	void moveOgre(){
+		int i,x = 0,y = 0;
+		Random rand = new Random();
+		
+		// Before moving
+		int range = 4 - 1 + 1;
+		i = rand.nextInt(range) + 1;
+		
+		//	Move up
+		if (i == 1){
+			y = -1;
+		}
+		//	Move down
+		else if (i == 2){
+			y = 1;
+		}
+		//	Move left
+		else if (i == 3){
+			x = -1;
+		}
+		//	Move right
+		else if (i == 4){
+			x = 1;
+		}
+		
+		//	Check if moving to a null cell
+		if (map.getCells()[getOgre().getY() + y][getOgre().getX() + x] == null){
+			// MOVE
+
+			// Clean previous cell
+			map.getCells()[ogre.getY()][ogre.getX()] = null;
+			// Update guard position
+			ogre.setX(ogre.getX()+x);
+			ogre.setY(ogre.getY()+y);
+			//	Show in next cell
+			map.getCells()[ogre.getY()][ogre.getX()] = ogre;	
+		}
+	}
 
 	/** 
 	 * Check if the hero is on a lever
@@ -193,23 +287,57 @@ public class Game extends Object {
 		if (guard.getX() == hero.getX()+1 && guard.getY() == hero.getY()){
 			return true;
 		}
-
+		return false;
+	}
+	
+	public boolean isOgreNear(){
+		// Check if the guard is above hero
+		if (ogre.getX() == hero.getX() && ogre.getY() == hero.getY()-1){
+			return true;
+		}
+		// Check if the guard is down
+		if (ogre.getX() == hero.getX() && ogre.getY() == hero.getY()+1){
+			return true;
+		}
+		// Check if the guard is on the right
+		if (ogre.getX() == hero.getX()+1 && ogre.getY() == hero.getY()){
+			return true;
+		}
+		//	Check if the guard is on the left
+		if (ogre.getX() == hero.getX()+1 && ogre.getY() == hero.getY()){
+			return true;
+		}
 		return false;
 	}
 
-	///	Create doors
-	void createDoors(){
-		map.addDoor(4, 1, false);
-		map.addDoor(4, 3, false);
-		map.addDoor(2, 3, false);
-		map.addDoor(0, 5, true);
-		map.addDoor(0, 6, true);
-		map.addDoor(2, 8, false);
-		map.addDoor(4, 8, false);
+	///	Create first level doors
+	void createDoorsFirstLevel(){
+		//	Create doors
+		Door door1 = new Door(4, 1, false);
+		Door door2 = new Door(4, 3, false);
+		Door door3 = new Door(2, 3, false);
+		Door door4 = new Door(0, 5, true);
+		Door door5 = new Door(0, 6, true);
+		Door door6 = new Door(2, 8, false);
+		Door door7 = new Door(4, 8, false);
+		//	Add to map
+		map.addCell(door1);
+		map.addCell(door2);
+		map.addCell(door3);
+		map.addCell(door4);
+		map.addCell(door5);
+		map.addCell(door6);
+		map.addCell(door7);
 	}
 
-	/// Adds walls
-	public void createWalls(){
+	/// Create doors second level
+	void createDoorsSecondLevel(){
+		Door door = new Door(0,1,true);
+		map.addCell(door);
+	}
+
+	/// Create first level walls
+	public void createWallsFirstLevel(){
 		// Add first line
 		map.addWall(0, 0);
 		map.addWall(1, 0);
@@ -274,6 +402,30 @@ public class Game extends Object {
 		map.addWall(9, 9);
 	}
 
+	public void createWallsSecondLevel(){
+		int i;
+		// Add first row walls
+		for (i = 0; i < 10; i++){
+			map.addWall(i, 0);
+			
+		}
+		//	Right wall column
+		for(i = 1; i < 10; i++){
+			map.addWall(9, i);
+		}
+		//	Left wall column
+		for(i = 2; i < 10; i++){
+			map.addWall(0, i);
+		}
+		//	Last wall row
+		for(i = 1; i < 9; i++){
+			map.addWall(i, 9);
+		}
+	}
+
+	/** 
+	 * Prints game on screen
+	 * */
 	public void printGame(){
 		System.out.println(map);
 	}
@@ -354,5 +506,19 @@ public class Game extends Object {
 	 */
 	public void setLever(Lever lever) {
 		this.lever = lever;
+	}
+
+	/**
+	 * @return the ogre
+	 */
+	public Ogre getOgre() {
+		return ogre;
+	}
+
+	/**
+	 * @param ogre the ogre to set
+	 */
+	public void setOgre(Ogre ogre) {
+		this.ogre = ogre;
 	}
 }

@@ -5,9 +5,11 @@ import game.logic.*;
 public class Main {
 
 	public static void main(String[] args) {
+		System.out.println("Game Started!");
 		// Start a new game
 		Game game = new Game();
-		game.start();
+		//	Starts first level
+		game.startFirstLevel();
 
 		// Start user input scanner
 		Scanner user_input = new Scanner( System.in );
@@ -25,5 +27,6 @@ public class Main {
 
 		//		close scanner
 		user_input.close();
+		System.out.println("Game finished!");
 	}
 }

@@ -4,7 +4,7 @@ public class Door extends Cell {
 	private boolean isExit;
 
 	///	Constructor
-	Door(boolean isExit, int x, int y) {
+	Door(int x, int y, boolean isExit) {
 		super("I", x, y);
 		setOpen(false);
 		setExit(isExit);
