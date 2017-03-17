@@ -1,5 +1,7 @@
 package game.logic;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+
 
 public class Game extends Object {
 	private Map map;
@@ -9,6 +11,7 @@ public class Game extends Object {
 	private GameState state;
 	private Lever lever;
 	private Ogre ogre;
+	private Key key;
 
 	public Game(){
 		setState(GameState.started);
@@ -16,10 +19,11 @@ public class Game extends Object {
 		hero = new Hero(1,1);
 		guard = new Guard(8,1);
 		setOgre(null);
+		setKey(null);
 		lever = new Lever(6,8);
 		guardMovesCounter = 0;
 	}
-	
+
 	public void updateGame(String typed){
 
 		// Checked typed key
@@ -43,7 +47,7 @@ public class Game extends Object {
 		default:
 			break;
 		}
-		
+
 		// First level logic
 		if (this.getState() == GameState.firstlvl){
 			//		Move guard
@@ -59,8 +63,8 @@ public class Game extends Object {
 		else if (this.getState() == GameState.secondlvl){
 			//	Move ogre
 			moveOgre();
-			//	Check if moving to ogre
-			if(isOgreNear() == true){
+			//	Check if moved next to a ogre or a ogre bash
+			if(isOgreNear() == true || isClubNear() == true){
 				// END GAME, GAME Over
 				setState(GameState.ended);
 				System.out.println("Game Over!");
@@ -103,14 +107,17 @@ public class Game extends Object {
 		hero.setY(8);
 		//	Add hero to map
 		map.addCell(hero);
-		//	Create new lever
-		this.lever = new Lever(8,1);
-		//	Add lever to map
-		map.addCell(lever);
+		//	Create new key
+		this.key = new Key(8,1);
+		//	Add key to map
+		map.addCell(key);
 		//	Remove guard
 		guard = null;
 		//	Add ogre to map
 		ogre = new Ogre(4,1);
+		//	Add ogre weapon
+		ogre.addClub();
+		//	Add ogre to map
 		map.addCell(ogre);
 	}
 
@@ -131,6 +138,13 @@ public class Game extends Object {
 				Door door = (Door) map.getCells()[hero.getY()+y][hero.getX()+x];
 				// Check if door is closed
 				if (door.isOpen() == false){
+					//	Check if has key
+					if (hero.isHaveKey()){
+						//	Open door
+						door.openDoor();
+						//	Remove key from hero
+						hero.setHaveKey(false);
+					}
 					return;
 				} else {
 					//	If it is open and exit, finish map
@@ -138,23 +152,36 @@ public class Game extends Object {
 						//	End first level 
 						if (this.getState() == GameState.firstlvl){
 							startSecondLevel();
+							return;
 						}
 						// End second level
 						else if (this.getState() == GameState.secondlvl){
 							setState(GameState.ended);
 						}
-						return;
 					}
 				}
 			}
 
+			// MOVE
 			//	Check if moving to a lever
 			if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Lever){
-				System.out.println("Lever pressed!");
-				map.openAllDoors();
+				//	If level 1
+				if (getState() == GameState.firstlvl){
+					map.openAllDoors();
+				}
+				//	If level 2
+				if (getState() == GameState.secondlvl){
+					hero.setHaveKey(true);
+					map.openAllDoors();
+				}
 			}
-
-			// MOVE
+			//	Check if moving to a key
+			if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Key){
+				//	If level 2
+				if (getState() == GameState.secondlvl){
+					hero.setHaveKey(true);
+				}
+			}
 
 			// Clean previous cell
 			map.getCells()[hero.getY()][hero.getX()] = null;
@@ -220,15 +247,13 @@ public class Game extends Object {
 			guard.setMoveCounter(guard.getMoveCounter() + 1);
 		}
 	}
-	
-	void moveOgre(){
+
+	public void moveOgre(){
 		int i,x = 0,y = 0;
-		Random rand = new Random();
-		
-		// Before moving
-		int range = 4 - 1 + 1;
-		i = rand.nextInt(range) + 1;
-		
+
+		// Get random option
+		i = RandomService.getRandomInt(1, 4);
+
 		//	Move up
 		if (i == 1){
 			y = -1;
@@ -245,18 +270,97 @@ public class Game extends Object {
 		else if (i == 4){
 			x = 1;
 		}
-		
-		//	Check if moving to a null cell
-		if (map.getCells()[getOgre().getY() + y][getOgre().getX() + x] == null){
-			// MOVE
 
-			// Clean previous cell
-			map.getCells()[ogre.getY()][ogre.getX()] = null;
+		//	Check if moving to a null cell
+		if (map.getCells()[getOgre().getY() + y][getOgre().getX() + x] == null ||
+				map.getCells()[getOgre().getY() + y][getOgre().getX() + x] instanceof Key){
+			// MOVE
+			//			Check if moving out of a key
+			if (getOgre().getY() == key.getY() && getOgre().getX() == key.getX()){
+				// Change ogre to letter "$"
+				ogre.setLetter("O");
+				// Previous cell is key
+				map.getCells()[ogre.getY()][ogre.getX()] = this.key;
+			} else {
+				// Clean previous cell
+				map.getCells()[ogre.getY()][ogre.getX()] = null;
+			}
+			//	Check if moving to a key
+			if (getOgre().getY() + y == key.getY() && getOgre().getX() + x == key.getX()){
+				// Change ogre to letter "$"
+				ogre.setLetter("$");
+			}
 			// Update guard position
 			ogre.setX(ogre.getX()+x);
 			ogre.setY(ogre.getY()+y);
 			//	Show in next cell
 			map.getCells()[ogre.getY()][ogre.getX()] = ogre;	
+			//	Swing club
+			if (ogre.getClub() != null){
+				swingClub();
+			}
+		} else {
+			//	Use recursively
+			moveOgre();
+		}
+	}
+
+	public void swingClub(){
+		int i,x = 0,y = 0;
+
+		// Get random option
+		i = RandomService.getRandomInt(1, 4);
+
+		//	Club in ->up
+		if (i == 1){
+			x = 1;
+			y = -1;
+		}
+		//	Club in ->down
+		else if (i == 2){
+			x = 1;
+			y = 1;
+		}
+		//	Club in <-up
+		else if (i == 4){
+			x = -1;
+			y = -1;
+		}
+		//	Club in <-down
+		else if (i == 3){
+			x = -1;
+			y = 1;
+		}
+
+		//	Check if moving to a null cell or a key
+		if (map.getCells()[getOgre().getY() + y][getOgre().getX() + x] == null
+				|| map.getCells()[getOgre().getY() + y][getOgre().getX() + x] instanceof Key){
+			// MOVE
+			// Check if moving out of a key
+			if (getOgre().getClub().getY() == key.getY() && getOgre().getClub().getX() == key.getX()){
+				// Change key to letter "*"
+				ogre.getClub().setLetter("*");
+				// Previous cell is key
+				map.getCells()[ogre.getClub().getY()][ogre.getClub().getX()] = this.key;
+			} else {
+				// Clean previous cell
+				map.getCells()[ogre.getClub().getY()][ogre.getClub().getX()] = null;
+			}
+
+			// Check if moving to a key
+			if (getOgre().getY() + y == key.getY() && getOgre().getX() + x == key.getX()){
+				// Change key to letter "$"
+				ogre.getClub().setLetter("$");
+			}
+
+			// Update club position
+			ogre.getClub().setX(ogre.getX()+x);
+			ogre.getClub().setY(ogre.getY()+y);
+			//	Show in next cell
+			map.getCells()[ogre.getClub().getY()][ogre.getClub().getX()] = ogre.getClub();	
+		} else {
+			//	Calculate cell recursive
+			swingClub();
 		}
 	}
 
@@ -284,12 +388,12 @@ public class Game extends Object {
 			return true;
 		}
 		//	Check if the guard is on the left
-		if (guard.getX() == hero.getX()+1 && guard.getY() == hero.getY()){
+		if (guard.getX() == hero.getX()-1 && guard.getY() == hero.getY()){
 			return true;
 		}
 		return false;
 	}
-	
+
 	public boolean isOgreNear(){
 		// Check if the guard is above hero
 		if (ogre.getX() == hero.getX() && ogre.getY() == hero.getY()-1){
@@ -306,6 +410,29 @@ public class Game extends Object {
 		//	Check if the guard is on the left
 		if (ogre.getX() == hero.getX()+1 && ogre.getY() == hero.getY()){
 			return true;
+		}
+		return false;
+	}
+
+	public boolean isClubNear(){
+		//	Check if ogre has club
+		if (ogre.getClub() != null) {
+			// Check if the club ->up
+			if (ogre.getClub().getX() == hero.getX() +1 && ogre.getClub().getY() == hero.getY()-1){
+				return true;
+			}
+			// Check if the club ->down
+			if (ogre.getClub().getX() == hero.getX() +1&& ogre.getClub().getY() == hero.getY()+1){
+				return true;
+			}
+			// Check if the club <-up
+			if (ogre.getClub().getX() == hero.getX()-1 && ogre.getClub().getY() == hero.getY()-1){
+				return true;
+			}
+			//	Check if the club <-down
+			if (ogre.getClub().getX() == hero.getX()-1 && ogre.getClub().getY() == hero.getY()+1){
+				return true;
+			}
 		}
 		return false;
 	}
@@ -407,7 +534,7 @@ public class Game extends Object {
 		// Add first row walls
 		for (i = 0; i < 10; i++){
 			map.addWall(i, 0);
-			
+
 		}
 		//	Right wall column
 		for(i = 1; i < 10; i++){
@@ -520,5 +647,19 @@ public class Game extends Object {
 	 */
 	public void setOgre(Ogre ogre) {
 		this.ogre = ogre;
+	}
+
+	/**
+	 * @return the key
+	 */
+	public Key getKey() {
+		return key;
+	}
+
+	/**
+	 * @param key the key to set
+	 */
+	public void setKey(Key key) {
+		this.key = key;
 	}
 }
