@@ -1,23 +1,14 @@
 package game.logic;
+import java.util.ArrayList;
+
 public class Guard extends Cell {
-	private int guardMoves[];
 	private int moveCounter;
+	private ArrayList<Coordinate2d> movePositions;
 
 	///	Constructor
 	Guard(int x, int y) {
 		super("G", x, y);
 		// TODO Auto-generated constructor stub
-		this.setX(x);
-		this.setY(y);
-		this.setMoveCounter(0);
-	}
-
-	public int[] getGuardMoves() {
-		return guardMoves;
-	}
-
-	public void setGuardMoves(int guardMoves[]) {
-		this.guardMoves = guardMoves;
 		this.setMoveCounter(0);
 	}
 
@@ -27,5 +18,18 @@ public class Guard extends Cell {
 
 	public void setMoveCounter(int moveCounter) {
 		this.moveCounter = moveCounter;
+	}
+
+	/**
+	 * @return the movePositions
+	 */
+	public ArrayList<Coordinate2d> getMovePositions() {
+		return movePositions;
+	}
+	/**
+	 * @param movePositions the movePositions to set
+	 */
+	public void setMovePositions(ArrayList<Coordinate2d> movePositions) {
+		this.movePositions = movePositions;
 	}
 }

@@ -1,7 +1,6 @@
 package game.logic;
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
+import java.util.ArrayList;
 
 public class Game extends Object {
 	private Map map;
@@ -17,7 +16,7 @@ public class Game extends Object {
 		setState(GameState.started);
 		map = new Map(10,10);
 		hero = new Hero(1,1);
-		guard = new Guard(8,1);
+		guard = null;
 		setOgre(null);
 		setKey(null);
 		lever = new Lever(6,8);
@@ -50,14 +49,7 @@ public class Game extends Object {
 
 		// First level logic
 		if (this.getState() == GameState.firstlvl){
-			//		Move guard
-			moveGuard();
-			//		Check if moving to a guard
-			if(isGuardNear() == true){
-				// END GAME, GAME Over
-				setState(GameState.ended);
-				System.out.println("Game Over!");
-			}
+			firstLevelLogic();
 		}
 		//	Second level logic
 		else if (this.getState() == GameState.secondlvl){
@@ -72,7 +64,70 @@ public class Game extends Object {
 		}
 	}
 
-	/// Starts the game
+	///	First level logic
+	public void firstLevelLogic(){
+		//		MOVE GUARD
+		//	Check guard personality
+		//	Rookie
+		if(guard instanceof Rookie){
+			moveGuard(false);
+		} 
+		//	Drunken
+		else if(guard instanceof Drunken){
+			Drunken drunkGuard = (Drunken)guard;
+			//	Check if guard is not sleeping
+			if (!drunkGuard.isSleeping()){
+				int rates = RandomService.getRandomInt(1, 7);
+				//	Drunken chance of sleeping
+				if (rates == 1){
+					drunkGuard.setSleeping(true);
+				} else {
+					moveGuard(false);
+				}
+			} 
+			//	Guard is sleeping
+			else {
+				// Decrease sleeptime
+				drunkGuard.setSleepTime(drunkGuard.getSleepTime() - 1);
+				// If guard sleeping time is over awake him
+				if (drunkGuard.getSleepTime() == 0){
+					//	Awake guard
+					drunkGuard.setSleeping(false);
+				}
+			}
+		}
+		// Suspicious guard
+		else if (guard instanceof Suspicious){
+			Suspicious suspiciousGuard = (Suspicious)guard;
+			// Move guard
+			moveGuard(suspiciousGuard.isInReverse());
+
+			//	Guard have a random chance to change direction
+			int reverseChance = RandomService.getRandomInt(1, 6);
+			if (reverseChance == 1){
+				//	Change guard direction
+				suspiciousGuard.changeDirection();
+			}
+		}
+
+		//	Game Over check
+		//	Check if moved next to a guard
+		if(isGuardNear() == true){
+			//	Check if guard is not a drunken sleeping
+			if (guard instanceof Drunken) {
+				Drunken drunkGuard = (Drunken)guard;
+				if (drunkGuard.isSleeping()){
+					//	If guard is sleeping, doesnt end game.
+					return;
+				}
+			} 
+			// END GAME, GAME Over
+			setState(GameState.ended);
+			System.out.println("Game Over!");
+		}
+	}
+
+	/// Starts first level
 	public void startFirstLevel(){
 		//	Start new map
 		this.map = new Map(10,10);
@@ -88,9 +143,55 @@ public class Game extends Object {
 		//	Add lever to map
 		map.addCell(lever);
 		//	Add guard to map
-		guard = new Guard(8,1);
+		guard = new Suspicious(8,1);
+		//	Set guard moves
+		setGuardMoves();
 		map.addCell(guard);
+		//	Print map in the first time
+		System.out.println(map);
 	}
+
+	public void setGuardMoves(){
+		ArrayList<Coordinate2d> newPositions = new ArrayList<Coordinate2d>();
+		int x = 7, y = 1; // First move
+		int i;
+
+		// Move left 1 cell
+		Coordinate2d first = new Coordinate2d(x,y);
+		newPositions.add(first);
+		//	Move down 4 cells
+		for (i = 0; i < 4; i++){
+			y += 1;
+			Coordinate2d coord = new Coordinate2d(x,y);
+			newPositions.add(coord);
+		}
+		//	Move left 6 cells
+		for (i = 0; i < 6; i++){
+			x -= 1;
+			Coordinate2d coord = new Coordinate2d(x,y);
+			newPositions.add(coord);
+		}
+		// Move down
+		y += 1;
+		Coordinate2d second = new Coordinate2d(x,y);
+		newPositions.add(second);
+		// Move right 7 cells
+		for (i = 0; i < 7; i++){
+			x += 1;
+			Coordinate2d coord = new Coordinate2d(x,y);
+			newPositions.add(coord);
+		}
+		// Move up 5 cells
+		for (i = 0; i < 5; i++){
+			y -= 1;
+			Coordinate2d coord = new Coordinate2d(x,y);
+			newPositions.add(coord);
+		}
+
+		// Replace guard moves
+		guard.setMovePositions(newPositions);
+	}
+
 	///	Finishes first level and starts second level
 	public void startSecondLevel(){
 		//		Start new map
@@ -103,8 +204,7 @@ public class Game extends Object {
 		//	Add  doors to map
 		createDoorsSecondLevel();
 		//	Change hero coordinates
-		hero.setX(1);
-		hero.setY(8);
+		hero = new Hero(1,8);
 		//	Add hero to map
 		map.addCell(hero);
 		//	Create new key
@@ -186,65 +286,55 @@ public class Game extends Object {
 			// Clean previous cell
 			map.getCells()[hero.getY()][hero.getX()] = null;
 			// Update hero y;
-			hero.setX(hero.getX() + x);
-			hero.setY(hero.getY() + y);;
+			hero.setCoordinate(new Coordinate2d(hero.getX() + x, hero.getY() + y));
 			//	Show in next cell
 			map.getCells()[hero.getY()][hero.getX()] = hero;
 		}
 	}
 
-	public void moveGuard(){
-		//		BEFORE MOVING
-		// Check if out of bounds
-		int x = 0,y = 0;
-
-		if(guard.getMoveCounter() == 0){
-			// MOVE LEFT
-			y = 0;
-			x = -1;
-		}
-		else if (guard.getMoveCounter() < 5){
-			// MOVE DOWN
-			y = +1;
-			x = 0;
-		} 
-		else if (guard.getMoveCounter() < 11){
-			// MOVE LEFT
-			y = 0;
-			x = -1;
-		}
-		else if (guard.getMoveCounter() == 11){
-			// MOVE DOWN
-			y = 1;
-			x = 0;
-		}
-		else if (guard.getMoveCounter() < 19){
-			// MOVE RIGHT
-			y = 0;
-			x = 1;
-		}
-		else if(guard.getMoveCounter() < 24) {
-			//	MOVE UP
-			y = -1;
-			x = 0;
-		}
+	/**	
+	 * @brief Moves guard
+	 * @parameter reverse Should reverse
+	 * */
+	/// @parameter 
+	public void moveGuard(boolean reverse){
+		//	BEFORE MOVING
+		// Get new x and y;
+		int x,y;
+		x = guard.getMovePositions().get(guard.getMoveCounter()).getX();
+		y = guard.getMovePositions().get(guard.getMoveCounter()).getY();
 
 		// MOVE
 
 		// Clean previous cell
 		map.getCells()[guard.getY()][guard.getX()] = null;
 		// Update guard position
-		guard.setX(guard.getX()+x);
-		guard.setY(guard.getY()+y);
+		guard.setCoordinate(new Coordinate2d(x,y));
 		//	Show in next cell
 		map.getCells()[guard.getY()][guard.getX()] = guard;
 
-		// Check if original cell
-		if(guard.getMoveCounter() == 24){
-			//	RESET GUARD COUNTER
-			guard.setMoveCounter(0);
-		} else {
-			guard.setMoveCounter(guard.getMoveCounter() + 1);
+		// AFTER MOVING
+		// If is not reverse, add counter
+		if (!reverse) {
+			// Check if end of moves
+			if(guard.getMoveCounter() == guard.getMovePositions().size()-1){
+				//	Reset guard move counter
+				guard.setMoveCounter(0);
+			} else {
+				//	Increase move counter
+				guard.setMoveCounter(guard.getMoveCounter() + 1);
+			}
+		} 
+		//	It is reversed, subtract counter
+		else {
+			// Check if the first move
+			if(guard.getMoveCounter() == 0){
+				//	Reset guard move counter to last
+				guard.setMoveCounter(guard.getMovePositions().size()-1);
+			} else {
+				//	Decrease
+				guard.setMoveCounter(guard.getMoveCounter() - 1);
+			}
 		}
 	}
 
@@ -291,8 +381,7 @@ public class Game extends Object {
 				ogre.setLetter("$");
 			}
 			// Update guard position
-			ogre.setX(ogre.getX()+x);
-			ogre.setY(ogre.getY()+y);
+			ogre.setCoordinate(new Coordinate2d(ogre.getX() + x, ogre.getY() + y));
 			//	Show in next cell
 			map.getCells()[ogre.getY()][ogre.getX()] = ogre;	
 			//	Swing club
@@ -354,8 +443,7 @@ public class Game extends Object {
 			}
 
 			// Update club position
-			ogre.getClub().setX(ogre.getX()+x);
-			ogre.getClub().setY(ogre.getY()+y);
+			ogre.getClub().setCoordinate(new Coordinate2d(ogre.getX()+x, ogre.getY()+y));
 			//	Show in next cell
 			map.getCells()[ogre.getClub().getY()][ogre.getClub().getX()] = ogre.getClub();	
 		} else {

@@ -2,14 +2,12 @@ package game.logic;
 
 public class Cell extends Object {
 	private String letter;
-	private int x;
-	private int y;
+	private Coordinate2d coordinate;
 	
 	//	Constructor
 	Cell(String string, int x, int y){
 		this.setLetter(string);
-		this.setX(x);
-		this.setY(y);
+		this.setCoordinate(new Coordinate2d(x,y));
 	}
 
 	/**
@@ -30,27 +28,27 @@ public class Cell extends Object {
 	 * @return the x
 	 */
 	public int getX() {
-		return x;
-	}
-
-	/**
-	 * @param x the x to set
-	 */
-	public void setX(int x) {
-		this.x = x;
+		return coordinate.getX();
 	}
 
 	/**
 	 * @return the y
 	 */
 	public int getY() {
-		return y;
+		return coordinate.getY();
 	}
 
 	/**
-	 * @param y the y to set
+	 * @return the coordinate
 	 */
-	public void setY(int y) {
-		this.y = y;
+	public Coordinate2d getCoordinate() {
+		return coordinate;
+	}
+
+	/**
+	 * @param coordinate the coordinate to set
+	 */
+	public void setCoordinate(Coordinate2d coordinate) {
+		this.coordinate = coordinate;
 	}
 }
