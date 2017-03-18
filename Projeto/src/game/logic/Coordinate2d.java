@@ -10,6 +10,13 @@ public class Coordinate2d extends Object{
 		setY(y);
 	}
 	
+	public boolean equals(Object obj){
+		return (obj instanceof Coordinate2d) &&
+				((Coordinate2d)obj).getX() == x &&
+				((Coordinate2d)obj).getY() == y
+				;
+	}
+	
 	/**
 	 * @return the x
 	 */

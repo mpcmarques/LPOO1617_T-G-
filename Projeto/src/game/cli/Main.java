@@ -6,17 +6,16 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Game Started!");
+		//	Creates the first level
 		// Start a new game
-		Game game = new Game();
-		//	Starts first level
-		game.startFirstLevel();
+		Game game = new Game(new LevelOne());
 
 		// Start user input scanner
 		Scanner user_input = new Scanner( System.in );
 		String typed;	
 		
 		//	Game Loop
-		while(game.getState() != GameState.ended){
+		while(game.getState() != GameState.closed){
 			// Ask for user input
 			typed = user_input.next();
 			//  Update game
