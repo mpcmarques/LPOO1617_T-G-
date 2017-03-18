@@ -5,12 +5,14 @@ public class GameMap extends Object implements GameMapDelegate {
 	private Hero hero;
 	private Guard guard;
 	private Lever lever;
+	private boolean isCompleted;
 
 	/**
 	 * @brief Constructor 
 	 * */
 	public GameMap(Map map){
 		this.setMap(map);
+		this.setCompleted(false);
 	}
 
 	public GameMap(char[][] map){
@@ -64,9 +66,12 @@ public class GameMap extends Object implements GameMapDelegate {
 		}
 	}
 	/** 
-	 * @brief Player finished game map
+	 * @brief Player finished game map, need to call super first
 	 * */
-	public void completed(){}
+	public void completed(){
+		//	Set completed
+		this.setCompleted(true);
+	}
 	/** 
 	 * @brief Player pressed a lever, opens all doors
 	 * */
@@ -164,7 +169,9 @@ public class GameMap extends Object implements GameMapDelegate {
 		}
 	}
 
-	//	Open all doors
+	/** 
+	 * @brief Open all doors 
+	 * */
 	public void openAllDoors(){
 		int i,j;
 		//	Loop through cells
@@ -179,6 +186,27 @@ public class GameMap extends Object implements GameMapDelegate {
 			}
 		}
 	}
+	
+	/** 
+	 * @brief Returns true if there is a open exit door
+	 * */
+	public boolean isExitDoorsOpen(){
+		int i,j;
+		//	Loop through cells
+		for(i = 0; i < map.getNumberLines(); i++){
+			for(j = 0; j < map.getNumberCellsForLine(); j++){
+				//	Check if it is a door
+				if(map.getCells()[i][j] instanceof Door){
+					//	Check if door is open
+					Door door = (Door)this.map.getCells()[i][j];
+					//	Return true if exit door is open
+					if (door.isExit() == true && door.isOpen()) return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	
 	public boolean isGuardNear(){
 		if(getGuard() == null) return false;
@@ -255,5 +283,19 @@ public class GameMap extends Object implements GameMapDelegate {
 	 */
 	public void setLever(Lever lever) {
 		this.lever = lever;
+	}
+
+	/**
+	 * @return the completed
+	 */
+	public boolean isCompleted() {
+		return isCompleted;
+	}
+
+	/**
+	 * @param completed the completed to set
+	 */
+	public void setCompleted(boolean completed) {
+		this.isCompleted = completed;
 	}
 }
