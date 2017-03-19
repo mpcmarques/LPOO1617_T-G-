@@ -33,14 +33,23 @@ public class Game extends Object {
 		this.setGameMap(map);
 	}
 	
-	public void finishGame(){
-		this.setState(GameState.over);
-	}
-	
 	public boolean isGameOver(){
 		return this.getState() == GameState.over;
 	}
 
+	public void gameOver(){
+		// END GAME, GAME Over
+		System.out.println("Game Over!");
+		setState(GameState.over);
+		setEndStatus(EndStatus.DEFEAT);
+	}
+	
+	public void  gameCompleted(){
+		// END GAME, GAME Over
+		System.out.println("Game Completed!");
+		setState(GameState.over);
+		setEndStatus(EndStatus.WIN);
+	}
 	//	MARK: Getters and Setters
 
 	/**

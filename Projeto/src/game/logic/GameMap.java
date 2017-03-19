@@ -1,18 +1,22 @@
 package game.logic;
 
+import java.util.ArrayList;
+
 public class GameMap extends Object implements GameMapDelegate {
 	private Map map;
 	private Hero hero;
 	private Guard guard;
 	private Lever lever;
 	private boolean isCompleted;
+	private ArrayList<Ogre> ogres;
 
 	/**
-	 * @brief Constructor 
+	 * @brief Constructor a
 	 * */
 	public GameMap(Map map){
 		this.setMap(map);
 		this.setCompleted(false);
+		this.setOgres(new ArrayList<Ogre>());
 	}
 
 	public GameMap(char[][] map){
@@ -99,7 +103,12 @@ public class GameMap extends Object implements GameMapDelegate {
 		default:
 			break;
 		}
+		
+		//	Hero will move
+		heroDidMove();
+	}
 
+	public void heroDidMove(){
 		// Game over check
 		//	Check if moved next to a guard
 		if(isGuardNear() == true){
@@ -112,8 +121,25 @@ public class GameMap extends Object implements GameMapDelegate {
 				}
 			} 
 			// END GAME, GAME Over
-			Game.instance.setState(GameState.over);
-			Game.instance.setEndStatus(EndStatus.DEFEAT);
+			Game.instance.gameOver();
+		}
+
+		//	If moved next to an ogre and hero doesnt have weapon, game over
+		Ogre nearOgre = isOgreNear(getHero().getX(), getHero().getY());
+		if(nearOgre != null){
+			//	If hero has weapon, stun ogre, else, lose game
+			if(getHero().hasWeapon()) {
+				nearOgre.setStunned(true);
+			} else {
+				// END GAME, GAME Over
+				Game.instance.gameOver();
+				return;
+			}
+		}
+		//	If moved adjacent to a ogre club, game is over
+		if(isOgreClubNear() == true) {
+			// END GAME, GAME Over
+			Game.instance.gameOver();
 		}
 	}
 
@@ -158,6 +184,18 @@ public class GameMap extends Object implements GameMapDelegate {
 				//	Get key
 				hero.setHaveKey(true);
 			}
+			//	Check if moving to a club
+			if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Club){
+				Club club = (Club)map.getCells()[hero.getY()+y][hero.getX()+x];
+				//	Get club
+				hero.setClub(club);
+			}
+			//	Check if moving near a ogre
+			Ogre ogrenear = isOgreNear(hero.getX()+x, hero.getY()+y);
+			if(ogrenear != null){
+				//	Stun ogre
+				ogrenear.setStunned(true);
+			}
 
 			// MOVE
 			// Clean previous cell
@@ -186,7 +224,7 @@ public class GameMap extends Object implements GameMapDelegate {
 			}
 		}
 	}
-	
+
 	/** 
 	 * @brief Returns true if there is a open exit door
 	 * */
@@ -206,11 +244,11 @@ public class GameMap extends Object implements GameMapDelegate {
 		}
 		return false;
 	}
-	
-	
+
+
 	public boolean isGuardNear(){
 		if(getGuard() == null) return false;
-		
+
 		// Check if the guard is above hero
 		if (getGuard().getX() == getHero().getX() && getGuard().getY() == getHero().getY()-1){
 			return true;
@@ -229,8 +267,62 @@ public class GameMap extends Object implements GameMapDelegate {
 		}
 		return false;
 	}
+	//	Check if ogre is adjacent
+	public Ogre isOgreNear(int x, int y){
+		for(Ogre ogre: ogres){
+			if (ogre != null){
+				// Check if the guard is above hero
+				if (ogre.getX() == x && ogre.getY() == y-1){
+					return ogre;
+				}
+				// Check if the guard is down
+				if (ogre.getX() == x && ogre.getY() == y+1){
+					return ogre;
+				}
+				// Check if the guard is on the right
+				if (ogre.getX() == x+1 && ogre.getY() == y){
+					return ogre;
+				}
+				//	Check if the guard is on the left
+				if (ogre.getX() == x-1 && ogre.getY() == y){
+					return ogre;
+				}
+			}
+		}
+		return null;
+	}
 
+	public boolean isOgreClubNear(){
+		// Check if ogre is no null
+		for(Ogre ogre: ogres){
+			if(ogre != null) {
+				//	Check if ogre has club
+				if (ogre.getClub() != null) {
+					// Check if the club up
+					if (ogre.getClub().getX() == getHero().getX()  && ogre.getClub().getY() == getHero().getY()-1){
+						return true;
+					}
+					// Check if the club down
+					if (ogre.getClub().getX() == getHero().getX() && ogre.getClub().getY() == getHero().getY()+1){
+						return true;
+					}
+					// Check if the club <-
+					if (ogre.getClub().getX() == getHero().getX()-1 && ogre.getClub().getY() == getHero().getY()){
+						return true;
+					}
+					//	Check if the club ->
+					if (ogre.getClub().getX() == getHero().getX()+1 && ogre.getClub().getY() == getHero().getY()){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 
+	public void addOgre(Ogre ogre){
+		ogres.add(ogre);
+	}
 
 	/**
 	 * @return the map
@@ -297,5 +389,19 @@ public class GameMap extends Object implements GameMapDelegate {
 	 */
 	public void setCompleted(boolean completed) {
 		this.isCompleted = completed;
+	}
+
+	/**
+	 * @return the ogres
+	 */
+	public ArrayList<Ogre> getOgres() {
+		return ogres;
+	}
+
+	/**
+	 * @param ogres the ogres to set
+	 */
+	public void setOgres(ArrayList<Ogre> ogres) {
+		this.ogres = ogres;
 	}
 }

@@ -15,8 +15,26 @@ public class LevelOne extends GameMap {
 
 	/// Starts first level
 	public void startMap(){
-		//	 Create map layout
-		//		Add walls to map
+		//	 Sort guard type
+		int guardCount = RandomService.getRandomInt(1, 3);
+		switch(guardCount){
+		case 1:
+			setGuard(new Suspicious(8,1));
+			break;
+		case 2:
+			setGuard(new Rookie(8,1));
+			break;
+		case 3:
+			setGuard(new Drunken(8,1));
+			break;
+		default:
+			break;
+		}
+		//	Add guard to map
+		setGuardMoves();
+		getMap().addCell(getGuard());
+
+		//	Add walls to map
 		createWallsFirstLevel();
 		//	Add  doors to map
 		createDoorsFirstLevel();
@@ -25,27 +43,21 @@ public class LevelOne extends GameMap {
 		getMap().addCell(getHero());
 		//	Add lever to map
 		getMap().addCell(new Lever(6,8));
-		//	Add guard to map
-		setGuard(new Suspicious(8,1));
-		//	Set guard moves
-		setGuardMoves();
-		getMap().addCell(getGuard());
 		//	Print map in the first time
 		System.out.println(getMap());
 	}
 
-	public void updateGame(String typed){
-		//	Update superclass -> makes hero walk
-		super.updateGame(typed);
-
-		//	Level logic
+	public void heroDidMove(){
+		//	Level logic -> Makes guard walk
 		firstLevelLogic();
+		//	Check if meet super conditions
+		super.heroDidMove();
 	}
-	
+
 	public void completed(){
 		//	Call super
 		super.completed();
-		
+
 		//	Change map
 		Game.instance.changeMap(new LevelTwo());
 	}
