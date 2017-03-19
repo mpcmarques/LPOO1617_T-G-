@@ -39,14 +39,12 @@ public class Game extends Object {
 
 	public void gameOver(){
 		// END GAME, GAME Over
-		System.out.println("Game Over!");
 		setState(GameState.over);
 		setEndStatus(EndStatus.DEFEAT);
 	}
 	
-	public void  gameCompleted(){
+	public void gameCompleted(){
 		// END GAME, GAME Over
-		System.out.println("Game Completed!");
 		setState(GameState.over);
 		setEndStatus(EndStatus.WIN);
 	}

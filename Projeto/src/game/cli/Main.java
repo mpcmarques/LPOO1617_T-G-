@@ -15,7 +15,7 @@ public class Main {
 		String typed;	
 		
 		//	Game Loop
-		while(game.getState() != GameState.closed){
+		while(game.getState() != GameState.over){
 			// Ask for user input
 			typed = user_input.next();
 			//  Update game
@@ -26,6 +26,12 @@ public class Main {
 
 		//		close scanner
 		user_input.close();
-		System.out.println("Game finished!");
+		
+		// Final game sentence
+		if (game.getEndStatus() == EndStatus.DEFEAT) {
+			System.out.println("GAME OVER!!!!");
+		} else {
+			System.out.println("YOU WON!!!!");
+		}
 	}
 }

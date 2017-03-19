@@ -2,13 +2,14 @@ package game.logic;
 
 import java.util.ArrayList;
 
-public class GameMap extends Object implements GameMapDelegate {
+public class GameMap extends Object {
 	private Map map;
 	private Hero hero;
 	private Guard guard;
 	private Lever lever;
 	private boolean isCompleted;
 	private ArrayList<Ogre> ogres;
+	private Key key;
 
 	/**
 	 * @brief Constructor a
@@ -24,6 +25,8 @@ public class GameMap extends Object implements GameMapDelegate {
 
 		// Create new map
 		this.setMap(new Map(map[0].length, map.length));
+		this.setCompleted(false);
+		this.setOgres(new ArrayList<Ogre>());
 
 		//	Iterate through matrix
 		for(row = 0; row < map.length; row++){
@@ -103,7 +106,7 @@ public class GameMap extends Object implements GameMapDelegate {
 		default:
 			break;
 		}
-		
+
 		//	Hero will move
 		heroDidMove();
 	}
@@ -269,7 +272,7 @@ public class GameMap extends Object implements GameMapDelegate {
 	}
 	//	Check if ogre is adjacent
 	public Ogre isOgreNear(int x, int y){
-		for(Ogre ogre: ogres){
+		for(Ogre ogre: getOgres()){
 			if (ogre != null){
 				// Check if the guard is above hero
 				if (ogre.getX() == x && ogre.getY() == y-1){
@@ -320,8 +323,145 @@ public class GameMap extends Object implements GameMapDelegate {
 		return false;
 	}
 
+
 	public void addOgre(Ogre ogre){
 		ogres.add(ogre);
+	}
+	//	Move all ogres
+	public void moveOgres(){
+		for (Ogre ogre: getOgres()){
+			//	If ogre is stunned, he doenst move, but swing bat
+			if (ogre.isStunned()) {
+				//	Decrease stun counter
+				ogre.decreaseStunCounter();
+				//	Swing club
+				if (ogre.getClub() != null){
+					swingClub(ogre);
+				}
+			} else {
+				moveOgre(ogre);
+			}
+		}
+	}
+	//	Move a single ogre
+	public void moveOgre(Ogre ogre){
+		int i,x = 0,y = 0;
+
+		// Get random option
+		i = RandomService.getRandomInt(1, 4);
+
+		//	Move up
+		if (i == 1){
+			y = -1;
+		}
+		//	Move down
+		else if (i == 2){
+			y = 1;
+		}
+		//	Move left
+		else if (i == 3){
+			x = -1;
+		}
+		//	Move right
+		else if (i == 4){
+			x = 1;
+		}
+
+		//	Check if not moving to a wall or a door
+		if (getMap().getCells()[ogre.getY() + y][ogre.getX() + x] == null ||
+				getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Key ||
+				getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Ogre ||
+				getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Club
+				){
+			//	BEFORE MOVING
+			//	If moving out of a key, change ogre letter to "O"
+			if (ogre.getY() == key.getY() && ogre.getX() == key.getX()){
+				// Change ogre to letter "$"
+				ogre.setLetter("O");
+				// Previous cell is key
+				getMap().getCells()[ogre.getY()][ogre.getX()] = this.key;
+			} else {
+				// Clean previous cell
+				getMap().getCells()[ogre.getY()][ogre.getX()] = null;
+			}
+			//	Check if moving to a key
+			if (ogre.getY() + y == key.getY() && ogre.getX() + x == key.getX()){
+				// Change ogre to letter "$"
+				ogre.setLetter("$");
+			}
+
+			//	MOVE
+			// Update ogre position
+			ogre.setCoordinate(new Coordinate2d(ogre.getX() + x, ogre.getY() + y));
+			//	Show in next cell
+			getMap().getCells()[ogre.getY()][ogre.getX()] = ogre;	
+
+			//	Swing club
+			if (ogre.getClub() != null){
+				swingClub(ogre);
+			}
+		} else {
+			//	Use recursively
+			moveOgre(ogre);
+		}
+	}
+
+	public void swingClub(Ogre ogre){
+		int i,x = 0,y = 0;
+
+		// Get random option
+		i = RandomService.getRandomInt(1, 4);
+
+		//	Club up
+		if (i == 1){
+			y = -1;
+		}
+		//	Club down
+		else if (i == 2){
+			y = 1;
+		}
+		//	Club <-
+		else if (i == 4){
+			x = -1;
+		}
+		//	Club ->
+		else if (i == 3){
+			x = 1;
+		}
+
+		//	Check if moving to a null cell or a key
+		if (getMap().getCells()[ogre.getY() + y][ogre.getX() + x] == null
+				|| getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Key 
+				|| getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Club
+				){
+			// MOVE
+			// Check if moving out of a key
+			if (ogre.getClub().getY() == key.getY() && ogre.getClub().getX() == key.getX()){
+				// Change key to letter "*"
+				ogre.getClub().setLetter("*");
+				// Previous cell is key
+				getMap().getCells()[ogre.getClub().getY()][ogre.getClub().getX()] = this.key;
+			} else {
+				// Clean previous cell if it is not a ogre (weapon is on ogre when added)
+				if(getMap().getCells()[ogre.getClub().getY()][ogre.getClub().getX()] instanceof Ogre == false){
+					getMap().getCells()[ogre.getClub().getY()][ogre.getClub().getX()] = null;
+				}
+			}
+
+			// Check if moving to a key
+			if (ogre.getY() + y == key.getY() && ogre.getX() + x == key.getX()){
+				// Change key to letter "$"
+				ogre.getClub().setLetter("$");
+			}
+
+			// Update club position
+			ogre.getClub().setCoordinate(new Coordinate2d(ogre.getX()+x, ogre.getY()+y));
+			//	Show in next cell
+			getMap().getCells()[ogre.getClub().getY()][ogre.getClub().getX()] = ogre.getClub();	
+		} else {
+			//	Calculate cell recursive
+			swingClub(ogre);
+		}
 	}
 
 	/**
@@ -403,5 +543,19 @@ public class GameMap extends Object implements GameMapDelegate {
 	 */
 	public void setOgres(ArrayList<Ogre> ogres) {
 		this.ogres = ogres;
+	}
+
+	/**
+	 * @return the key
+	 */
+	public Key getKey() {
+		return key;
+	}
+
+	/**
+	 * @param key the key to set
+	 */
+	public void setKey(Key key) {
+		this.key = key;
 	}
 }
