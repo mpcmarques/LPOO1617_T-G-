@@ -55,11 +55,17 @@ public class GameMap extends Object {
 					break;
 					//	Ogre
 				case 'O':
+					//	Add ogre
+					addOgre(new Ogre(col, row, false));
 					break;
 					// Lever / Key
-				case 'k':
+				case 'l':
 					//	Add lever
 					this.map.addCell(new Lever(col,row));
+					break;
+				case 'k':
+					//	Add key
+					this.map.addCell(new Key(col,row));
 					break;
 					// Door
 				case 'I':
@@ -73,12 +79,15 @@ public class GameMap extends Object {
 		}
 	}
 	/** 
-	 * @brief Player finished game map, need to call super first
+	 * @brief Player finished game map, call game level completion handler
 	 * */
 	public void completed(){
 		//	Set completed
 		this.setCompleted(true);
+		//	Call game level completion handler
+		Game.instance.levelCompleted();
 	}
+	
 	/** 
 	 * @brief Player pressed a lever, opens all doors
 	 * */
@@ -163,7 +172,7 @@ public class GameMap extends Object {
 				// If door is closed, open and remove key from hero
 				if (door.isOpen() == false){
 					//	Check if has key
-					if (hero.isHaveKey()){
+					if (hero.hasKey()){
 						//	Open door
 						door.openDoor();
 						//	Remove key from hero

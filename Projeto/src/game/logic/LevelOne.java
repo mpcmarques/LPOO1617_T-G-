@@ -4,13 +4,19 @@ import java.util.ArrayList;
 
 public class LevelOne extends GameMap {
 	private int guardMovesCounter;
-	private Lever lever;
-
+	private boolean isGuardAllowedToMove;
+	
 	public LevelOne() {
 		//	Start new map
 		super(new Map(10,10));
-		// TODO Auto-generated constructor stub
+		setGuardAllowedToMove(false);
+		// Start map logic
 		startMap();
+	}
+	
+	public LevelOne(char[][] map){
+		super(map);
+		setGuardAllowedToMove(false);
 	}
 
 	/// Starts first level
@@ -33,7 +39,9 @@ public class LevelOne extends GameMap {
 		//	Add guard to map
 		setGuardMoves();
 		getMap().addCell(getGuard());
-
+		//	Allow guard movement
+		setGuardAllowedToMove(true);
+		
 		//	Add walls to map
 		createWallsFirstLevel();
 		//	Add  doors to map
@@ -48,22 +56,16 @@ public class LevelOne extends GameMap {
 	}
 
 	public void heroDidMove(){
-		//	Level logic -> Makes guard walk
-		firstLevelLogic();
+		//	Moves guard
+		if (isGuardAllowedToMove()){
+			moveGuardLogic();
+		}
 		//	Check if meet super conditions
 		super.heroDidMove();
 	}
 
-	public void completed(){
-		//	Call super
-		super.completed();
-
-		//	Change map
-		Game.instance.changeMap(new LevelTwo());
-	}
-
 	///	First level logic
-	public void firstLevelLogic(){
+	public void moveGuardLogic(){
 		//		MOVE GUARD
 		//	Check guard personality
 		//	Rookie
@@ -297,17 +299,16 @@ public class LevelOne extends GameMap {
 	}
 
 	/**
-	 * @return the lever
+	 * @return the isGuardAllowedToMove
 	 */
-	public Lever getLever() {
-		return lever;
+	public boolean isGuardAllowedToMove() {
+		return isGuardAllowedToMove;
 	}
 
 	/**
-	 * @param lever the lever to set
+	 * @param isGuardAllowedToMove the isGuardAllowedToMove to set
 	 */
-	public void setLever(Lever lever) {
-		this.lever = lever;
+	public void setGuardAllowedToMove(boolean isGuardAllowedToMove) {
+		this.isGuardAllowedToMove = isGuardAllowedToMove;
 	}
-
 }

@@ -13,7 +13,7 @@ public class Hero extends Cell {
 	/**
 	 * @return the haveKey
 	 */
-	public boolean isHaveKey() {
+	public boolean hasKey() {
 		return haveKey;
 	}
 

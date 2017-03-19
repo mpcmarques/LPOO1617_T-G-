@@ -4,6 +4,7 @@ public class Game extends Object {
 	private GameMap gameMap;
 	private EndStatus endStatus;
 	private GameState state;
+	private boolean isFirstLevelCompleted;
 	
 	// Game instance
 	static Game instance;
@@ -12,6 +13,7 @@ public class Game extends Object {
 		setState(GameState.started);
 		setGameMap(gameMap);
 		instance = this;
+		setFirstLevelCompleted(false);
 	}
 
 	public void updateGame(String typed){
@@ -41,6 +43,16 @@ public class Game extends Object {
 		// END GAME, GAME Over
 		setState(GameState.over);
 		setEndStatus(EndStatus.DEFEAT);
+	}
+	
+	public void levelCompleted(){
+		//	Is on first level
+		if( this.getGameMap() instanceof LevelOne){
+			changeMap(new LevelTwo());
+		} else {
+			//	Finish game
+			gameCompleted();
+		}
 	}
 	
 	public void gameCompleted(){
@@ -91,5 +103,19 @@ public class Game extends Object {
 	 */
 	public void setEndStatus(EndStatus endStatus) {
 		this.endStatus = endStatus;
+	}
+
+	/**
+	 * @return the isFirstLevelCompleted
+	 */
+	public boolean isFirstLevelCompleted() {
+		return isFirstLevelCompleted;
+	}
+
+	/**
+	 * @param isFirstLevelCompleted the isFirstLevelCompleted to set
+	 */
+	public void setFirstLevelCompleted(boolean isFirstLevelCompleted) {
+		this.isFirstLevelCompleted = isFirstLevelCompleted;
 	}
 }

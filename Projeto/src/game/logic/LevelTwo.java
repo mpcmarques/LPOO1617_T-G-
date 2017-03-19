@@ -1,27 +1,31 @@
 package game.logic;
 
 public class LevelTwo extends GameMap {
-
+	private boolean isOgreAllowedToMove;
+	
 	public LevelTwo() {
 		//	Start new map
 		super(new Map(10,10));
-		// TODO Auto-generated constructor stub
+		setOgreAllowedToMove(false);
+		// Set configurations
 		startSecondLevel();
+	}
+	
+	public LevelTwo(char[][] map){
+		//	Start new map
+		super(map);
+		//	Ogre can't move
+		setOgreAllowedToMove(false);
 	}
 
 	public void heroDidMove(){
 		//	Move ogres
-		moveOgres();
+		if (isOgreAllowedToMove()){
+			moveOgres();
+		}
 
 		//	Call super
 		super.heroDidMove();
-	}
-
-	public void completed(){
-		super.completed();
-
-		//	Finish game
-		Game.instance.gameCompleted();
 	}
 
 	///	Finishes first level and starts second level
@@ -51,6 +55,9 @@ public class LevelTwo extends GameMap {
 			getMap().addCell(ogre);
 			swingClub(ogre);
 		}
+		//	Ogres are allowed to move
+		setOgreAllowedToMove(true);
+		
 		//	Add club 
 		getMap().addCell(new Club(2,8));
 	}
@@ -80,5 +87,19 @@ public class LevelTwo extends GameMap {
 		for(i = 1; i < 9; i++){
 			getMap().addWall(i, 9);
 		}
+	}
+
+	/**
+	 * @return the isOgreAllowedToMove
+	 */
+	public boolean isOgreAllowedToMove() {
+		return isOgreAllowedToMove;
+	}
+
+	/**
+	 * @param isOgreAllowedToMove the isOgreAllowedToMove to set
+	 */
+	public void setOgreAllowedToMove(boolean isOgreAllowedToMove) {
+		this.isOgreAllowedToMove = isOgreAllowedToMove;
 	}
 }
