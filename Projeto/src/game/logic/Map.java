@@ -47,14 +47,14 @@ public class Map {
 					Cell cell = cells[i][j];
 					//	Add to line
 					line += cell.getLetter();
-					line += "|";
+					line += " ";
 				} else {
 					//	Empty cell
-					line += " |";
+					line += "  ";
 				}
 			}
 			//	Add line
-			string += line + "\n";
+			string += line + "|\n";
 		}
 		return string;
 	}

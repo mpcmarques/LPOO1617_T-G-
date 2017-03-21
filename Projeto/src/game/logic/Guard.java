@@ -1,7 +1,7 @@
 package game.logic;
 import java.util.ArrayList;
 
-public class Guard extends Cell {
+public abstract class Guard extends Cell {
 	private int moveCounter;
 	private ArrayList<Coordinate2d> movePositions;
 
@@ -9,6 +9,13 @@ public class Guard extends Cell {
 	Guard(int x, int y) {
 		super("G", x, y);
 		// TODO Auto-generated constructor stub
+		this.setMoveCounter(0);
+	}
+	/** 
+	 * Creates guard with coordinates 0,0
+	 * */
+	Guard(){
+		super("G",0,0);
 		this.setMoveCounter(0);
 	}
 

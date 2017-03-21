@@ -49,7 +49,7 @@ public class GameMap extends Object {
 					//	Guard
 				case 'G':
 					//	Set guard
-					setGuard(new Guard(col,row));
+					setGuard(new Rookie(col,row));
 					//	Add cell to map
 					this.map.addCell(getGuard());
 					break;

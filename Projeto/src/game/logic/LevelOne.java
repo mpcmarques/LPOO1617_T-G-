@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class LevelOne extends GameMap {
 	private int guardMovesCounter;
 	private boolean isGuardAllowedToMove;
-	
+
 	public LevelOne() {
 		//	Start new map
 		super(new Map(10,10));
@@ -13,7 +13,31 @@ public class LevelOne extends GameMap {
 		// Start map logic
 		startMap();
 	}
-	
+
+	public LevelOne(Guard guard){
+		//	Start new map
+		super(new Map(10,10));
+		//	Set guard
+		setGuard(guard);
+		// 	Set guard position
+		guard.setCoordinate(new Coordinate2d(8,1));
+		//	Add guard to map
+		setGuardMoves();
+		getMap().addCell(getGuard());
+		//	Allow guard movement
+		setGuardAllowedToMove(true);
+
+		//	Add walls to map
+		createWallsFirstLevel();
+		//	Add  doors to map
+		createDoorsFirstLevel();
+		//	Add hero to map
+		setHero(new Hero(1,1));
+		getMap().addCell(getHero());
+		//	Add lever to map
+		getMap().addCell(new Lever(6,8));
+	}
+
 	public LevelOne(char[][] map){
 		super(map);
 		setGuardAllowedToMove(false);
@@ -21,7 +45,7 @@ public class LevelOne extends GameMap {
 
 	/// Starts first level
 	public void startMap(){
-		//	 Sort guard type
+		//	 Sort guard type if guard is nil
 		int guardCount = RandomService.getRandomInt(1, 3);
 		switch(guardCount){
 		case 1:
@@ -41,7 +65,7 @@ public class LevelOne extends GameMap {
 		getMap().addCell(getGuard());
 		//	Allow guard movement
 		setGuardAllowedToMove(true);
-		
+
 		//	Add walls to map
 		createWallsFirstLevel();
 		//	Add  doors to map

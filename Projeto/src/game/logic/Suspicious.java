@@ -3,9 +3,14 @@ package game.logic;
 public class Suspicious extends Guard {
 	private boolean isInReverse;
 	
-	Suspicious(int x, int y) {
+	public Suspicious(int x, int y) {
 		super(x, y);
 		// TODO Auto-generated constructor stub
+		this.setInReverse(false);
+	}
+	
+	public Suspicious(){
+		super();
 		this.setInReverse(false);
 	}
 	

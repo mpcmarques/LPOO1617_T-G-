@@ -3,9 +3,16 @@ package game.logic;
 public class Drunken extends Guard {
 	private boolean isSleeping;
 	private int sleepTime;
-	
-	Drunken(int x, int y) {
+
+	public Drunken(int x, int y) {
 		super(x, y);
+		// TODO Auto-generated constructor stub
+		this.setSleeping(false);
+		this.setSleepTime(0);
+	}
+
+	public Drunken(){
+		super();
 		// TODO Auto-generated constructor stub
 		this.setSleeping(false);
 		this.setSleepTime(0);

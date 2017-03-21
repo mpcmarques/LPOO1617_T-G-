@@ -15,6 +15,16 @@ public class Game extends Object {
 		instance = this;
 		setFirstLevelCompleted(false);
 	}
+	
+	public Game(GameMap gameMap, Guard guard, int numOgres){
+		setState(GameState.started);
+		setGameMap(gameMap);
+		instance = this;
+		setFirstLevelCompleted(false);
+		
+		// Configure first level
+		gameMap.setGuard(guard);
+	}
 
 	public void updateGame(String typed){
 		//	Updates game map
@@ -24,8 +34,9 @@ public class Game extends Object {
 	/** 
 	 * Prints game on screen
 	 * */
-	public void printGame(){
+	public String printGame(){
 		System.out.println(gameMap.getMap());
+		return getGameMap().getMap().toString();
 	}
 	
 	/** 
