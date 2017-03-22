@@ -5,87 +5,76 @@ import java.util.ArrayList;
 public class LevelOne extends GameMap {
 	private int guardMovesCounter;
 	private boolean isGuardAllowedToMove;
+	private Guard guard;
+	private Lever lever;
 
-	public LevelOne() {
-		//	Start new map
-		super(new Map(10,10));
-		setGuardAllowedToMove(false);
-		// Start map logic
-		startMap();
-	}
-
-	public LevelOne(Guard guard){
-		//	Start new map
-		super(new Map(10,10));
-		//	Set guard
-		setGuard(guard);
-		// 	Set guard position
-		guard.setCoordinate(new Coordinate2d(8,1));
-		//	Add guard to map
-		setGuardMoves();
-		getMap().addCell(getGuard());
-		//	Allow guard movement
-		setGuardAllowedToMove(true);
-
-		//	Add walls to map
-		createWallsFirstLevel();
-		//	Add  doors to map
-		createDoorsFirstLevel();
-		//	Add hero to map
-		setHero(new Hero(1,1));
-		getMap().addCell(getHero());
-		//	Add lever to map
-		getMap().addCell(new Lever(6,8));
-	}
-
-	public LevelOne(char[][] map){
+	/** 
+	 * Constructor
+	 * */
+	public LevelOne(char[][] map, GuardTypes guardTyp, boolean isGuardAllowedToMove){
+		//	Call super
 		super(map);
-		setGuardAllowedToMove(false);
-	}
-
-	/// Starts first level
-	public void startMap(){
-		//	 Sort guard type if guard is nil
-		int guardCount = RandomService.getRandomInt(1, 3);
-		switch(guardCount){
-		case 1:
-			setGuard(new Suspicious(8,1));
-			break;
-		case 2:
-			setGuard(new Rookie(8,1));
-			break;
-		case 3:
-			setGuard(new Drunken(8,1));
-			break;
-		default:
-			break;
+		GuardTypes guardType = guardTyp;
+		
+		// Sort guard type if guard is nil, sort guard type
+		if (guardType == null) {
+			guardType = GuardTypes.values()[RandomService.getRandomInt(0, 2)];
 		}
-		//	Add guard to map
-		setGuardMoves();
-		getMap().addCell(getGuard());
-		//	Allow guard movement
-		setGuardAllowedToMove(true);
 
-		//	Add walls to map
-		createWallsFirstLevel();
-		//	Add  doors to map
-		createDoorsFirstLevel();
-		//	Add hero to map
-		setHero(new Hero(1,1));
-		getMap().addCell(getHero());
-		//	Add lever to map
-		getMap().addCell(new Lever(6,8));
-		//	Print map in the first time
-		System.out.println(getMap());
+		//	Get guard from map
+		int row, col;
+		for(row = 0; row < map.length; row++){
+			for(col = 0; col < map[row].length; col++){
+				char value = map[col][row];
+				if (value == 'G'){
+					switch(guardType.ordinal()){
+					case 2:
+						setGuard(new Suspicious(row,col));
+						break;
+					case 0:
+						setGuard(new Rookie(row,col));
+						break;
+					case 1:
+						setGuard(new Drunken(row,col));
+						break;
+					default:
+						break;
+					}
+					
+					//	Add cell to map
+					this.getMap().addCell(getGuard());
+				}
+			}
+		}
+		// Set guard allowed to move
+		setGuardAllowedToMove(isGuardAllowedToMove);
+		
+		//	Set guard moves
+		if(this.getGuard() != null){
+			setGuardMoves();
+		}
 	}
 
 	public void heroDidMove(){
+		// Game over check
 		//	Moves guard
-		if (isGuardAllowedToMove()){
+		if (isGuardAllowedToMove() == true){
 			moveGuardLogic();
 		}
-		//	Check if meet super conditions
-		super.heroDidMove();
+
+		//	Check if moved next to a guard
+		if(isGuardNear() == true){
+			//	Check if guard is not a drunken sleeping
+			if (getGuard() instanceof Drunken) {
+				Drunken drunkGuard = (Drunken)getGuard();
+				if (drunkGuard.isSleeping()){
+					//	If guard is sleeping, doesnt end game.
+					return;
+				}
+			} 
+			// END GAME, GAME Over
+			Game.instance.gameOver();
+		}
 	}
 
 	///	First level logic
@@ -222,90 +211,29 @@ public class LevelOne extends GameMap {
 		}
 	}
 
-	///	Create first level doors
-	public void createDoorsFirstLevel(){
-		//	Create doors
-		Door door1 = new Door(4, 1, false);
-		Door door2 = new Door(4, 3, false);
-		Door door3 = new Door(2, 3, false);
-		Door door4 = new Door(0, 5, true);
-		Door door5 = new Door(0, 6, true);
-		Door door6 = new Door(2, 8, false);
-		Door door7 = new Door(4, 8, false);
-		//	Add to map
-		getMap().addCell(door1);
-		getMap().addCell(door2);
-		getMap().addCell(door3);
-		getMap().addCell(door4);
-		getMap().addCell(door5);
-		getMap().addCell(door6);
-		getMap().addCell(door7);
-	}
+	/** 
+	 * @returns boolean Returns true if guard is adjacent
+	 * */
+	public boolean isGuardNear(){
+		if(getGuard() == null) return false;
 
-	/// Create first level walls
-	public void createWallsFirstLevel(){
-		// Add first line
-		getMap().addWall(0, 0);
-		getMap().addWall(1, 0);
-		getMap().addWall(2, 0);
-		getMap().addWall(3, 0);
-		getMap().addWall(4, 0);
-		getMap().addWall(5, 0);
-		getMap().addWall(6, 0);
-		getMap().addWall(7, 0);
-		getMap().addWall(8, 0);
-		getMap().addWall(9, 0);
-		//	Add second line
-		getMap().addWall(0, 1);
-		getMap().addWall(6, 1);
-		getMap().addWall(9, 1);
-		//	Add third line
-		getMap().addWall(0, 2);
-		getMap().addWall(1, 2);
-		getMap().addWall(2, 2);
-		getMap().addWall(4, 2);
-		getMap().addWall(5, 2);
-		getMap().addWall(6, 2);
-		getMap().addWall(9, 2);
-		//	Add fourth line
-		getMap().addWall(0,3);
-		getMap().addWall(6,3);
-		getMap().addWall(9,3);
-		//	Add fifth
-		getMap().addWall(0, 4);
-		getMap().addWall(1, 4);
-		getMap().addWall(2, 4);
-		getMap().addWall(4, 4);
-		getMap().addWall(5, 4);
-		getMap().addWall(6, 4);
-		getMap().addWall(9, 4);
-		//	Add six and Seven
-		getMap().addWall(9, 5);
-		getMap().addWall(9, 6);
-		//	Add eight
-		getMap().addWall(0, 7);
-		getMap().addWall(1, 7);
-		getMap().addWall(2, 7);
-		getMap().addWall(4, 7);
-		getMap().addWall(5, 7);
-		getMap().addWall(6, 7);
-		getMap().addWall(7, 7);
-		getMap().addWall(9, 7);
-		//	Add nine
-		getMap().addWall(0, 8);
-		getMap().addWall(5, 8);
-		getMap().addWall(9, 8);
-		// Add last line
-		getMap().addWall(0, 9);
-		getMap().addWall(1, 9);
-		getMap().addWall(2, 9);
-		getMap().addWall(3, 9);
-		getMap().addWall(4, 9);
-		getMap().addWall(5, 9);
-		getMap().addWall(6, 9);
-		getMap().addWall(7, 9);
-		getMap().addWall(8, 9);
-		getMap().addWall(9, 9);
+		// Check if the guard is above hero
+		if (getGuard().getX() == getHero().getX() && getGuard().getY() == getHero().getY()-1){
+			return true;
+		}
+		// Check if the guard is down
+		if (getGuard().getX() == getHero().getX() && getGuard().getY() == getHero().getY()+1){
+			return true;
+		}
+		// Check if the guard is on the right
+		if (getGuard().getX() == getHero().getX()+1 && getGuard().getY() == getHero().getY()){
+			return true;
+		}
+		//	Check if the guard is on the left
+		if (getGuard().getX() == getHero().getX()-1 && getGuard().getY() == getHero().getY()){
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -334,5 +262,33 @@ public class LevelOne extends GameMap {
 	 */
 	public void setGuardAllowedToMove(boolean isGuardAllowedToMove) {
 		this.isGuardAllowedToMove = isGuardAllowedToMove;
+	}
+
+	/**
+	 * @return the guard
+	 */
+	public Guard getGuard() {
+		return guard;
+	}
+
+	/**
+	 * @param guard the guard to set
+	 */
+	public void setGuard(Guard guard) {
+		this.guard = guard;
+	}
+
+	/**
+	 * @return the lever
+	 */
+	public Lever getLever() {
+		return lever;
+	}
+
+	/**
+	 * @param lever the lever to set
+	 */
+	public void setLever(Lever lever) {
+		this.lever = lever;
 	}
 }

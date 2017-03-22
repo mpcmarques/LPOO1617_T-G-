@@ -5,27 +5,25 @@ public class Game extends Object {
 	private EndStatus endStatus;
 	private GameState state;
 	private boolean isFirstLevelCompleted;
+	private int numberOfOgres;
 	
 	// Game instance
 	static Game instance;
-
+	
+	/** 
+	 * Constructor
+	 * */
 	public Game(GameMap gameMap){
 		setState(GameState.started);
 		setGameMap(gameMap);
 		instance = this;
 		setFirstLevelCompleted(false);
+		setNumberOfOgres(1);
 	}
 	
-	public Game(GameMap gameMap, Guard guard, int numOgres){
-		setState(GameState.started);
-		setGameMap(gameMap);
-		instance = this;
-		setFirstLevelCompleted(false);
-		
-		// Configure first level
-		gameMap.setGuard(guard);
-	}
-
+	/** 
+	 * Updates game with typed string
+	 * */
 	public void updateGame(String typed){
 		//	Updates game map
 		gameMap.updateGame(typed);
@@ -59,7 +57,9 @@ public class Game extends Object {
 	public void levelCompleted(){
 		//	Is on first level
 		if( this.getGameMap() instanceof LevelOne){
-			changeMap(new LevelTwo());
+			changeMap(new LevelTwo(DefaultMaps.map2, true, numberOfOgres));
+			//	print new map
+			this.printGame();
 		} else {
 			//	Finish game
 			gameCompleted();
@@ -128,5 +128,19 @@ public class Game extends Object {
 	 */
 	public void setFirstLevelCompleted(boolean isFirstLevelCompleted) {
 		this.isFirstLevelCompleted = isFirstLevelCompleted;
+	}
+
+	/**
+	 * @return the numberOfOgres
+	 */
+	public int getNumberOfOgres() {
+		return numberOfOgres;
+	}
+
+	/**
+	 * @param numberOfOgres the numberOfOgres to set
+	 */
+	public void setNumberOfOgres(int numberOfOgres) {
+		this.numberOfOgres = numberOfOgres;
 	}
 }

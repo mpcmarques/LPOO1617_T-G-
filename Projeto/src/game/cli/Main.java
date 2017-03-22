@@ -8,7 +8,9 @@ public class Main {
 		System.out.println("Game Started!");
 		//	Creates the first level
 		// Start a new game
-		Game game = new Game(new LevelOne());
+		Game game = new Game(new LevelOne(DefaultMaps.map1, null, true));
+		// Print map
+		game.printGame();
 
 		// Start user input scanner
 		Scanner user_input = new Scanner( System.in );

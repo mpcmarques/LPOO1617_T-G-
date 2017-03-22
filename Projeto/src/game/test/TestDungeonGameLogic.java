@@ -8,14 +8,16 @@ import game.logic.*;
 
 public class TestDungeonGameLogic {
 
-	char[][] map = {{'X','X','X','X','X'},
+	char[][] map1 = {
+			{'X','X','X','X','X'},
 			{'X','H',' ','G','X'},
 			{'I',' ',' ','X','X'},
 			{'I','l',' ','X','X'},
 			{'X','X','X','X','X'}
 	};
 
-	char[][] map2 = {{'X','X','X','X','X'},
+	char[][] map2 = {
+			{'X','X','X','X','X'},
 			{'X','H',' ','O','X'},
 			{'I',' ',' ',' ','X'},
 			{'I','k',' ',' ','X'},
@@ -26,14 +28,14 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testMoveHeroIntoFreeCell(){
-		GameMap gameMap = new LevelOne(map);
+		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
 		Game game = new Game(gameMap);
 		assertEquals(new Coordinate2d(1,1), game.getGameMap().getHero().getCoordinate());
 	}
 
 	@Test
 	public void testHeroMoveIntoWall(){
-		GameMap gameMap = new LevelOne(map);
+		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
 		Game game = new Game(gameMap);
 		Coordinate2d originalPosition = game.getGameMap().getHero().getCoordinate();
 		game.getGameMap().updateGame("a");
@@ -44,7 +46,7 @@ public class TestDungeonGameLogic {
 	//	Level one
 	@Test
 	public void testHeroIsCapturedByGuard(){
-		GameMap gameMap = new LevelOne(map);
+		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
 		Game game = new Game(gameMap);
 		assertFalse(game.isGameOver());
 		game.getGameMap().updateGame("d");
@@ -54,7 +56,7 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testHeroMoveIntoClosedDoor(){
-		GameMap gameMap = new LevelOne(map);
+		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
 		Game game = new Game(gameMap);
 		// Move hero 1 down 
 		game.getGameMap().updateGame("s");
@@ -67,7 +69,7 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testExitDoorsOpenWhenOnLever(){
-		GameMap gameMap = new LevelOne(map);
+		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
 		Game game = new Game(gameMap);
 		// Move hero down 2 cells -> get lever
 		game.getGameMap().updateGame("s");
@@ -78,7 +80,7 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testGameMapProgresses(){
-		GameMap gameMap = new LevelOne(map);
+		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
 		Game game = new Game(gameMap);
 		// Move hero down 2 cells -> get lever than 1 cell left -> end game map
 		game.getGameMap().updateGame("s");
@@ -92,16 +94,20 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testMoveHeroIsCapturedByOgre(){
-		GameMap gameMap = new LevelTwo(map2);
+		LevelTwo gameMap = new LevelTwo(map2, false, 1);
 		Game game = new Game(gameMap);
 		assertFalse(game.isGameOver());
 		game.getGameMap().updateGame("d");
+		
+		//	Check if ogre has not a club
+		assertEquals(null,gameMap.getOgres().get(0).getClub());
+		
 		assertTrue(game.isGameOver());
 		assertEquals(EndStatus.DEFEAT, game.getEndStatus());
 	}
 
 	@Test public void testHeroMoveIntoKey(){
-		GameMap gameMap = new LevelTwo(map2);
+		GameMap gameMap = new LevelTwo(map2, false, 1);
 		Game game = new Game(gameMap);
 		//	Move down 2 cells
 		game.getGameMap().updateGame("s");
@@ -113,7 +119,7 @@ public class TestDungeonGameLogic {
 	}
 
 	@Test public void testHeroMoveIntoClosedDoorWithoutKey(){
-		GameMap gameMap = new LevelTwo(map2);
+		GameMap gameMap = new LevelTwo(map2, false, 1);
 		Game game = new Game(gameMap);
 		//	Hero must not have the key
 		assertFalse(game.getGameMap().getHero().hasKey());
@@ -127,7 +133,7 @@ public class TestDungeonGameLogic {
 
 	@Test public void testHeroMoveIntoClosedDoorWithKey(){
 		//	Creates game and map
-		GameMap gameMap = new LevelTwo(map2);
+		GameMap gameMap = new LevelTwo(map2, false, 1);
 		Game game = new Game(gameMap);
 
 		//	Hero must not have the key
@@ -147,7 +153,7 @@ public class TestDungeonGameLogic {
 
 	@Test public void testHeroFinishedGame(){
 		//		Creates game and map
-		GameMap gameMap = new LevelTwo(map2);
+		GameMap gameMap = new LevelTwo(map2, false, 1);
 		Game game = new Game(gameMap);
 
 		//	Hero must not have the key
@@ -177,7 +183,7 @@ public class TestDungeonGameLogic {
 
 	@Test(timeout=1000) public void testOgreRandomMovement(){
 		//	Creates game and map
-		LevelTwo gameMap = new LevelTwo();
+		LevelTwo gameMap = new LevelTwo(DefaultMaps.map2, true, 1);
 		gameMap.setOgreAllowedToMove(true);
 
 		Game game = new Game(gameMap);
@@ -186,32 +192,32 @@ public class TestDungeonGameLogic {
 
 		while(!movedUp || !movedDown || !movedRight || !movedLeft){
 			// Save first ogre last position
-			Coordinate2d ogrePosition = game.getGameMap().getOgres().get(0).getCoordinate();
+			Coordinate2d ogrePosition = gameMap.getOgres().get(0).getCoordinate();
 
 			// Do action
 			game.updateGame("");
 
 			//	If ogre moved -1 y
-			if (game.getGameMap().getOgres().get(0).getCoordinate().getX() == ogrePosition.getX()
-					&& game.getGameMap().getOgres().get(0).getCoordinate().getY() == ogrePosition.getY()-1){
+			if (gameMap.getOgres().get(0).getCoordinate().getX() == ogrePosition.getX()
+					&& gameMap.getOgres().get(0).getCoordinate().getY() == ogrePosition.getY()-1){
 				movedUp = true;
 			}
 
 			//	If ogre moved +1 y
-			if (game.getGameMap().getOgres().get(0).getCoordinate().getX() == ogrePosition.getX()
-					&& game.getGameMap().getOgres().get(0).getCoordinate().getY() == ogrePosition.getY()+1){
+			if (gameMap.getOgres().get(0).getCoordinate().getX() == ogrePosition.getX()
+					&& gameMap.getOgres().get(0).getCoordinate().getY() == ogrePosition.getY()+1){
 				movedDown = true;
 			}
 
 			//	If ogre moved +1 x
-			if (game.getGameMap().getOgres().get(0).getCoordinate().getX() == ogrePosition.getX()+1
-					&& game.getGameMap().getOgres().get(0).getCoordinate().getY() == ogrePosition.getY()){
+			if (gameMap.getOgres().get(0).getCoordinate().getX() == ogrePosition.getX()+1
+					&& gameMap.getOgres().get(0).getCoordinate().getY() == ogrePosition.getY()){
 				movedRight = true;
 			}
 
 			//	If ogre moved -1 x
-			if (game.getGameMap().getOgres().get(0).getCoordinate().getX() == ogrePosition.getX()-1
-					&& game.getGameMap().getOgres().get(0).getCoordinate().getY() == ogrePosition.getY()){
+			if (gameMap.getOgres().get(0).getCoordinate().getX() == ogrePosition.getX()-1
+					&& gameMap.getOgres().get(0).getCoordinate().getY() == ogrePosition.getY()){
 				movedLeft = true;
 			}
 		}
@@ -225,9 +231,8 @@ public class TestDungeonGameLogic {
 
 	@Test(timeout = 1000) public void testOgreRandomClubSwing(){
 		//	Creates game and map
-		GameMap gameMap = new LevelTwo();
+		LevelTwo gameMap = new LevelTwo(DefaultMaps.map2, true, 1);
 		Game game = new Game(gameMap);
-
 
 		boolean movedUp = false, movedDown = false, movedRight = false, movedLeft = false;
 
@@ -237,29 +242,29 @@ public class TestDungeonGameLogic {
 			game.updateGame("a");
 
 			// get ogre position
-			Coordinate2d ogrePosition = game.getGameMap().getOgres().get(0).getCoordinate();
+			Coordinate2d ogrePosition = gameMap.getOgres().get(0).getCoordinate();
 
 			//	If ogre club is on top
-			if (game.getGameMap().getOgres().get(0).getClub().getCoordinate().getX() == ogrePosition.getX()
-					&& game.getGameMap().getOgres().get(0).getClub().getCoordinate().getY() == ogrePosition.getY()-1){
+			if (gameMap.getOgres().get(0).getClub().getCoordinate().getX() == ogrePosition.getX()
+					&& gameMap.getOgres().get(0).getClub().getCoordinate().getY() == ogrePosition.getY()-1){
 				movedUp = true;
 			}
 
 			//	If ogre club is down
-			if (game.getGameMap().getOgres().get(0).getClub().getCoordinate().getX() == ogrePosition.getX()
-					&& game.getGameMap().getOgres().get(0).getClub().getCoordinate().getY() == ogrePosition.getY()+1){
+			if (gameMap.getOgres().get(0).getClub().getCoordinate().getX() == ogrePosition.getX()
+					&& gameMap.getOgres().get(0).getClub().getCoordinate().getY() == ogrePosition.getY()+1){
 				movedDown = true;
 			}
 
 			//	If ogre club is on the right
-			if (game.getGameMap().getOgres().get(0).getClub().getCoordinate().getX() == ogrePosition.getX()+1
-					&& game.getGameMap().getOgres().get(0).getClub().getCoordinate().getY() == ogrePosition.getY()){
+			if (gameMap.getOgres().get(0).getClub().getCoordinate().getX() == ogrePosition.getX()+1
+					&& gameMap.getOgres().get(0).getClub().getCoordinate().getY() == ogrePosition.getY()){
 				movedRight = true;
 			}
 
 			//	If ogre club is on the left
-			if (game.getGameMap().getOgres().get(0).getClub().getCoordinate().getX() == ogrePosition.getX()-1
-					&& game.getGameMap().getOgres().get(0).getClub().getCoordinate().getY() == ogrePosition.getY()){
+			if (gameMap.getOgres().get(0).getClub().getCoordinate().getX() == ogrePosition.getX()-1
+					&& gameMap.getOgres().get(0).getClub().getCoordinate().getY() == ogrePosition.getY()){
 				movedLeft = true;
 			}
 		}
@@ -273,87 +278,88 @@ public class TestDungeonGameLogic {
 
 	@Test(timeout = 1000) public void testGuardRandomPick(){
 		//	Creates game and map
-		LevelOne gameMap = new LevelOne();
+		LevelOne gameMap = new LevelOne(DefaultMaps.map1, null, true);
 		Game game = new Game(gameMap);
-
 
 		boolean isDrunken = false, isRookie = false, isSuspicious = false;
 
-		while(!isDrunken || !isRookie || !isSuspicious){
-
-			// Do action
-			gameMap.startMap();
-
+		while(!isDrunken){
+			//			start new map again
+			gameMap = new LevelOne(DefaultMaps.map1, null, true);
 			//	If guard is drunken
 			if(gameMap.getGuard() instanceof Drunken){
 				isDrunken = true;
 			}
+		}
 
+		while(!isRookie){
+			//			start new map again
+			gameMap = new LevelOne(DefaultMaps.map1, null, true);
 			//	If guard is rookie
 			if(gameMap.getGuard() instanceof Rookie){
 				isRookie = true;
 			}
+		}
+
+		while(!isSuspicious){
+			//	start new map again
+			gameMap = new LevelOne(DefaultMaps.map1, null, true);
 			//	If guard is suspicious
 			if(gameMap.getGuard() instanceof Suspicious){
 				isSuspicious = true;
 			}
 		}
-
-		//		Assertions
-		assertTrue(isRookie);
-		assertTrue(isSuspicious);
-		assertTrue(isDrunken);
 	}
 
 	//	Check if drunken is getting drunk and suspicious is getting suspicious
 	@Test(timeout = 1000) public void testGuardRandomPropriety(){
 		//	Creates game and map
-		LevelOne gameMap = new LevelOne();
+		LevelOne gameMap = new LevelOne(DefaultMaps.map1, null, true);
 		Game game = new Game(gameMap);
+		assertTrue(gameMap.isGuardAllowedToMove());
 
 		boolean isDrunken = false, isSuspicious = false;
 
-		while(!isDrunken || !isSuspicious){
-
-			// Do action
-			gameMap.startMap();
+		while(!isDrunken){
+			// Reload map
+			gameMap = new LevelOne(DefaultMaps.map1, null, true);
 
 			//	If guard is drunken and got drunk
 			if(gameMap.getGuard() instanceof Drunken){
 				//	Test if guard sleeps
-				while(!((Drunken) gameMap.getGuard()).isSleeping()){
-					game.updateGame("a");
+				while(!((Drunken)gameMap.getGuard()).isSleeping()){
+					gameMap.updateGame("a");
 				}
 				//	Test if guard stops sleeping
-				while(((Drunken) gameMap.getGuard()).isSleeping()){
-					game.updateGame("a");
+				while(((Drunken)gameMap.getGuard()).isSleeping()){
+					gameMap.updateGame("a");
 				}
 				// Stop sleeping
 				isDrunken = true;
 			}
+		}
 
+		while(!isSuspicious){
+			// Reload map
+			gameMap = new LevelOne(DefaultMaps.map1, null, true);
 			//	If guard is suspicious and got suspicious
 			if(gameMap.getGuard() instanceof Suspicious){
 				//	Test if guard gets suspecious
 				while(!((Suspicious) gameMap.getGuard()).isInReverse()){
-					game.updateGame("a");
+					gameMap.updateGame("a");
 				}
 				//	Test if guard stops getting suspicious
 				while(((Suspicious) gameMap.getGuard()).isInReverse()){
-					game.updateGame("a");
+					gameMap.updateGame("a");
 				}
 				isSuspicious = true;
 			}
 		}
-
-		//		Assertions
-		assertTrue(isSuspicious);
-		assertTrue(isDrunken);
 	}
 
 	@Test public void testHeroMoveIntoBat(){
 		//		Creates game and map
-		LevelTwo gameMap = new LevelTwo();
+		LevelTwo gameMap = new LevelTwo(DefaultMaps.map2, false, 1);
 		Game game = new Game(gameMap);
 
 		//	Check if hero doesn't have club
@@ -369,25 +375,41 @@ public class TestDungeonGameLogic {
 
 	@Test public void testHeroStunOgre(){
 		//	Creates game and map
-		LevelTwo gameMap = new LevelTwo(map2);
+		LevelTwo gameMap = new LevelTwo(map2, false, 1);
 		Game game = new Game(gameMap);
 
 		//	Check if hero doesn't have club
 		assertFalse(gameMap.getHero().hasWeapon());
 		assertEquals("H", gameMap.getHero().getLetter());
-		
+
 		//	Give hero a club
 		gameMap.getHero().setClub(new Club(gameMap.getHero().getX(),gameMap.getHero().getY()));
 
 		//	Check if hero got club
 		assertTrue(gameMap.getHero().hasWeapon());
 		assertEquals("A", gameMap.getHero().getLetter());
-		
+
 		//	Move hero to stun ogre
 		game.updateGame("d");
-		
+
 		//	Check if ogre is stunned
+		
+		//	Check if ogre has not a club
+		assertEquals(null, gameMap.getOgres().get(0).getClub());
+		
 		assertTrue(gameMap.getOgres().get(0).isStunned());
 		assertEquals("8", gameMap.getOgres().get(0).getLetter());
+	}
+
+	/** 
+	 * Test if all doors are opening properly
+	 * */
+	@Test public void openAllDoors(){
+		// Creates game and map
+		LevelOne gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
+		Game game = new Game(gameMap);		
+		
+		gameMap.openAllDoors();
+		assertTrue(gameMap.isExitDoorsOpen());
 	}
 }

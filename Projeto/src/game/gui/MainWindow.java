@@ -1,11 +1,13 @@
 package game.gui;
 
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import game.logic.*;
@@ -42,7 +44,6 @@ public class MainWindow {
 
 	// MARK: PROPRIETIES
 	private Game game;
-	public enum guardTypes { Rookie, Drunken, Suspicious; };
 
 	/**
 	 * Launch the application.
@@ -79,10 +80,10 @@ public class MainWindow {
 
 		JLabel lblNumberOfOgres = new JLabel("Number of ogres:");
 		frmMainWindow.getContentPane().add(lblNumberOfOgres, "cell 0 0,alignx left");
-		
-				textField = new JTextField();
-				frmMainWindow.getContentPane().add(textField, "cell 1 0");
-				textField.setColumns(10);
+
+		textField = new JTextField();
+		frmMainWindow.getContentPane().add(textField, "cell 1 0");
+		textField.setColumns(10);
 
 		lblNewLabel = new JLabel("Guard personality:");
 		frmMainWindow.getContentPane().add(lblNewLabel, "flowx,cell 0 1");
@@ -94,9 +95,9 @@ public class MainWindow {
 				startGame();
 			}
 		});
-				comboBox = new JComboBox(guardTypes.values());
-				comboBox.setToolTipText("text\n");
-				frmMainWindow.getContentPane().add(comboBox, "cell 1 1");
+		comboBox = new JComboBox(GuardTypes.values());
+		comboBox.setToolTipText("text\n");
+		frmMainWindow.getContentPane().add(comboBox, "cell 1 1");
 
 		textArea = new JTextArea();
 		textArea.setFont(new Font("Courier New", Font.BOLD, 15));
@@ -104,6 +105,7 @@ public class MainWindow {
 		frmMainWindow.getContentPane().add(btnNewButton, "cell 3 2 2 1,alignx center");
 
 		btnUp = new JButton("Up");
+		btnUp.setEnabled(false);
 		btnUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//	update game move up
@@ -113,6 +115,7 @@ public class MainWindow {
 		frmMainWindow.getContentPane().add(btnUp, "cell 3 4 2 1,alignx center");
 
 		btnLeft = new JButton("Left");
+		btnLeft.setEnabled(false);
 		btnLeft.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//	update game move left
@@ -122,6 +125,7 @@ public class MainWindow {
 		frmMainWindow.getContentPane().add(btnLeft, "flowx,cell 3 5,alignx center");
 
 		btnRight = new JButton("Right");
+		btnRight.setEnabled(false);
 		btnRight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//	update game move right
@@ -131,6 +135,7 @@ public class MainWindow {
 		frmMainWindow.getContentPane().add(btnRight, "cell 4 5,alignx center");
 
 		btnDown = new JButton("Down");
+		btnDown.setEnabled(false);
 		btnDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//	update game move down
@@ -157,26 +162,36 @@ public class MainWindow {
 	 * */
 	private void startGame(){
 		Guard guard = new Rookie();
-		
-		//	Choose guard
-		if (comboBox.getSelectedIndex() == 0){
-			guard = new Rookie();
-		}
-		else if (comboBox.getSelectedIndex() == 1){
-			guard = new Drunken();
-		} else if (comboBox.getSelectedIndex() == 2){
-			guard = new Suspicious();
-		}
-		
-		GameMap levelOne = new LevelOne(guard);
+		int numberOfOgres;
+		int selectedIndex = comboBox.getSelectedIndex();
+
+		GameMap levelOne = new LevelOne(DefaultMaps.map1, GuardTypes.values()[selectedIndex], true);
 		setGame(new Game(levelOne));
+		
+		//	Configure number of ogres
+		try { 
+			numberOfOgres = Integer.parseInt(this.textField.getText());
+		} catch(NumberFormatException e){
+			JOptionPane.showMessageDialog(this.frmMainWindow,"Please type a valid number of ogres, between 1 and 5.");
+			return;
+		}
+		
+		//	Verify number of ogres
+		if (0 < numberOfOgres && numberOfOgres <= 5) {
+			game.setNumberOfOgres(numberOfOgres);
+		} else {
+			JOptionPane.showMessageDialog(this.frmMainWindow,"Number of ogres must be between 1 and 5.");
+			return;
+		}
 
 		//	Show game on screen;
 		textArea.setText(game.printGame());
 		lblNewLabel_1.setText("Game started!");
-		
-		//	Configure game accordingly to options
+
+		//	Enable buttons
+		this.enableButtons(true);
 	}
+	
 	/** 
 	 * Updates game
 	 * */
@@ -185,9 +200,11 @@ public class MainWindow {
 			this.game.updateGame(typed);
 			//	Show game on screen;
 			textArea.setText(game.printGame());
-			
+
 			if(game.isGameOver()){
-				// Final game sentence
+				//
+				this.enableButtons(false);
+				// get final game sentence
 				if (game.getEndStatus() == EndStatus.DEFEAT) {
 					lblNewLabel_1.setText("Game Over!");
 				} else {
@@ -195,6 +212,16 @@ public class MainWindow {
 				}
 			}
 		}
+	}
+
+	/** 
+	 * @brief Enables user buttons
+	 * */
+	private void enableButtons(boolean enable){
+		btnRight.setEnabled(enable);
+		btnLeft.setEnabled(enable);
+		btnUp.setEnabled(enable);
+		btnDown.setEnabled(enable);
 	}
 
 	/**
