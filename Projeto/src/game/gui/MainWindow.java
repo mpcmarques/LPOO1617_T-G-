@@ -25,7 +25,6 @@ public class MainWindow {
 	private JButton btnNewButton;
 	private JLabel lblNewLabel_1;
 	private JButton btnExit;
-	private GamePanel gamePanel;
 
 	/**
 	 * Launch the application.
@@ -128,6 +127,8 @@ public class MainWindow {
 
 		//	Verify number of ogres
 		if (0 < numberOfOgres && numberOfOgres <= 5) {
+			//	Config number of ogres
+			game.setNumberOfOgres(numberOfOgres);
 			// Show game window
 			frmMainWindow.dispose();
 			frmMainWindow  = new GameWindow(game);
@@ -149,20 +150,5 @@ public class MainWindow {
 	 * */
 	private void enableButtons(boolean enable){
 		btnNewButton.setEnabled(!enable);
-	}
-	
-	
-	/**
-	 * @return the gamePanel
-	 */
-	public GamePanel getGamePanel() {
-		return gamePanel;
-	}
-
-	/**
-	 * @param gamePanel the gamePanel to set
-	 */
-	public void setGamePanel(GamePanel gamePanel) {
-		this.gamePanel = gamePanel;
 	}
 }

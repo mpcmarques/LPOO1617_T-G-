@@ -51,7 +51,7 @@ public class LevelTwo extends GameMap {
 
 		//	If one ogre, just show a club if he has one, otherwise move all ogres
 		if (isOgreAllowedToMove){
-			if (this.getOgres().size() == 0){
+			if (this.getOgres().size() == 1){
 				if (getOgres().get(0).getClub() != null){
 					swingClub(getOgres().get(0));
 				}
@@ -70,6 +70,19 @@ public class LevelTwo extends GameMap {
 		if(ogrenear != null){
 			//	Stun ogre
 			ogrenear.setStunned(true);
+		}
+		//	Check if moving to a key
+		if(getMap().getCells()[getHero().getY()+y][getHero().getX()+x] instanceof Key){
+			//	Get key
+			getHero().setHaveKey(true);
+			//	Remove key from map
+			//	Check if moving to a key
+			if(getMap().getCells()[getHero().getY()+y][getHero().getX()+x] instanceof Key){
+				//	Get key
+				getHero().setHaveKey(true);
+				//	Remove key from map
+				this.setKey(null);
+			}
 		}
 
 		return super.heroWillMove(x, y);
@@ -181,16 +194,20 @@ public class LevelTwo extends GameMap {
 		else if (i == 4){
 			x = 1;
 		}
-
-		//	Check if not moving to a wall or a door
-		if (getMap().getCells()[ogre.getY() + y][ogre.getX() + x] == null ||
+		if ((ogre.getX() + x >= 0 
+				&& ogre.getX() + x <= getMap().getNumberCellsForLine()
+				&& ogre.getY() + y >= 0 
+				&& ogre.getY() + y <= getMap().getNumberLines())
+				&&
+				//	Check if not moving to a wall or a door
+				(getMap().getCells()[ogre.getY() + y][ogre.getX() + x] == null ||
 				getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Key ||
 				getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Ogre ||
-				getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Club
+				getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Club)
 				){
 			//	BEFORE MOVING
 			//	If moving out of a key, change ogre letter to "O"
-			if (ogre.getY() == key.getY() && ogre.getX() == key.getX()){
+			if (this.key != null && (ogre.getY() == key.getY() && ogre.getX() == key.getX())){
 				// Change ogre to letter "$"
 				ogre.setLetter("O");
 				// Previous cell is key
@@ -200,7 +217,7 @@ public class LevelTwo extends GameMap {
 				getMap().getCells()[ogre.getY()][ogre.getX()] = null;
 			}
 			//	Check if moving to a key
-			if (ogre.getY() + y == key.getY() && ogre.getX() + x == key.getX()){
+			if (this.key != null && (ogre.getY() + y == key.getY() && ogre.getX() + x == key.getX())){
 				// Change ogre to letter "$"
 				ogre.setLetter("$");
 			}
@@ -244,14 +261,20 @@ public class LevelTwo extends GameMap {
 			x = 1;
 		}
 
-		//	Check if moving to a null cell or a key
-		if (getMap().getCells()[ogre.getY() + y][ogre.getX() + x] == null
-				|| getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Key 
-				|| getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Club
+		if ((ogre.getX() + x >= 0 
+				&& ogre.getX() + x <= getMap().getNumberCellsForLine()
+				&& ogre.getY() + y >= 0 
+				&& ogre.getY() + y <= getMap().getNumberLines())
+				&&
+				//	Check if not moving to a wall or a door
+				(getMap().getCells()[ogre.getY() + y][ogre.getX() + x] == null ||
+				getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Key ||
+				getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Ogre ||
+				getMap().getCells()[ogre.getY() + y][ogre.getX() + x] instanceof Club)
 				){
 			// MOVE
 			// Check if moving out of a key
-			if (ogre.getClub().getY() == key.getY() && ogre.getClub().getX() == key.getX()){
+			if (this.key != null && (ogre.getClub().getY() == key.getY() && ogre.getClub().getX() == key.getX())){
 				// Change key to letter "*"
 				ogre.getClub().setLetter("*");
 				// Previous cell is key
@@ -264,7 +287,7 @@ public class LevelTwo extends GameMap {
 			}
 
 			// Check if moving to a key
-			if (ogre.getY() + y == key.getY() && ogre.getX() + x == key.getX()){
+			if (this.key != null && (ogre.getY() + y == key.getY() && ogre.getX() + x == key.getX())){
 				// Change key to letter "$"
 				ogre.getClub().setLetter("$");
 			}

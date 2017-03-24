@@ -141,11 +141,7 @@ public class GameMap extends Object {
 		if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Lever){
 			this.pressedLever();
 		}
-		//	Check if moving to a key
-		if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Key){
-			//	Get key
-			hero.setHaveKey(true);
-		}
+		
 		//	Check if moving to a club
 		if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Club){
 			Club club = (Club)map.getCells()[hero.getY()+y][hero.getX()+x];

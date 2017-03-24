@@ -18,7 +18,7 @@ public class Game extends Object {
 		setGameMap(gameMap);
 		instance = this;
 		setFirstLevelCompleted(false);
-		setNumberOfOgres(1);
+		setNumberOfOgres(0);
 	}
 	
 	/** 
@@ -57,7 +57,13 @@ public class Game extends Object {
 	public void levelCompleted(){
 		//	Is on first level
 		if( this.getGameMap() instanceof LevelOne){
-			changeMap(new LevelTwo(DefaultMaps.map2, true, numberOfOgres));
+			int num = numberOfOgres;
+			if (num == 0){
+				changeMap(new LevelTwo(DefaultMaps.map2, true, RandomService.getRandomInt(1, 5)));
+			} else {
+				changeMap(new LevelTwo(DefaultMaps.map2, true, num));
+			}
+			
 			//	print new map
 			this.printGame();
 		} else {

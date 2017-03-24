@@ -15,7 +15,7 @@ public class LevelOne extends GameMap {
 		//	Call super
 		super(map);
 		GuardTypes guardType = guardTyp;
-		
+
 		// Sort guard type if guard is nil, sort guard type
 		if (guardType == null) {
 			guardType = GuardTypes.values()[RandomService.getRandomInt(0, 2)];
@@ -40,7 +40,7 @@ public class LevelOne extends GameMap {
 					default:
 						break;
 					}
-					
+
 					//	Add cell to map
 					this.getMap().addCell(getGuard());
 				}
@@ -48,7 +48,7 @@ public class LevelOne extends GameMap {
 		}
 		// Set guard allowed to move
 		setGuardAllowedToMove(isGuardAllowedToMove);
-		
+
 		//	Set guard moves
 		if(this.getGuard() != null){
 			setGuardMoves();
