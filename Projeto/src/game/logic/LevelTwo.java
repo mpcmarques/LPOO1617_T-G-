@@ -7,19 +7,36 @@ public class LevelTwo extends GameMap {
 	private ArrayList<Ogre> ogres;
 	private Key key;
 
-	/*public LevelTwo() {
-		setOgreAllowedToMove(false);
-		// Set configurations
-		startSecondLevel();
-	}*/
-
+	/** Constructor */
 	public LevelTwo(char[][] map, boolean isOgreAllowedToMove, int numberOfOgres){
 		//	Start new map
 		super(map);
 		//	New ogres array
 		this.setOgres(new ArrayList<Ogre>());
 
-		//	Get ogres from map
+		//	Set ogre movement 
+		setOgreAllowedToMove(isOgreAllowedToMove);
+
+		//	Create ogres and objects
+		this.populateMapWithObjects(map, numberOfOgres);
+
+		//	If one ogre, just show a club if he has one, otherwise move all ogres
+		if (isOgreAllowedToMove){
+			if (this.getOgres().size() == 1){
+				if (getOgres().get(0).getClub() != null){
+					swingClub(getOgres().get(0));
+				}
+			} else {
+				moveOgres();
+			}
+		}
+	}
+
+	/** 
+	 * Populates gameMap with objects
+	 * */
+	private void populateMapWithObjects(char[][] map, int numberOfOgres){
+		//		Get ogres from map
 		int row, col;
 		for(row = 0; row < map.length; row++){
 			for(col = 0; col < map[row].length; col++){
@@ -43,20 +60,6 @@ public class LevelTwo extends GameMap {
 					Club club = new Club(row,col);
 					this.getMap().addCell(club);
 				}
-			}
-		}
-
-		//	Ogre can't move
-		setOgreAllowedToMove(isOgreAllowedToMove);
-
-		//	If one ogre, just show a club if he has one, otherwise move all ogres
-		if (isOgreAllowedToMove){
-			if (this.getOgres().size() == 1){
-				if (getOgres().get(0).getClub() != null){
-					swingClub(getOgres().get(0));
-				}
-			} else {
-				moveOgres();
 			}
 		}
 	}
@@ -151,6 +154,9 @@ public class LevelTwo extends GameMap {
 	}
 
 
+	/** 
+	 * @brief Adds an ogre to level two
+	 * */
 	public void addOgre(Ogre ogre){
 		ogres.add(ogre);
 	}

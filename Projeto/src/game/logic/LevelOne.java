@@ -20,8 +20,24 @@ public class LevelOne extends GameMap {
 		if (guardType == null) {
 			guardType = GuardTypes.values()[RandomService.getRandomInt(0, 2)];
 		}
+		
+		//	Populates map
+		populateMapWithObjects(map, guardType);
 
-		//	Get guard from map
+		// Set guard allowed to move
+		setGuardAllowedToMove(isGuardAllowedToMove);
+
+		//	Set guard moves
+		if(this.getGuard() != null){
+			setGuardMoves();
+		}
+	}
+	
+	/** 
+	 * Populates Gamemap map with objects.
+	 * */
+	private void populateMapWithObjects(char[][] map, GuardTypes guardType){
+		//		Get guard from map
 		int row, col;
 		for(row = 0; row < map.length; row++){
 			for(col = 0; col < map[row].length; col++){
@@ -45,13 +61,6 @@ public class LevelOne extends GameMap {
 					this.getMap().addCell(getGuard());
 				}
 			}
-		}
-		// Set guard allowed to move
-		setGuardAllowedToMove(isGuardAllowedToMove);
-
-		//	Set guard moves
-		if(this.getGuard() != null){
-			setGuardMoves();
 		}
 	}
 
@@ -215,25 +224,27 @@ public class LevelOne extends GameMap {
 	 * @returns boolean Returns true if guard is adjacent
 	 * */
 	public boolean isGuardNear(){
-		if(getGuard() == null) return false;
-
+		if(getGuard() == null){
+			return false;
+		}
 		// Check if the guard is above hero
-		if (getGuard().getX() == getHero().getX() && getGuard().getY() == getHero().getY()-1){
+		else if (getGuard().getX() == getHero().getX() && getGuard().getY() == getHero().getY()-1){
 			return true;
 		}
 		// Check if the guard is down
-		if (getGuard().getX() == getHero().getX() && getGuard().getY() == getHero().getY()+1){
+		else if (getGuard().getX() == getHero().getX() && getGuard().getY() == getHero().getY()+1){
 			return true;
 		}
 		// Check if the guard is on the right
-		if (getGuard().getX() == getHero().getX()+1 && getGuard().getY() == getHero().getY()){
+		else if (getGuard().getX() == getHero().getX()+1 && getGuard().getY() == getHero().getY()){
 			return true;
 		}
 		//	Check if the guard is on the left
-		if (getGuard().getX() == getHero().getX()-1 && getGuard().getY() == getHero().getY()){
+		else if (getGuard().getX() == getHero().getX()-1 && getGuard().getY() == getHero().getY()){
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	/**

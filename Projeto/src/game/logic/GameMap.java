@@ -9,16 +9,24 @@ public class GameMap extends Object {
 	 * @brief Constructor
 	 * */
 	public GameMap(char[][] map){
-		int col, row;
-
 		// Create new map
 		this.setMap(new Map(map[0].length, map.length));
 		this.setCompleted(false);
+		
+		//	Populates map with objects
+		populateMapWithObjects(map);
+	}
 
-		//	Iterate through matrix
+	/** 
+	 * Populates map with objects
+	 * */
+	private void populateMapWithObjects(char[][] map){
+		int col, row;
+		//		Iterate through matrix
 		for(row = 0; row < map.length; row++){
 			for(col = 0; col < map[row].length; col++){
 				char value = map[row][col];
+				
 				//	Get cell value
 				switch(value){
 				//	Hero
@@ -53,6 +61,8 @@ public class GameMap extends Object {
 			}
 		}
 	}
+
+
 	/** 
 	 * @brief Player finished game map, call game level completion handler
 	 * */
@@ -69,6 +79,7 @@ public class GameMap extends Object {
 	public void pressedLever(){
 		this.map.openAllDoors();
 	}
+
 	/** 
 	 * @brief Updates game, need to call the super method to walk hero in subclasses.
 	 * */
@@ -114,7 +125,7 @@ public class GameMap extends Object {
 			//	Hero can't move
 			return false;
 		}
-		
+
 		//		Check if moving to door
 		if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Door){
 			Door door = (Door) map.getCells()[hero.getY()+y][hero.getX()+x];
@@ -141,7 +152,7 @@ public class GameMap extends Object {
 		if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Lever){
 			this.pressedLever();
 		}
-		
+
 		//	Check if moving to a club
 		if(map.getCells()[hero.getY()+y][hero.getX()+x] instanceof Club){
 			Club club = (Club)map.getCells()[hero.getY()+y][hero.getX()+x];

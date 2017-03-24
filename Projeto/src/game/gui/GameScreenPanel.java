@@ -5,8 +5,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-
 import javax.swing.InputMap;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -21,21 +19,17 @@ import game.logic.Guard;
 import game.logic.Hero;
 import game.logic.Key;
 import game.logic.Lever;
-import game.logic.Map;
 import game.logic.Ogre;
 import game.logic.Wall;
 
-import javax.swing.UIManager;
-import javax.swing.table.DefaultTableCellRenderer;
-
 import net.miginfocom.swing.MigLayout;
-import java.awt.FlowLayout;
 
 /** 
  * It's the game panel, it's composed by the background where the game is draw and a table to represent mouse clicked events.
  * */
 
 public class GameScreenPanel extends JPanel implements KeyListener, MouseListener {
+
 	private JTable table;
 
 	private GameTableModel gameTableModel;
@@ -56,25 +50,6 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 		this.cellDimensionX = 0;
 		this.cellDimensionY = 0;
 		setLayout(new MigLayout("", "[grow]", "[grow]"));
-		
-		/*//	Create a table
-		table = new JTable(gameTableModel);
-		table.setEnabled(false);
-		table.setShowGrid(false);
-		//	Configurate table
-		table.setSurrendersFocusOnKeystroke(true);
-		//	Remove table keyboard bounds
-		this.removeTableKeyboardBounds();
-		//	Invisible table
-		table.setOpaque(false);
-		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){{
-			setOpaque(false);
-		}});
-		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-		table.setRowHeight(60);
-		table.setBorder(null);
-		add(table);*/
 	}
 	
 	/** 
@@ -85,17 +60,6 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 		addMouseListener(this);
 	}
 
-	/** 
-	 * 	Removes table keyboard bounds
-	 * */
-	private void removeTableKeyboardBounds(){
-		//	Remove table keyboard bounds
-		InputMap im = table.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-		im.put(KeyStroke.getKeyStroke("DOWN"), "none");
-		im.put(KeyStroke.getKeyStroke("UP"), "none");
-		im.put(KeyStroke.getKeyStroke("LEFT"), "none");
-		im.put(KeyStroke.getKeyStroke("RIGHT"), "none");
-	}
 	/** 
 	 * Paints components
 	 * */
@@ -146,7 +110,6 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 		for(y = 0; y < gameTableModel.getRowCount(); y++){
 			for(x = 0; x < gameTableModel.getColumnCount() ; x++){
 				Cell cell = gameTableModel.getCellAt(x,y);
-
 				
 				//	If it is wall
 				if (cell instanceof Wall){
@@ -263,12 +226,14 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 	@Override
 	public void keyReleased(KeyEvent e) {}
 	
-	// MARK: Keyboard delegates
+	// MARK: Mouse Delegates
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (this.cellDimensionX != 0 && this.cellDimensionY != 0){
-			System.out.println("X: " + e.getX()/cellDimensionX + " Y: " + e.getY()/cellDimensionY);
+			int x = e.getX()/cellDimensionX;
+			int y = e.getY()/cellDimensionY;
+			System.out.println(gameTableModel.getCellAt(x, y));
 		}
 	}
 

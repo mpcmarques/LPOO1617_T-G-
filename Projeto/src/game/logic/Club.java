@@ -6,5 +6,5 @@ public class Club extends Cell{
 		super("*", x, y);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 }

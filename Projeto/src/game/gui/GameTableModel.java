@@ -27,7 +27,7 @@ public class GameTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		return null;
+		return map.getCells()[rowIndex][columnIndex];
 	}
 	
 	public Cell getCellAt(int x, int y) {
