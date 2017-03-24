@@ -2,6 +2,8 @@ package game.logic;
 
 import java.util.ArrayList;
 
+import game.services.RandomService;
+
 public class LevelOne extends GameMap {
 	private int guardMovesCounter;
 	private boolean isGuardAllowedToMove;

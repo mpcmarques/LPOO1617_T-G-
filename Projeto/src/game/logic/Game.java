@@ -1,5 +1,7 @@
 package game.logic;
 
+import game.services.RandomService;
+
 public class Game extends Object {
 	private GameMap gameMap;
 	private EndStatus endStatus;

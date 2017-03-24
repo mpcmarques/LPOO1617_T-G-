@@ -1,5 +1,7 @@
 package game.logic;
 
+import game.services.RandomService;
+
 public class Drunken extends Guard {
 	private boolean isSleeping;
 	private int sleepTime;

@@ -1,18 +1,28 @@
 package game.logic;
+/** 
+ * Class represents a game cell
+ * */
 public class Lever extends Cell {
 	private boolean pressed;
 
-	///	Constructor
-	Lever(int x, int y) {
+	/** 
+	 * Constructor
+	 * */
+	public Lever(int x, int y) {
 		super("k", x, y);
 		setPressed(false);
-		// TODO Auto-generated constructor stub
 	}
-
+	
+	/** 
+	 * @return boolean Lever is pressed
+	 * */
 	public boolean isPressed() {
 		return pressed;
 	}
-
+	
+	/** 
+	 * Set lever pressed / not pressed
+	 * */
 	public void setPressed(boolean pressed) {
 		this.pressed = pressed;
 	}

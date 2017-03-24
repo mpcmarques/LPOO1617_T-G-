@@ -5,12 +5,15 @@ public abstract class Guard extends Cell {
 	private int moveCounter;
 	private ArrayList<Coordinate2d> movePositions;
 
-	///	Constructor
-	Guard(int x, int y) {
+	/** 
+	 * Constructor
+	 * */
+	public Guard(int x, int y) {
 		super("G", x, y);
 		// TODO Auto-generated constructor stub
 		this.setMoveCounter(0);
 	}
+	
 	/** 
 	 * Creates guard with coordinates 0,0
 	 * */

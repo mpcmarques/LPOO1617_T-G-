@@ -2,6 +2,8 @@ package game.logic;
 
 import java.util.ArrayList;
 
+import game.services.RandomService;
+
 public class LevelTwo extends GameMap {
 	private boolean isOgreAllowedToMove;
 	private ArrayList<Ogre> ogres;

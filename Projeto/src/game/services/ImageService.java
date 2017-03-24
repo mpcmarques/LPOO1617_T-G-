@@ -1,11 +1,9 @@
-package game.gui;
+package game.services;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
 
 /** 
  * This class loads and holds all images, keeping a shared instance.
@@ -28,6 +26,7 @@ public class ImageService {
 	private BufferedImage clubImage;
 	private BufferedImage heroClubImage;
 	private BufferedImage heroKeyImage;
+	private BufferedImage pilarImage;
 	
 	/** 
 	 * Constructor
@@ -35,7 +34,7 @@ public class ImageService {
 	ImageService(){
 		//	Load images
 		this.floorImage = loadBufferedImage("/floor.png");
-		this.setWallImage(loadBufferedImage("/wall.jpg"));
+		this.setWallImage(loadBufferedImage("/wall.png"));
 		this.heroKeyImage = loadBufferedImage("/player_key.png");
 		this.heroClubImage = loadBufferedImage("/player_club.png");
 		this.clubImage = loadBufferedImage("/club.png");
@@ -47,6 +46,7 @@ public class ImageService {
 		this.closedDoorImage = loadBufferedImage("/door_closed.png");
 		this.setHeroImage(loadBufferedImage("/player.png"));
 		this.leverImage = loadBufferedImage("/lever.png");
+		this.setPilarImage(loadBufferedImage("/pilar.png"));
 	}
 	
 	/** 
@@ -297,6 +297,20 @@ public class ImageService {
 	 */
 	public void setHeroKeyImage(BufferedImage heroKeyImage) {
 		this.heroKeyImage = heroKeyImage;
+	}
+
+	/**
+	 * @return the pilarImage
+	 */
+	public BufferedImage getPilarImage() {
+		return pilarImage;
+	}
+
+	/**
+	 * @param pilarImage the pilarImage to set
+	 */
+	public void setPilarImage(BufferedImage pilarImage) {
+		this.pilarImage = pilarImage;
 	}
 
 }

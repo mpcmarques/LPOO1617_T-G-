@@ -53,7 +53,7 @@ public class GameMap extends Object {
 					// Door
 				case 'I':
 					//	Add door
-					this.map.addCell(new Door(col,row, true));
+					this.map.addCell(new Door(col,row));
 					break;
 				default:
 					break;
@@ -141,11 +141,8 @@ public class GameMap extends Object {
 				// 	Return false, hero cant move
 				return false;
 			} else {
-				//	If the door is open and is a exit, complete map
-				if(door.isExit()){
-					//	Complete level
-					this.completed();
-				}
+				//	Complete level
+				this.completed();
 			}
 		}
 		//	Check if moving to a lever
@@ -214,7 +211,7 @@ public class GameMap extends Object {
 					//	Check if door is open
 					Door door = (Door)this.map.getCells()[i][j];
 					//	Return true if exit door is open
-					if (door.isExit() == true && door.isOpen()) return true;
+					if(door.isOpen()) return true;
 				}
 			}
 		}

@@ -5,7 +5,11 @@ public class Ogre extends Cell{
 	private boolean isStunned;
 	private int stunCounter;
 	
-	Ogre(int x, int y, boolean hasClub) {
+	
+	/** 
+	 * Constructor
+	 * */
+	public Ogre(int x, int y, boolean hasClub) {
 		super("O", x, y);
 		// TODO Auto-generated constructor stub
 		setStunned(false);
