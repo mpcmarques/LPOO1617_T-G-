@@ -133,15 +133,15 @@ public class LevelTwo extends GameMap {
 						return true;
 					}
 					// Check if the club down
-					if (ogre.getClub().getX() == getHero().getX() && ogre.getClub().getY() == getHero().getY()+1){
+					else if (ogre.getClub().getX() == getHero().getX() && ogre.getClub().getY() == getHero().getY()+1){
 						return true;
 					}
 					// Check if the club <-
-					if (ogre.getClub().getX() == getHero().getX()-1 && ogre.getClub().getY() == getHero().getY()){
+					else if (ogre.getClub().getX() == getHero().getX()-1 && ogre.getClub().getY() == getHero().getY()){
 						return true;
 					}
 					//	Check if the club ->
-					if (ogre.getClub().getX() == getHero().getX()+1 && ogre.getClub().getY() == getHero().getY()){
+					else if (ogre.getClub().getX() == getHero().getX()+1 && ogre.getClub().getY() == getHero().getY()){
 						return true;
 					}
 				}
@@ -313,15 +313,15 @@ public class LevelTwo extends GameMap {
 					return ogre;
 				}
 				// Check if the guard is down
-				if (ogre.getX() == x && ogre.getY() == y+1){
+				else if (ogre.getX() == x && ogre.getY() == y+1){
 					return ogre;
 				}
 				// Check if the guard is on the right
-				if (ogre.getX() == x+1 && ogre.getY() == y){
+				else if (ogre.getX() == x+1 && ogre.getY() == y){
 					return ogre;
 				}
 				//	Check if the guard is on the left
-				if (ogre.getX() == x-1 && ogre.getY() == y){
+				else if (ogre.getX() == x-1 && ogre.getY() == y){
 					return ogre;
 				}
 			}
