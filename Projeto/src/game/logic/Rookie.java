@@ -1,13 +1,17 @@
 package game.logic;
 
 public class Rookie extends Guard {
+	public Rookie(int x, int y){
+		super(x,y);
+	}
 
-	public Rookie(int x, int y) {
-		super(x, y);
-		// TODO Auto-generated constructor stub
+	@Override
+	public String getLetter() {
+		return "G";
 	}
 	
-	public Rookie(){
-		super();
+	@Override
+	public boolean canMoveTo() {
+		return false;
 	}
 }

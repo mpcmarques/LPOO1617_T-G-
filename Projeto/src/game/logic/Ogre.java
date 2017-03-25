@@ -1,42 +1,39 @@
 package game.logic;
 
-public class Ogre extends Cell{
-	private Club club;
+public class Ogre extends GameObject {
 	private boolean isStunned;
 	private int stunCounter;
-	
+	private boolean hasClub;
 	
 	/** 
 	 * Constructor
 	 * */
 	public Ogre(int x, int y, boolean hasClub) {
-		super("O", x, y);
-		// TODO Auto-generated constructor stub
+		super(x,y);
 		setStunned(false);
 		setStunCounter(0);
-		if (hasClub){
-			addClub();
+		this.hasClub = hasClub;
+	}
+	
+	@Override
+	public String getLetter() {
+		if(isStunned){
+			return "8";
 		} else {
-			setClub(null);
+			return "O"; 
 		}
 	}
 	
+	@Override
+	public boolean canMoveTo() {
+		return false;
+	}
+	
+	/** 
+	 * Adds club to ogre
+	 * */
 	public void addClub(){
-		this.club = new Club(getX(),getY());
-	}
-
-	/**
-	 * @return the club
-	 */
-	public Club getClub() {
-		return club;
-	}
-
-	/**
-	 * @param club the club to set
-	 */
-	public void setClub(Club club) {
-		this.club = club;
+		this.setHasClub(true);
 	}
 
 	/**
@@ -65,9 +62,6 @@ public class Ogre extends Cell{
 		if (isStunned){
 			// Set stun counter
 			setStunCounter(2);
-			setLetter("8");
-		} else {
-			setLetter("O");
 		}
 		this.isStunned = isStunned;
 	}
@@ -86,4 +80,17 @@ public class Ogre extends Cell{
 		this.stunCounter = stunCounter;
 	}
 
+	/**
+	 * @return the hasClub
+	 */
+	public boolean hasClub() {
+		return hasClub;
+	}
+
+	/**
+	 * @param hasClub the hasClub to set
+	 */
+	public void setHasClub(boolean hasClub) {
+		this.hasClub = hasClub;
+	}
 }

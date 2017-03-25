@@ -1,31 +1,27 @@
 package game.logic;
 import java.util.ArrayList;
 
-public abstract class Guard extends Cell {
+public abstract class Guard extends GameObject {
+	
+	//	Direction guard is moving
 	private int moveCounter;
 	private ArrayList<Coordinate2d> movePositions;
-
-	/** 
-	 * Constructor
-	 * */
-	public Guard(int x, int y) {
-		super("G", x, y);
-		// TODO Auto-generated constructor stub
+	
+	public Guard(int x, int y){
+		super(x,y);
 		this.setMoveCounter(0);
 	}
 	
-	/** 
-	 * Creates guard with coordinates 0,0
-	 * */
-	Guard(){
-		super("G",0,0);
-		this.setMoveCounter(0);
-	}
-
+	/**
+	 * @return the moveCounter
+	 */
 	public int getMoveCounter() {
 		return moveCounter;
 	}
 
+	/**
+	 * @param moveCounter the moveCounter to set
+	 */
 	public void setMoveCounter(int moveCounter) {
 		this.moveCounter = moveCounter;
 	}
@@ -36,6 +32,7 @@ public abstract class Guard extends Cell {
 	public ArrayList<Coordinate2d> getMovePositions() {
 		return movePositions;
 	}
+
 	/**
 	 * @param movePositions the movePositions to set
 	 */

@@ -4,18 +4,21 @@ public class Suspicious extends Guard {
 	private boolean isInReverse;
 	
 	public Suspicious(int x, int y) {
-		super(x, y);
-		// TODO Auto-generated constructor stub
+		super(x,y);
 		this.setInReverse(false);
 	}
 	
-	public Suspicious(){
-		super();
-		this.setInReverse(false);
+	@Override
+	public String getLetter() {
+		return "G";
+	}
+	@Override
+	public boolean canMoveTo() {
+		return false;
 	}
 	
 	//	Change guard direction
-	public void changeDirection(){
+	public void reverseDirection(){
 		if (isInReverse){
 			this.setInReverse(false);
 		} else {

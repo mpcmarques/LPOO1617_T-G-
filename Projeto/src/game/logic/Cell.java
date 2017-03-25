@@ -1,54 +1,36 @@
 package game.logic;
 
+/** 
+ * Represent a cell in the gameMap
+ * */
 public class Cell extends Object {
-	private String letter;
-	private Coordinate2d coordinate;
+	private GameObject element;
 	
-	//	Constructor
-	Cell(String string, int x, int y){
-		this.setLetter(string);
-		this.setCoordinate(new Coordinate2d(x,y));
+	/** 
+	 * Constructor
+	 * */
+	Cell(){
+		this.setElement(null);
+	}
+	
+	/** 
+	 * Constructor with parameters
+	 * */
+	Cell(GameObject element){
+		this.setElement(element);
 	}
 
 	/**
-	 * @return the letter
+	 * @return the element
 	 */
-	public String getLetter() {
-		return letter;
+	public GameObject getElement() {
+		return element;
 	}
 
 	/**
-	 * @param letter the letter to set
+	 * @param element the element to set
 	 */
-	public void setLetter(String letter) {
-		this.letter = letter;
-	}
-
-	/**
-	 * @return the x
-	 */
-	public int getX() {
-		return coordinate.getX();
-	}
-
-	/**
-	 * @return the y
-	 */
-	public int getY() {
-		return coordinate.getY();
-	}
-
-	/**
-	 * @return the coordinate
-	 */
-	public Coordinate2d getCoordinate() {
-		return coordinate;
-	}
-
-	/**
-	 * @param coordinate the coordinate to set
-	 */
-	public void setCoordinate(Coordinate2d coordinate) {
-		this.coordinate = coordinate;
+	public void setElement(GameObject element) {
+		this.element = element;
 	}
 }

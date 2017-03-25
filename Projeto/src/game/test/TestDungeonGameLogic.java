@@ -28,25 +28,25 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testMoveHeroIntoFreeCell(){
-		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
+		GameMap gameMap = new GameMap(map1);
 		Game game = new Game(gameMap);
-		assertEquals(new Coordinate2d(1,1), game.getGameMap().getHero().getCoordinate());
+		assertEquals(new Coordinate2d(1,1), game.getGameMap().getHero().getCoordinates());
 	}
 
 	@Test
 	public void testHeroMoveIntoWall(){
-		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
+		GameMap gameMap = new GameMap(map1);
 		Game game = new Game(gameMap);
-		Coordinate2d originalPosition = game.getGameMap().getHero().getCoordinate();
+		Coordinate2d originalPosition = game.getGameMap().getHero().getCoordinates();
 		game.getGameMap().updateGame("a");
 		//	Check if hero didn't move
-		assertEquals(originalPosition, game.getGameMap().getHero().getCoordinate());
+		assertEquals(originalPosition, game.getGameMap().getHero().getCoordinates());
 	}
 
 	//	Level one
 	@Test
 	public void testHeroIsCapturedByGuard(){
-		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
+		GameMap gameMap = new GameMap(map1);
 		Game game = new Game(gameMap);
 		assertFalse(game.isGameOver());
 		game.getGameMap().updateGame("d");
@@ -56,20 +56,20 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testHeroMoveIntoClosedDoor(){
-		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
+		GameMap gameMap =  new GameMap(map1);
 		Game game = new Game(gameMap);
 		// Move hero 1 down 
 		game.getGameMap().updateGame("s");
-		Coordinate2d originalPosition = game.getGameMap().getHero().getCoordinate();
+		Coordinate2d originalPosition = game.getGameMap().getHero().getCoordinates();
 		// Try to move 1 left -> Should fail 
 		game.getGameMap().updateGame("a");
 		//	Check if hero didn't move
-		assertEquals(originalPosition, game.getGameMap().getHero().getCoordinate());
+		assertEquals(originalPosition, game.getGameMap().getHero().getCoordinates());
 	}
 
 	@Test
 	public void testExitDoorsOpenWhenOnLever(){
-		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
+		GameMap gameMap = new GameMap(map1);
 		Game game = new Game(gameMap);
 		// Move hero down 2 cells -> get lever
 		game.getGameMap().updateGame("s");
@@ -80,14 +80,14 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testGameMapProgresses(){
-		GameMap gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
+		GameMap gameMap = new GameMap(map1);
 		Game game = new Game(gameMap);
 		// Move hero down 2 cells -> get lever than 1 cell left -> end game map
 		game.getGameMap().updateGame("s");
 		game.getGameMap().updateGame("s");
 		game.getGameMap().updateGame("a");
 		//	Check if first level is completed, is on second level
-		assertFalse(game.getGameMap() instanceof LevelOne);
+		assertTrue(game.isGamemapCompleted());
 	}
 
 	///	Second level tests - ogre
@@ -98,10 +98,10 @@ public class TestDungeonGameLogic {
 		Game game = new Game(gameMap);
 		assertFalse(game.isGameOver());
 		game.getGameMap().updateGame("d");
-		
+
 		//	Check if ogre has not a club
 		assertEquals(null,gameMap.getOgres().get(0).getClub());
-		
+
 		assertTrue(game.isGameOver());
 		assertEquals(EndStatus.DEFEAT, game.getEndStatus());
 	}
@@ -278,14 +278,15 @@ public class TestDungeonGameLogic {
 
 	@Test(timeout = 1000) public void testGuardRandomPick(){
 		//	Creates game and map
-		LevelOne gameMap = new LevelOne(DefaultMaps.map1, null, true);
+		GameMap gameMap = new GameMap(DefaultMaps.map1);
 		Game game = new Game(gameMap);
 
 		boolean isDrunken = false, isRookie = false, isSuspicious = false;
 
 		while(!isDrunken){
-			//			start new map again
-			gameMap = new LevelOne(DefaultMaps.map1, null, true);
+			//	Random guard type
+			gameMap.randomGuardType();
+
 			//	If guard is drunken
 			if(gameMap.getGuard() instanceof Drunken){
 				isDrunken = true;
@@ -293,8 +294,8 @@ public class TestDungeonGameLogic {
 		}
 
 		while(!isRookie){
-			//			start new map again
-			gameMap = new LevelOne(DefaultMaps.map1, null, true);
+			//	Random guard type
+			gameMap.randomGuardType();
 			//	If guard is rookie
 			if(gameMap.getGuard() instanceof Rookie){
 				isRookie = true;
@@ -302,8 +303,9 @@ public class TestDungeonGameLogic {
 		}
 
 		while(!isSuspicious){
-			//	start new map again
-			gameMap = new LevelOne(DefaultMaps.map1, null, true);
+			//	Random guard type
+			gameMap.randomGuardType();
+			
 			//	If guard is suspicious
 			if(gameMap.getGuard() instanceof Suspicious){
 				isSuspicious = true;
@@ -314,15 +316,16 @@ public class TestDungeonGameLogic {
 	//	Check if drunken is getting drunk and suspicious is getting suspicious
 	@Test(timeout = 1000) public void testGuardRandomPropriety(){
 		//	Creates game and map
-		LevelOne gameMap = new LevelOne(DefaultMaps.map1, null, true);
+		GameMap gameMap = new GameMap(DefaultMaps.map1);
 		Game game = new Game(gameMap);
-		assertTrue(gameMap.isGuardAllowedToMove());
+		gameMap.setGuardDefaultMoves();
 
 		boolean isDrunken = false, isSuspicious = false;
 
 		while(!isDrunken){
 			// Reload map
-			gameMap = new LevelOne(DefaultMaps.map1, null, true);
+			gameMap.randomGuardType();
+			gameMap.setGuardDefaultMoves();
 
 			//	If guard is drunken and got drunk
 			if(gameMap.getGuard() instanceof Drunken){
@@ -341,7 +344,9 @@ public class TestDungeonGameLogic {
 
 		while(!isSuspicious){
 			// Reload map
-			gameMap = new LevelOne(DefaultMaps.map1, null, true);
+			gameMap.randomGuardType();
+			gameMap.setGuardDefaultMoves();
+			
 			//	If guard is suspicious and got suspicious
 			if(gameMap.getGuard() instanceof Suspicious){
 				//	Test if guard gets suspecious
@@ -393,10 +398,10 @@ public class TestDungeonGameLogic {
 		game.updateGame("d");
 
 		//	Check if ogre is stunned
-		
+
 		//	Check if ogre has not a club
 		assertEquals(null, gameMap.getOgres().get(0).getClub());
-		
+
 		assertTrue(gameMap.getOgres().get(0).isStunned());
 		assertEquals("8", gameMap.getOgres().get(0).getLetter());
 	}
@@ -406,9 +411,9 @@ public class TestDungeonGameLogic {
 	 * */
 	@Test public void openAllDoors(){
 		// Creates game and map
-		LevelOne gameMap = new LevelOne(map1, GuardTypes.Rookie, false);
+		GameMap gameMap = new GameMap(map1);
 		Game game = new Game(gameMap);		
-		
+
 		gameMap.openAllDoors();
 		assertTrue(gameMap.isExitDoorsOpen());
 	}

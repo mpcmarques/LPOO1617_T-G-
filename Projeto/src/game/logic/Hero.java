@@ -1,52 +1,57 @@
 package game.logic;
 
-public class Hero extends Cell {
-	private boolean haveKey;
-	private Club club;
+public class Hero extends GameObject{
+	private boolean hasKey;
+	private boolean hasClub;
 	
 	///	Constructor
 	Hero(int x, int y) {
-		super("H", x, y);
-		setHaveKey(false);
+		super(x,y);
+		setHasKey(false);
 	}
 
-	/**
-	 * @return the haveKey
-	 */
-	public boolean hasKey() {
-		return haveKey;
-	}
-
-	/**
-	 * @param haveKey the haveKey to set
-	 */
-	public void setHaveKey(boolean haveKey) {
-		if (haveKey) {
-			setLetter("K");
-		} else {
-			setLetter("H");
+	@Override public String getLetter(){
+		if (hasKey){
+			return "K";
 		}
-		this.haveKey = haveKey;
+		else if (hasClub){
+			return "A";
+		} else {
+			return "H";
+		}
 	}
 	
-	public boolean hasWeapon(){
-		return club != null;
+	@Override
+	public boolean canMoveTo() {
+		return false;
 	}
 
 	/**
-	 * @return the club
+	 * @return the hasKey
 	 */
-	public Club getClub() {
-		return club;
+	public boolean hasKey() {
+		return hasKey;
 	}
 
 	/**
-	 * @param club the club to set
+	 * @param hasKey the hasKey to set
 	 */
-	public void setClub(Club club) {
-		this.club = club;
-		// Change letter
-		this.setLetter("A");
+	public void setHasKey(boolean hasKey) {
+		this.hasKey = hasKey;
+	}
+
+	/**
+	 * @return the hasClub
+	 */
+	public boolean isHasClub() {
+		return hasClub;
+	}
+
+	/**
+	 * @param hasClub the hasClub to set
+	 */
+	public void setHasClub(boolean hasClub) {
+		this.hasClub = hasClub;
 	}
 }
 

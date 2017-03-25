@@ -2,20 +2,18 @@ package game.logic;
 
 import game.services.RandomService;
 
+/** 
+ * Class represents a Drunken guard
+ * */
 public class Drunken extends Guard {
 	private boolean isSleeping;
 	private int sleepTime;
 
+	/** 
+	 * Constructor
+	 * */
 	public Drunken(int x, int y) {
-		super(x, y);
-		// TODO Auto-generated constructor stub
-		this.setSleeping(false);
-		this.setSleepTime(0);
-	}
-
-	public Drunken(){
-		super();
-		// TODO Auto-generated constructor stub
+		super(x,y);
 		this.setSleeping(false);
 		this.setSleepTime(0);
 	}
@@ -36,11 +34,22 @@ public class Drunken extends Guard {
 			//	Random the sleeping time
 			int sleepTime = RandomService.getRandomInt(3,8);
 			this.setSleepTime(sleepTime);
-			setLetter("g");
-		} else {
-			setLetter("G");
-		}
+		} 
 		this.isSleeping = isSleeping;
+	}
+	
+	@Override
+	public String getLetter() {
+		if (isSleeping) {
+			return "g";
+		} else {
+			return "G";
+		}
+	}
+	
+	@Override
+	public boolean canMoveTo() {
+		return false;
 	}
 
 	/**
@@ -56,5 +65,4 @@ public class Drunken extends Guard {
 	public void setSleepTime(int sleepTime) {
 		this.sleepTime = sleepTime;
 	}
-
 }

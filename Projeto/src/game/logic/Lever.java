@@ -1,29 +1,23 @@
 package game.logic;
 /** 
- * Class represents a game cell
+ * Class represents a lever in the game
  * */
-public class Lever extends Cell {
-	private boolean pressed;
+public class Lever extends GameObject{
 
 	/** 
 	 * Constructor
 	 * */
 	public Lever(int x, int y) {
-		super("k", x, y);
-		setPressed(false);
+		super(x,y);
 	}
 	
-	/** 
-	 * @return boolean Lever is pressed
-	 * */
-	public boolean isPressed() {
-		return pressed;
+	@Override
+	public String getLetter() {
+		return "l";
 	}
 	
-	/** 
-	 * Set lever pressed / not pressed
-	 * */
-	public void setPressed(boolean pressed) {
-		this.pressed = pressed;
+	@Override
+	public boolean canMoveTo() {
+		return true;
 	}
 }

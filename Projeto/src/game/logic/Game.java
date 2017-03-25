@@ -6,12 +6,12 @@ public class Game extends Object {
 	private GameMap gameMap;
 	private EndStatus endStatus;
 	private GameState state;
-	private boolean isFirstLevelCompleted;
+	private boolean isGamemapCompleted;
 	private int numberOfOgres;
-	
+
 	// Game instance
 	static Game instance;
-	
+
 	/** 
 	 * Constructor
 	 * */
@@ -19,10 +19,10 @@ public class Game extends Object {
 		setState(GameState.started);
 		setGameMap(gameMap);
 		instance = this;
-		setFirstLevelCompleted(false);
+		this.setGamemapCompleted(false);
 		setNumberOfOgres(0);
 	}
-	
+
 	/** 
 	 * Updates game with typed string
 	 * */
@@ -35,17 +35,18 @@ public class Game extends Object {
 	 * Prints game on screen
 	 * */
 	public String printGame(){
-		System.out.println(gameMap.getMap());
-		return getGameMap().getMap().toString();
+		System.out.println(gameMap);
+		return getGameMap().toString();
 	}
-	
+
 	/** 
 	 * Changes map
 	 * */
 	public void changeMap(GameMap map){
 		this.setGameMap(map);
+		this.isGamemapCompleted = false;
 	}
-	
+
 	public boolean isGameOver(){
 		return this.getState() == GameState.over;
 	}
@@ -55,30 +56,13 @@ public class Game extends Object {
 		setState(GameState.over);
 		setEndStatus(EndStatus.DEFEAT);
 	}
-	
-	public void levelCompleted(){
-		//	Is on first level
-		if( this.getGameMap() instanceof LevelOne){
-			int num = numberOfOgres;
-			if (num == 0){
-				changeMap(new LevelTwo(DefaultMaps.map2, true, RandomService.getRandomInt(1, 5)));
-			} else {
-				changeMap(new LevelTwo(DefaultMaps.map2, true, num));
-			}
-			
-			//	print new map
-			this.printGame();
-		} else {
-			//	Finish game
-			gameCompleted();
-		}
-	}
-	
+
 	public void gameCompleted(){
 		// END GAME, GAME Over
 		setState(GameState.over);
 		setEndStatus(EndStatus.WIN);
 	}
+
 	//	MARK: Getters and Setters
 
 	/**
@@ -95,7 +79,7 @@ public class Game extends Object {
 		this.state = state;
 	}
 
-	
+
 	/**
 	 * @return the gameMap
 	 */
@@ -125,20 +109,6 @@ public class Game extends Object {
 	}
 
 	/**
-	 * @return the isFirstLevelCompleted
-	 */
-	public boolean isFirstLevelCompleted() {
-		return isFirstLevelCompleted;
-	}
-
-	/**
-	 * @param isFirstLevelCompleted the isFirstLevelCompleted to set
-	 */
-	public void setFirstLevelCompleted(boolean isFirstLevelCompleted) {
-		this.isFirstLevelCompleted = isFirstLevelCompleted;
-	}
-
-	/**
 	 * @return the numberOfOgres
 	 */
 	public int getNumberOfOgres() {
@@ -150,5 +120,19 @@ public class Game extends Object {
 	 */
 	public void setNumberOfOgres(int numberOfOgres) {
 		this.numberOfOgres = numberOfOgres;
+	}
+
+	/**
+	 * @return the isGamemapCompleted
+	 */
+	public boolean isGamemapCompleted() {
+		return isGamemapCompleted;
+	}
+
+	/**
+	 * @param isGamemapCompleted the isGamemapCompleted to set
+	 */
+	public void setGamemapCompleted(boolean isGamemapCompleted) {
+		this.isGamemapCompleted = isGamemapCompleted;
 	}
 }

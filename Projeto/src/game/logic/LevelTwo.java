@@ -50,17 +50,17 @@ public class LevelTwo extends GameMap {
 						Ogre ogre = new Ogre(row,col,isOgreAllowedToMove);
 						addOgre(ogre);
 						//	Add ogre to map
-						this.getMap().addCell(ogre);
+						this.addCell(ogre);
 					}
 				} else if (value == 'k'){
 					//	Add key
 					Key key = new Key(row,col);
 					setKey(key);
-					this.getMap().addCell(key);
+					this.addCell(key);
 				} else if (value == '*'){
 					//	Add club
 					Club club = new Club(row,col);
-					this.getMap().addCell(club);
+					this.addCell(club);
 				}
 			}
 		}
