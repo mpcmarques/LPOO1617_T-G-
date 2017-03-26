@@ -37,7 +37,7 @@ public class TestDungeonGameLogic {
 		Game game = new Game(gameMap);
 		assertEquals(new Coordinate2d(1,1), game.getCurrentMap().getHero().getCoordinates());
 	}
-	
+
 	/** 
 	 * Test if hero can't move to a wall
 	 * */
@@ -62,9 +62,10 @@ public class TestDungeonGameLogic {
 		game.getCurrentMap().updateGame("d");
 		assertTrue(game.isGameOver());
 		assertEquals(EndStatus.DEFEAT, game.getEndStatus());
+		assertTrue(game.getCurrentMap().isGuardNear());
 	}
-	
-	
+
+
 	/**
 	 * Test if hero moved into a closed door
 	 *  */
@@ -89,6 +90,9 @@ public class TestDungeonGameLogic {
 		Game game = new Game(gameMap);
 		// Move hero down 2 cells -> get lever
 		game.getCurrentMap().updateGame("s");
+		// Check if can move down
+		assertTrue((game.getCurrentMap().getElementAt(game.getCurrentMap().getHero().getX(), game.getCurrentMap().getHero().getY()+1)).canMoveTo());
+		//	Check if moved down
 		game.getCurrentMap().updateGame("s");
 		//	Check if exit doors are open
 		assertTrue(game.getCurrentMap().isExitDoorsOpen());
@@ -127,20 +131,44 @@ public class TestDungeonGameLogic {
 		assertEquals(null,gameMap.getOgres().get(0).getClub());
 
 		assertTrue(game.isGameOver());
+		assertTrue(game.getCurrentMap().isOgreNear(game.getCurrentMap().getHero().getX(), game.getCurrentMap().getHero().getY()) != null);
 		assertEquals(EndStatus.DEFEAT, game.getEndStatus());
 	}
+	
+	@Test(timeout = 1000) public void testRandomService(){
+		boolean n1 = false,n2 = false,n3 = false;
+		int random;
+		while(!n1 || !n2 || !n3){
+			random = RandomService.getRandomInt(0, 2);
+			
+			if(random == 0) n1 = true;
+			if(random == 1) n2 = true;
+			if(random == 2) n3 = true;
+		}
+	}
+	
 	/** 
 	 * Test if hero move into key and get key
 	 * */
 	@Test public void testHeroMoveIntoKey(){
 		GameMap gameMap = new GameMap(map2);
 		Game game = new Game(gameMap);
+		
+		//	Hero isn't with key
+		assertFalse(game.getCurrentMap().getHero().hasKey());
+		
 		//	Move down 2 cells
 		game.getCurrentMap().updateGame("s");
+		
+		//	Assert that can move to key
+		assertTrue((game.getCurrentMap().getElementAt(game.getCurrentMap().getHero().getX(), game.getCurrentMap().getHero().getY()+1)) instanceof Key);
+		assertTrue(((Key)game.getCurrentMap().getElementAt(game.getCurrentMap().getHero().getX(), game.getCurrentMap().getHero().getY()+1)).canMoveTo());
+		assertEquals("k",((Key)game.getCurrentMap().getElementAt(game.getCurrentMap().getHero().getX(), game.getCurrentMap().getHero().getY()+1)).getLetter());
+		
 		game.getCurrentMap().updateGame("s");
+		
 		//	Check if hero letter has changed to "K"
 		assertEquals("K", game.getCurrentMap().getHero().getLetter());
-		//	Check if hero has key
 		assertTrue(game.getCurrentMap().getHero().hasKey());
 	}
 	/** 
@@ -176,12 +204,16 @@ public class TestDungeonGameLogic {
 
 		//	Check if hero has key
 		assertTrue(game.getCurrentMap().getHero().hasKey());
+		//	Check if door is closed
+		assertEquals("I", game.getCurrentMap().getElementAt(game.getCurrentMap().getHero().getX()-1, game.getCurrentMap().getHero().getY()).getLetter());
+		assertFalse(game.getCurrentMap().isExitDoorsOpen());
 		// Try to move 1 left -> Unlock door
 		game.getCurrentMap().updateGame("a");
 		//	Check if door is open
 		assertTrue(game.getCurrentMap().isExitDoorsOpen());
+		assertEquals("S", game.getCurrentMap().getElementAt(game.getCurrentMap().getHero().getX()-1, game.getCurrentMap().getHero().getY()).getLetter());
 	}
-	
+
 	/** 
 	 * Test if finished game
 	 * */
@@ -212,11 +244,11 @@ public class TestDungeonGameLogic {
 		game.getCurrentMap().updateGame("a");
 
 		//	Check if game is over
-		assertEquals(game.getState(), GameState.over);
+		assertEquals(GameState.over, game.getState());
 		//	Check if player won
-		assertEquals(EndStatus.WIN, EndStatus.WIN);
+		assertEquals(EndStatus.WIN, game.getEndStatus());
 	}
-	
+
 	/** 
 	 * Test ogre random movement
 	 * */
@@ -227,6 +259,12 @@ public class TestDungeonGameLogic {
 		Game game = new Game(gameMap);
 
 		boolean movedUp = false, movedDown = false, movedRight = false, movedLeft = false;
+		
+		assertFalse(gameMap.getOgres().get(0).isOnKey());
+		assertFalse(gameMap.getOgres().get(0).isStunned());
+		assertEquals("O",gameMap.getOgres().get(0).getLetter());
+		assertEquals(0, gameMap.getOgres().get(0).getStunCounter());
+		assertFalse(gameMap.getOgres().get(0).canMoveTo());
 
 		while(!movedUp || !movedDown || !movedRight || !movedLeft){
 			// Save first ogre last position
@@ -266,7 +304,7 @@ public class TestDungeonGameLogic {
 		assertTrue(movedRight);
 		assertTrue(movedLeft);
 	}
-	
+
 	/** 
 	 * Test ogre random club swing
 	 * */
@@ -318,7 +356,67 @@ public class TestDungeonGameLogic {
 		assertTrue(movedRight);
 		assertTrue(movedLeft);
 	}
-	
+	/** 
+	 * Test if hero is being killed by ogre club
+	 * */
+	@Test(timeout = 1000) public void testHeroKilledByOgreClub(){
+		//		Creates game and map
+		GameMap gameMap = new GameMap(DefaultMaps.map2);
+		Game game = new Game(gameMap);
+		gameMap.addClubToOgres();
+		
+		//	Assert that ogre is not in a key or stunned when he is created
+		assertFalse(gameMap.getOgres().get(0).isOnKey());
+		assertFalse(gameMap.getOgres().get(0).isStunned());
+		
+		boolean heroIsKilledByOgre = false;
+
+		//	Test if ogre moves to key he changes to "$"
+		while(!heroIsKilledByOgre){
+
+			// Do action
+			game.updateGame("a");
+
+			if(game.getCurrentMap().isOgreClubNear() && game.isGameOver()){
+				heroIsKilledByOgre = true;
+			}
+		}
+	}
+
+	/** 
+	 * Test if hero can't move to pilar
+	 * */
+	@Test public void heroCantMoveToPilar(){
+		//	Creates game and map
+		GameMap gameMap = new GameMap(DefaultMaps.map2);
+		Game game = new Game(gameMap);
+
+		Hero hero = gameMap.getHero();
+		//	Adds pilar above hero
+		gameMap.addElementAt(new Pilar(hero.getX(), hero.getY()-1), hero.getX(), hero.getY()-1);
+		//	Check if pilar was added
+		assertTrue(gameMap.getElementAt(hero.getX(), hero.getY()-1) instanceof Pilar);
+
+		//	Try to move hero up
+		game.updateGame("w");
+		//	Assert that hero can't move, pilar still on top of him
+		assertTrue(gameMap.getElementAt(hero.getX(), hero.getY()-1) instanceof Pilar);
+	}
+
+	/** */
+	@Test public void testGameIsIniting(){
+		//		Creates game and map
+		GameMap gameMap = new GameMap(DefaultMaps.map2);
+		Game game = new Game(gameMap);
+		
+		//	Assert that game is started
+		assertEquals(GameState.started, game.getState());
+		assertFalse(game.isGameOver());
+		assertFalse(game.getCurrentMap().isCompleted());
+		assertTrue(game.getCurrentMap().isPlayable());
+		assertTrue(game.getCurrentMap().canGuardsAndOgresMove());
+	}
+
 	/** 
 	 * Test if ogre moved into a key
 	 * */
@@ -342,13 +440,13 @@ public class TestDungeonGameLogic {
 			if(ogre.isOnKey() && ogre.getLetter() == "$"){
 				//	Get ogre first position
 				Coordinate2d ogrePosition = gameMap.getOgres().get(0).getCoordinates();
-				
+
 				ogreIsInKey = true;
-				
+
 				//	Move ogre
 				game.updateGame("a");
 				//	Check if he moved out of the key with success
-				
+
 				if(ogre.isOnKey() == false 
 						&& gameMap.getElementAt(ogrePosition.getX(), ogrePosition.getY()) instanceof Key){
 					ogreIsOutOfKey = true;
@@ -364,7 +462,7 @@ public class TestDungeonGameLogic {
 		GameMap gameMap = new GameMap(DefaultMaps.map2);
 		Game game = new Game(gameMap);
 		gameMap.addClubToOgres();
-		
+
 		boolean ogreClubIsInKey= false;
 		boolean ogreClubIsOutOfKey = false;
 
@@ -380,13 +478,13 @@ public class TestDungeonGameLogic {
 			if(ogre.getClub().isOnKey() && ogre.getClub().getLetter() == "$"){
 				//	Get ogre first position
 				Coordinate2d ogreClubPosition = gameMap.getOgres().get(0).getClub().getCoordinates();
-				
+
 				ogreClubIsInKey = true;
-				
+
 				//	Move ogre
 				game.updateGame("a");
 				//	Check if he moved out of the key with success
-				
+
 				if(ogre.getClub().isOnKey() == false 
 						&& gameMap.getElementAt(ogreClubPosition.getX(), ogreClubPosition.getY()) instanceof Key){
 					ogreClubIsOutOfKey = true;
@@ -394,7 +492,7 @@ public class TestDungeonGameLogic {
 			}
 		}
 	}
-	
+
 	/** 
 	 * Test guard random pick
 	 * */
@@ -485,7 +583,7 @@ public class TestDungeonGameLogic {
 			}
 		}
 	}
-	
+
 	/** 
 	 * Check if hero moved into a club
 	 * */
@@ -497,6 +595,12 @@ public class TestDungeonGameLogic {
 		//	Check if hero doesn't have club
 		assertFalse(gameMap.getHero().isHasClub());
 		assertEquals("H", gameMap.getHero().getLetter());
+		
+		//	Check if club is on the right
+		assertTrue(gameMap.getElementAt(gameMap.getHero().getX()+1, gameMap.getHero().getY()) instanceof Club);
+		assertEquals("*",gameMap.getElementAt(gameMap.getHero().getX()+1, gameMap.getHero().getY()).getLetter());
+		assertTrue("*",gameMap.getElementAt(gameMap.getHero().getX()+1, gameMap.getHero().getY()).canMoveTo());
+		
 		//	Move hero one cell right
 		game.updateGame("d");
 
@@ -534,6 +638,13 @@ public class TestDungeonGameLogic {
 
 		assertTrue(gameMap.getOgres().get(0).isStunned());
 		assertEquals("8", gameMap.getOgres().get(0).getLetter());
+		
+		//	Decrease stun counter
+		game.getCurrentMap().getOgres().get(0).decreaseStunCounter();
+		game.getCurrentMap().getOgres().get(0).decreaseStunCounter();
+		assertFalse(gameMap.getOgres().get(0).isStunned());
+		assertEquals("O", gameMap.getOgres().get(0).getLetter());
+		
 	}
 
 	/** 
@@ -544,6 +655,7 @@ public class TestDungeonGameLogic {
 		GameMap gameMap = new GameMap(map1);
 		Game game = new Game(gameMap);		
 
+		assertFalse(gameMap.isExitDoorsOpen());
 		gameMap.openAllDoors();
 		assertTrue(gameMap.isExitDoorsOpen());
 	}

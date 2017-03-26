@@ -749,6 +749,9 @@ public class GameMap extends Object {
 
 	/** 
 	 * Ogre is moving to a key
+	 * @param ogre Ogre that is moving to akey
+	 * @param x Delta x
+	 * @param y Delta y
 	 * */
 	private void ogreMovingToKeyCompletionHandler(Ogre ogre, int x, int y){
 		// Check if moving to a key
@@ -764,6 +767,8 @@ public class GameMap extends Object {
 	/** 
 	 * Move an ogre
 	 * @param ogre Ogre that will move
+	 * @param x Delta x
+	 * @param y Delta y
 	 * */
 	private void ogreMoveCompletionHandler(Ogre ogre, int x, int y){
 		//		If moving out of a key, add key to previous cell
@@ -830,6 +835,9 @@ public class GameMap extends Object {
 
 	/** 
 	 * Ogre club swing completion handler
+	 * @param ogre Ogre that will swing club
+	 * @param x Delta x position
+	 * @param y Delta y postion
 	 * */
 	private void ogreClubSwingToKeyCompletionHandler(Ogre ogre, int x, int y){
 		// Check if moving to a key
@@ -845,6 +853,9 @@ public class GameMap extends Object {
 
 	/** 
 	 * Ogre club swing completion handler
+	 * @param ogre Ogre that will swing club
+	 * @param x X Position
+	 * @param y Y Position
 	 * */
 	private void clubSwingCompletionHandler(Ogre ogre, int x, int y){
 		//		If moving out of a key, add key to previous cell
