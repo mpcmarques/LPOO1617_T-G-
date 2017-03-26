@@ -817,36 +817,52 @@ public class GameMap extends Object {
 		GameObject element = getElementAt(ogre.getX() + x,ogre.getY() + y);
 
 		if (element == null || (element instanceof OgreClub)){
-			//	If moving out of a key, add key to previous cell
-			if (ogre.getClub().isOnKey()){
-				Coordinate2d clubLocation = ogre.getClub().getCoordinates();
-				//	Ogre is not on key anymore
-				ogre.getClub().setOnKey(false);
-				//	Add club to next cell
-				addElementAt(ogre.getClub(), ogre.getX() +x, ogre.getY()+y);
-				//	Add key to previous cell
-				addElementAt(new Key(clubLocation.getX(),clubLocation.getY()), clubLocation.getX(),clubLocation.getY());
-			} else {
-				// Remove last club
-				if (getElementAt(ogre.getClub().getX(), ogre.getClub().getY()) instanceof OgreClub){
-					removeElementAt(ogre.getClub().getX(), ogre.getClub().getY());
-				}
-				//	Add club
-				addElementAt(ogre.getClub(), ogre.getX() +x, ogre.getY()+y);
-			}
+			// Ogre club can move
+			clubSwingCompletionHandler(ogre,x,y);
 		} else if (element instanceof Key){
-			// Check if moving to a key
-			ogre.getClub().setOnKey(true);
+			// Ogre club is moving to a key
+			ogreClubSwingToKeyCompletionHandler(ogre, x, y);
+		} else {
+			//	Use recursively
+			swingClub(ogre);
+		}
+	}
 
+	/** 
+	 * Ogre club swing completion handler
+	 * */
+	private void ogreClubSwingToKeyCompletionHandler(Ogre ogre, int x, int y){
+		// Check if moving to a key
+		ogre.getClub().setOnKey(true);
+
+		// Remove last club
+		if (getElementAt(ogre.getClub().getX(), ogre.getClub().getY()) instanceof OgreClub){
+			removeElementAt(ogre.getClub().getX(), ogre.getClub().getY());
+		}
+		//	Add club
+		addElementAt(ogre.getClub(), ogre.getX() +x, ogre.getY()+y);	
+	}
+
+	/** 
+	 * Ogre club swing completion handler
+	 * */
+	private void clubSwingCompletionHandler(Ogre ogre, int x, int y){
+		//		If moving out of a key, add key to previous cell
+		if (ogre.getClub().isOnKey()){
+			Coordinate2d clubLocation = ogre.getClub().getCoordinates();
+			//	Ogre is not on key anymore
+			ogre.getClub().setOnKey(false);
+			//	Add club to next cell
+			addElementAt(ogre.getClub(), ogre.getX() +x, ogre.getY()+y);
+			//	Add key to previous cell
+			addElementAt(new Key(clubLocation.getX(),clubLocation.getY()), clubLocation.getX(),clubLocation.getY());
+		} else {
 			// Remove last club
 			if (getElementAt(ogre.getClub().getX(), ogre.getClub().getY()) instanceof OgreClub){
 				removeElementAt(ogre.getClub().getX(), ogre.getClub().getY());
 			}
 			//	Add club
 			addElementAt(ogre.getClub(), ogre.getX() +x, ogre.getY()+y);
-		} else {
-			//	Use recursively
-			swingClub(ogre);
 		}
 	}
 
