@@ -5,6 +5,7 @@
 O trabalho foi feito individualmente, pois sou TE.
 
 Mateus Pedroza Cortes Marques - up201601876
+mpcmarques@icloud.com
 
 Pasta da documentação: doc
 
