@@ -12,11 +12,10 @@ import javax.swing.JTable;
 import javax.swing.KeyStroke;
 
 import game.logic.*;
-import game.services.ImageService;
 import net.miginfocom.swing.MigLayout;
 
 /** 
- * It's the game panel, where the game is draw and where responds to clicks
+ * It's the game panel, where the game is draw and where the game responds to clicks and keyboard
  * */
 public class GameScreenPanel extends JPanel implements KeyListener, MouseListener {
 
@@ -79,10 +78,10 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 			// Final game sentence
 			if (game.getEndStatus() == EndStatus.DEFEAT) {
 				System.out.println("GAME OVER!!!!");
-				g.drawImage(ImageService.shared.getGameOverImage(), 0, 0, this);
+				g.drawImage(ImageService.shared.getGameOverImage(), 0, 0,500,600, this);
 			} else {
 				System.out.println("YOU WON!!!!");
-				g.drawImage(ImageService.shared.getYouWonImage(), 0, 0, this);
+				g.drawImage(ImageService.shared.getYouWonImage(), 0, 0, 600,600,  this);
 			}
 		}
 	}
@@ -165,7 +164,15 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 				}
 				//	If it is ogre
 				else if (cell instanceof Ogre){
-					g.drawImage(ImageService.shared.getOgreImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
+					if (((Ogre)cell).isStunned()){
+						g.drawImage(ImageService.shared.getOgreStunnedImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
+					}else {
+						g.drawImage(ImageService.shared.getOgreImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
+					}
+				}
+				//	If it is ogre club
+				else if (cell instanceof OgreClub){
+					g.drawImage(ImageService.shared.getOgreClubImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
 				}
 				//	If it is club
 				else if (cell instanceof Club){
@@ -252,7 +259,15 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 			//	Mouse Edit Action
 			//	Remove element
 			if (mouseAction == GameWindowEditMouseActions.removeElement){
-				this.game.getCurrentMap().removeElementAt(x, y);
+				GameObject removed = this.game.getCurrentMap().removeElementAt(x, y);
+				//	Check if removed an ogre or a guard or hero
+				if (removed instanceof Ogre){
+					this.game.getCurrentMap().removeOgre((Ogre)removed);
+				} else if (removed instanceof Guard){
+					this.game.getCurrentMap().setGuard(null);
+				} else if (removed instanceof Hero){
+					this.game.getCurrentMap().setHero(null);
+				}
 			} 
 			//	Add wall
 			else if (mouseAction == GameWindowEditMouseActions.addWall){
@@ -271,7 +286,8 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 			//	Add guard
 			else if (mouseAction == GameWindowEditMouseActions.addGuard){
 				Guard guard = new Rookie(x,y);
-				this.game.getCurrentMap().addElementAt(guard, x, y);
+				//	Add guard
+				this.game.getCurrentMap().addGuard(guard);
 			}
 			//	Add key
 			else if (mouseAction == GameWindowEditMouseActions.addKey){
@@ -280,13 +296,20 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 			}
 			//	Add ogre
 			else if (mouseAction == GameWindowEditMouseActions.addOgre){
-				Ogre ogre = new Ogre(x,y, false);
+				Ogre ogre = new Ogre(x,y, true);
+				this.game.getCurrentMap().addOgre(ogre);
 				this.game.getCurrentMap().addElementAt(ogre, x, y);
 			}
 			//	Add pilar
 			else if (mouseAction == GameWindowEditMouseActions.addPilar){
 				Pilar pilar = new Pilar(x,y);
 				this.game.getCurrentMap().addElementAt(pilar, x, y);
+			}
+			//	Add hero
+			else if (mouseAction == GameWindowEditMouseActions.addHero){
+				Hero hero = new Hero(x,y);
+				//	Add hero
+				this.game.getCurrentMap().addHero(hero);
 			}
 			else {
 				//	No actions

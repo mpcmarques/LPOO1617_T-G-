@@ -13,6 +13,7 @@ import game.logic.*;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,7 @@ public class GameWindow extends JFrame {
 	private GameScreenPanel gamePanel;
 
 	//	Buttons
+	JButton btnAddHero;
 	JButton btnRemoveElement;
 	JButton btnEditGame;
 	JButton btnApply;
@@ -65,14 +67,8 @@ public class GameWindow extends JFrame {
 				editGame();
 			}
 		});
-		
+
 		btnNewGame = new JButton("New game");
-		btnNewGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Show config
-				//TODO
-			}
-		});
 		btnNewGame.setFocusable(false);
 		getContentPane().add(btnNewGame, "cell 0 0");
 		btnEditGame.setFocusable(false);
@@ -132,8 +128,15 @@ public class GameWindow extends JFrame {
 		btnAddWall.setFocusable(false);
 		getContentPane().add(btnAddWall, "cell 0 5,alignx left");
 
-		JButton btnAddHero = new JButton("Add Hero");
+		this.btnAddHero = new JButton("Add Hero");
+		btnAddHero.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//	Add Hero
+				gamePanel.setMouseAction(GameWindowEditMouseActions.addHero);
+			}
+		});
 		btnAddHero.setEnabled(false);
+		btnAddHero.setFocusable(false);
 		getContentPane().add(btnAddHero, "cell 1 5,alignx left");
 
 		this.btnAddNewRow = new JButton("Add New Line");
@@ -244,14 +247,6 @@ public class GameWindow extends JFrame {
 	}
 
 	/** 
-	 * Show game config window
-	 * */
-	private void showConfigWindow(){
-		// Show game window
-		
-		
-	}
-	/** 
 	 * Enables game editing
 	 * */
 	private void editGame(){
@@ -277,16 +272,23 @@ public class GameWindow extends JFrame {
 		this.btnAddPilar.setEnabled(value);
 		this.btnAddNewRow.setEnabled(value);
 		this.btnAddNewColumn.setEnabled(value);
+		this.btnAddHero.setEnabled(value);
 	}
 	/** 
 	 * Apply editing changes
 	 * */
 	private void applyGameChanges(){
-		//	Resume game
-		gamePanel.setEditing(false);
+		//	Check if game is playable
+		if (game.getCurrentMap().isPlayable()){
 
-		//	Enable / Disable editing buttons
-		this.enableEditingButtons(false);
+			//	Resume game
+			gamePanel.setEditing(false);
+
+			//	Enable / Disable editing buttons
+			this.enableEditingButtons(false);
+		} else {
+			JOptionPane.showMessageDialog(this, "Map is not playable!");
+		}
 	}
 
 	/**

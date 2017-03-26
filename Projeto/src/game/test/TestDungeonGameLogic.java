@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import game.logic.*;
 
+/** 
+ * Game testing class
+ * */
 public class TestDungeonGameLogic {
 
 	char[][] map1 = {
@@ -24,15 +27,20 @@ public class TestDungeonGameLogic {
 			{'X','X','X','X','X'}
 	};
 
-	//	Game Map
 
+	/** 
+	 * Test if hero can move into a free cell
+	 * */
 	@Test
 	public void testMoveHeroIntoFreeCell(){
 		GameMap gameMap = new GameMap(map1);
 		Game game = new Game(gameMap);
 		assertEquals(new Coordinate2d(1,1), game.getCurrentMap().getHero().getCoordinates());
 	}
-
+	
+	/** 
+	 * Test if hero can't move to a wall
+	 * */
 	@Test
 	public void testHeroMoveIntoWall(){
 		GameMap gameMap = new GameMap(map1);
@@ -43,7 +51,9 @@ public class TestDungeonGameLogic {
 		assertEquals(originalPosition, game.getCurrentMap().getHero().getCoordinates());
 	}
 
-	//	Level one
+	/** 
+	 * Test if hero is captured by a guard
+	 * */
 	@Test
 	public void testHeroIsCapturedByGuard(){
 		GameMap gameMap = new GameMap(map1);
@@ -53,7 +63,11 @@ public class TestDungeonGameLogic {
 		assertTrue(game.isGameOver());
 		assertEquals(EndStatus.DEFEAT, game.getEndStatus());
 	}
-
+	
+	
+	/**
+	 * Test if hero moved into a closed door
+	 *  */
 	@Test
 	public void testHeroMoveIntoClosedDoor(){
 		GameMap gameMap =  new GameMap(map1);
@@ -66,7 +80,9 @@ public class TestDungeonGameLogic {
 		//	Check if hero didn't move
 		assertEquals(originalPosition, game.getCurrentMap().getHero().getCoordinates());
 	}
-
+	/** 
+	 * Test if hero moved to a lever and opened doors
+	 * */
 	@Test
 	public void testExitDoorsOpenWhenOnLever(){
 		GameMap gameMap = new GameMap(map1);
@@ -77,7 +93,9 @@ public class TestDungeonGameLogic {
 		//	Check if exit doors are open
 		assertTrue(game.getCurrentMap().isExitDoorsOpen());
 	}
-
+	/** 
+	 * Test if the game changes map when the actual finishes
+	 * */
 	@Test
 	public void testGameMapProgresses(){
 		GameMap gameMap = new GameMap(map1);
@@ -93,8 +111,9 @@ public class TestDungeonGameLogic {
 		assertEquals(game.getCurrentMap().toString(), map2.toString());
 	}
 
-	///	Second level tests - ogre
-
+	/** 
+	 * Test if hero is captured by ogre
+	 * */
 	@Test
 	public void testMoveHeroIsCapturedByOgre(){
 		GameMap gameMap = new GameMap(map2);
@@ -110,7 +129,9 @@ public class TestDungeonGameLogic {
 		assertTrue(game.isGameOver());
 		assertEquals(EndStatus.DEFEAT, game.getEndStatus());
 	}
-
+	/** 
+	 * Test if hero move into key and get key
+	 * */
 	@Test public void testHeroMoveIntoKey(){
 		GameMap gameMap = new GameMap(map2);
 		Game game = new Game(gameMap);
@@ -122,7 +143,9 @@ public class TestDungeonGameLogic {
 		//	Check if hero has key
 		assertTrue(game.getCurrentMap().getHero().hasKey());
 	}
-
+	/** 
+	 * Test if hero can't move to a close door without a key
+	 * */
 	@Test public void testHeroMoveIntoClosedDoorWithoutKey(){
 		GameMap gameMap = new GameMap(DefaultMaps.map2);
 		Game game = new Game(gameMap);
@@ -135,7 +158,9 @@ public class TestDungeonGameLogic {
 		//	Check if door isn't open
 		assertFalse(game.getCurrentMap().isExitDoorsOpen());
 	}
-
+	/** 
+	 * Test if hero can move to a closed door with key
+	 * */
 	@Test public void testHeroMoveIntoClosedDoorWithKey(){
 		//	Creates game and map
 		GameMap gameMap = new GameMap(map2);
@@ -156,7 +181,10 @@ public class TestDungeonGameLogic {
 		//	Check if door is open
 		assertTrue(game.getCurrentMap().isExitDoorsOpen());
 	}
-
+	
+	/** 
+	 * Test if finished game
+	 * */
 	@Test public void testHeroFinishedGame(){
 		//		Creates game and map
 		GameMap gameMap = new GameMap(map2);
@@ -188,7 +216,10 @@ public class TestDungeonGameLogic {
 		//	Check if player won
 		assertEquals(EndStatus.WIN, EndStatus.WIN);
 	}
-
+	
+	/** 
+	 * Test ogre random movement
+	 * */
 	@Test(timeout=1000) public void testOgreRandomMovement(){
 		//	Creates game and map
 		GameMap gameMap = new GameMap(DefaultMaps.map2);
@@ -235,12 +266,15 @@ public class TestDungeonGameLogic {
 		assertTrue(movedRight);
 		assertTrue(movedLeft);
 	}
-
+	
+	/** 
+	 * Test ogre random club swing
+	 * */
 	@Test(timeout = 1000) public void testOgreRandomClubSwing(){
 		//	Creates game and map
 		GameMap gameMap = new GameMap(DefaultMaps.map2);
 		Game game = new Game(gameMap);
-		//	Add bluc to ogres
+		//	Add club to ogres
 		gameMap.addClubToOgres();
 
 		boolean movedUp = false, movedDown = false, movedRight = false, movedLeft = false;
@@ -284,7 +318,10 @@ public class TestDungeonGameLogic {
 		assertTrue(movedRight);
 		assertTrue(movedLeft);
 	}
-
+	
+	/** 
+	 * Test if ogre moved into a key
+	 * */
 	@Test(timeout = 1000) public void testOgreMovedIntoKey(){
 		//	Creates game and map
 		GameMap gameMap = new GameMap(DefaultMaps.map2);
@@ -319,7 +356,9 @@ public class TestDungeonGameLogic {
 			}
 		}
 	}
-	
+	/** 
+	 * Test ogre club moved into a key
+	 * */
 	@Test(timeout = 1000) public void testOgreClubMovedIntoKey(){
 		//	Creates game and map
 		GameMap gameMap = new GameMap(DefaultMaps.map2);
@@ -355,7 +394,10 @@ public class TestDungeonGameLogic {
 			}
 		}
 	}
-
+	
+	/** 
+	 * Test guard random pick
+	 * */
 	@Test(timeout = 1000) public void testGuardRandomPick(){
 		//	Creates game and map
 		GameMap gameMap = new GameMap(DefaultMaps.map1);
@@ -393,7 +435,9 @@ public class TestDungeonGameLogic {
 		}
 	}
 
-	//	Check if drunken is getting drunk and suspicious is getting suspicious
+	/** 
+	 * Check if drunken guard is getting drunk and suspecious guard is getting suspecious
+	 * */
 	@Test(timeout = 1000) public void testGuardRandomPropriety(){
 		//	Creates game and map
 		GameMap gameMap = new GameMap(DefaultMaps.map1);
@@ -441,7 +485,10 @@ public class TestDungeonGameLogic {
 			}
 		}
 	}
-
+	
+	/** 
+	 * Check if hero moved into a club
+	 * */
 	@Test public void testHeroMoveIntoBat(){
 		//		Creates game and map
 		GameMap gameMap = new GameMap(DefaultMaps.map2);
@@ -458,6 +505,9 @@ public class TestDungeonGameLogic {
 		assertEquals("A", gameMap.getHero().getLetter());
 	}
 
+	/** 
+	 * Check if hero stun ogre successfully
+	 * */
 	@Test public void testHeroStunOgre(){
 		//	Creates game and map
 		GameMap gameMap = new GameMap(map2);

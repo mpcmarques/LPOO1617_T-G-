@@ -2,8 +2,6 @@ package game.logic;
 
 import java.util.ArrayList;
 
-import game.services.RandomService;
-
 public class GameMap extends Object {
 	private boolean isCompleted;
 	private ArrayList<ArrayList<GameObject>> elements;
@@ -63,7 +61,7 @@ public class GameMap extends Object {
 		//	Add line to map
 		elements.add(line);
 	}
-	
+
 	/** 
 	 * Adds a row to the map
 	 * */
@@ -125,6 +123,81 @@ public class GameMap extends Object {
 	 * */
 	public void addOgre(Ogre ogre){
 		ogres.add(ogre);
+	}
+	
+	/** 
+	 * Check if game map is playable
+	 * @return True if game map is playable
+	 * */
+	public boolean isPlayable(){
+		return ((this.getHero() != null) && hasDoor() && hasKeyOrLever());
+	}
+	
+	/**
+	 * Check if there is a door in the map
+	 * @return True if map has a door
+	 */
+	public boolean hasDoor(){
+		for (ArrayList<GameObject> line: elements){
+			for (GameObject obj: line){
+				if (obj instanceof Door){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/** 
+	 * Check if there is a key or a lever in the map
+	 * @return True if there is a key or a lever in the map
+	 * */
+	public boolean hasKeyOrLever(){
+		for (ArrayList<GameObject> line: elements){
+			for (GameObject obj: line){
+				if (obj instanceof Key || obj instanceof Lever){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/** 
+	 * @brief Adds an hero to the map
+	 * @param hero Hero to be added
+	 * */
+	public void addHero(Hero hero){
+		//	Remove hero from map
+		if(this.hero != null){
+			removeElementAt(getHero().getX(), getHero().getY());
+		}
+		//	Add hero
+		addElementAt(hero, hero.getX(), hero.getY());
+		setHero(hero);
+	}
+	/** 
+	 * @brief Removes an ogre
+	 * @param ogre Ogre to be added
+	 * */
+	public void removeOgre(Ogre ogre){
+		//	If ogre has a club, remove club from map
+		if (ogre.getClub() != null){
+			removeElementAt(ogre.getClub().getX(), ogre.getClub().getY());
+		}
+		ogres.remove(ogre);
+	}
+
+	/** 
+	 * @brief Adds a guard and shows in the map
+	 * */
+	public void addGuard(Guard guard){
+		//		Remove previous guard -> only allow 1 guard
+		if (getGuard() != null){
+			removeElementAt(getGuard().getX(), getGuard().getY());
+		}
+		setGuard(guard);
+		addElementAt(guard, guard.getX(), guard.getY());
 	}
 
 	/** 
@@ -647,7 +720,12 @@ public class GameMap extends Object {
 				//	Add ogre on next cell
 				addElementAt(ogre, ogre.getX()+x,ogre.getY()+y);
 			} else {
-				moveElement(ogre, ogre.getX()+x, ogre.getY()+y);
+				// Remove last ogre
+				if (getElementAt(ogre.getX(), ogre.getY()) instanceof Ogre){
+					removeElementAt(ogre.getX(), ogre.getY());
+				}
+				//	Add ogre
+				addElementAt(ogre, ogre.getX() +x, ogre.getY()+y);
 			}
 			//	Swing club
 			if (ogre.getClub() != null){
@@ -697,15 +775,16 @@ public class GameMap extends Object {
 
 		GameObject element = getElementAt(ogre.getX() + x,ogre.getY() + y);
 
-		if (element == null || element instanceof OgreClub){
+		if (element == null || (element instanceof OgreClub)){
 			//	If moving out of a key, add key to previous cell
 			if (ogre.getClub().isOnKey()){
+				Coordinate2d clubLocation = ogre.getClub().getCoordinates();
 				//	Ogre is not on key anymore
 				ogre.getClub().setOnKey(false);
-				//	Add key to previous cell
-				addElementAt(new Key(ogre.getClub().getX(),ogre.getClub().getY()), ogre.getClub().getX(),ogre.getY());
 				//	Add club to next cell
 				addElementAt(ogre.getClub(), ogre.getX() +x, ogre.getY()+y);
+				//	Add key to previous cell
+				addElementAt(new Key(clubLocation.getX(),clubLocation.getY()), clubLocation.getX(),clubLocation.getY());
 			} else {
 				// Remove last club
 				if (getElementAt(ogre.getClub().getX(), ogre.getClub().getY()) instanceof OgreClub){
@@ -751,7 +830,7 @@ public class GameMap extends Object {
 	 * */
 	public GameObject removeElementAt(int x,int y){
 		if (!isAllowedToGoTo(x,y)) return null;
-		
+
 		GameObject toReturn = this.elements.get(y).set(x, null);
 		return toReturn;
 	}
@@ -761,11 +840,11 @@ public class GameMap extends Object {
 	 * */
 	public void addElementAt(GameObject element, int x, int y){
 		if (!isAllowedToGoTo(x,y)) return;
-		
+
 		element.setCoordinates(new Coordinate2d(x,y));
 		this.elements.get(y).set(x, element);
 	}
-	
+
 	/** 
 	 * Check if cell can be added
 	 * */
@@ -773,7 +852,7 @@ public class GameMap extends Object {
 		if ((x >= 0 && x < getNumberOfRows() && y >= 0 && y < getNumberLines())) return true;
 		else return false;
 	}
-	
+
 	/** 
 	 * Move element
 	 * */
@@ -786,7 +865,7 @@ public class GameMap extends Object {
 			GameObject obj = getElementAt(element.getX(), element.getY());
 
 			//	If object is on screen
-			if(obj != null && obj == element){
+			if(obj != null && obj.getClass() == element.getClass()){
 				//	Remove object on screen
 				removeElementAt(element.getX(), element.getY());
 				//	Show in next cell

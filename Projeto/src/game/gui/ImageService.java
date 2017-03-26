@@ -1,4 +1,4 @@
-package game.services;
+package game.gui;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -29,6 +29,8 @@ public class ImageService {
 	private BufferedImage pilarImage;
 	private BufferedImage youWonImage;
 	private BufferedImage gameOverImage;
+	private BufferedImage ogreClubImage;
+	private BufferedImage ogreStunnedImage;
 	
 	/** 
 	 * Constructor
@@ -51,11 +53,14 @@ public class ImageService {
 		this.setPilarImage(loadBufferedImage("/pilar.png"));
 		this.setYouWonImage(loadBufferedImage("/you_won.png"));
 		this.setGameOverImage(loadBufferedImage("/game_over.png"));
+		this.ogreClubImage = loadBufferedImage("/ogre_club.png");
+		this.setOgreStunnedImage(loadBufferedImage("/ogre_stunned.png"));
 	}
 	
 	/** 
 	 * @brief Loads a image
 	 * @return BufferedImage Image loaded
+	 * @param string Image path
 	 * */
 	public BufferedImage loadBufferedImage(String string){
 		try
@@ -343,6 +348,34 @@ public class ImageService {
 	 */
 	public void setGameOverImage(BufferedImage gameOverImage) {
 		this.gameOverImage = gameOverImage;
+	}
+
+	/**
+	 * @return the ogreClubImage
+	 */
+	public BufferedImage getOgreClubImage() {
+		return ogreClubImage;
+	}
+
+	/**
+	 * @param ogreClubImage the ogreClubImage to set
+	 */
+	public void setOgreClubImage(BufferedImage ogreClubImage) {
+		this.ogreClubImage = ogreClubImage;
+	}
+
+	/**
+	 * @return the ogreStunnedImage
+	 */
+	public BufferedImage getOgreStunnedImage() {
+		return ogreStunnedImage;
+	}
+
+	/**
+	 * @param ogreStunnedImage the ogreStunnedImage to set
+	 */
+	public void setOgreStunnedImage(BufferedImage ogreStunnedImage) {
+		this.ogreStunnedImage = ogreStunnedImage;
 	}
 
 }

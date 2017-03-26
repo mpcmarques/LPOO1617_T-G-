@@ -1,4 +1,4 @@
-package game.services;
+package game.logic;
 import java.util.Random;
 
 /** 
@@ -10,6 +10,8 @@ public class RandomService {
 	/** 
 	 * @brief Get a random number between min and max
 	 * @return int Random value
+	 * @param min Minimum number
+	 * @param max Maximum number
 	 * */
 	public static int getRandomInt(int min, int max)
 	{

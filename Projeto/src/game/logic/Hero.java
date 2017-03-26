@@ -5,7 +5,7 @@ public class Hero extends GameObject{
 	private boolean hasClub;
 	
 	///	Constructor
-	Hero(int x, int y) {
+	public Hero(int x, int y) {
 		super(x,y);
 		setHasKey(false);
 	}

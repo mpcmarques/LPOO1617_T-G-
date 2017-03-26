@@ -2,8 +2,6 @@ package game.logic;
 
 import java.util.ArrayList;
 
-import game.services.RandomService;
-
 public class Game extends Object {
 	private ArrayList<GameMap> maps;
 	private EndStatus endStatus;

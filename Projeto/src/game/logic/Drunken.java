@@ -1,7 +1,5 @@
 package game.logic;
 
-import game.services.RandomService;
-
 /** 
  * Class represents a Drunken guard
  * */
