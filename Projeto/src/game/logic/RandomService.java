@@ -7,6 +7,8 @@ import java.util.Random;
 public class RandomService {
 	private static Random random = new Random();
 	
+	
+	
 	/** 
 	 * Get a random number between min and max
 	 * @return int Random value
