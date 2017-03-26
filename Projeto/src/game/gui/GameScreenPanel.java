@@ -252,69 +252,7 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 			int x = e.getX()/cellDimensionX;
 			int y = e.getY()/cellDimensionY;
 
-			//	Get cell
-			GameObject cell = this.game.getCurrentMap().getElementAt(x,y);
-
-			System.out.println(mouseAction.name());
-			//	Mouse Edit Action
-			//	Remove element
-			if (mouseAction == GameWindowEditMouseActions.removeElement){
-				GameObject removed = this.game.getCurrentMap().removeElementAt(x, y);
-				//	Check if removed an ogre or a guard or hero
-				if (removed instanceof Ogre){
-					this.game.getCurrentMap().removeOgre((Ogre)removed);
-				} else if (removed instanceof Guard){
-					this.game.getCurrentMap().setGuard(null);
-				} else if (removed instanceof Hero){
-					this.game.getCurrentMap().setHero(null);
-				}
-			} 
-			//	Add wall
-			else if (mouseAction == GameWindowEditMouseActions.addWall){
-				this.game.getCurrentMap().addElementAt(new Wall(x,y), x, y);
-			}
-			//	Add door
-			else if (mouseAction == GameWindowEditMouseActions.addDoor){
-				Door door = new Door(x,y);
-				this.game.getCurrentMap().addElementAt(door, x, y);
-			}
-			//	Add lever
-			else if (mouseAction == GameWindowEditMouseActions.addLever){
-				Lever lever = new Lever(x,y);
-				this.game.getCurrentMap().addElementAt(lever, x, y);
-			}
-			//	Add guard
-			else if (mouseAction == GameWindowEditMouseActions.addGuard){
-				Guard guard = new Rookie(x,y);
-				//	Add guard
-				this.game.getCurrentMap().addGuard(guard);
-			}
-			//	Add key
-			else if (mouseAction == GameWindowEditMouseActions.addKey){
-				Key key = new Key(x,y);
-				this.game.getCurrentMap().addElementAt(key, x, y);
-			}
-			//	Add ogre
-			else if (mouseAction == GameWindowEditMouseActions.addOgre){
-				Ogre ogre = new Ogre(x,y, true);
-				this.game.getCurrentMap().addOgre(ogre);
-				this.game.getCurrentMap().addElementAt(ogre, x, y);
-			}
-			//	Add pilar
-			else if (mouseAction == GameWindowEditMouseActions.addPilar){
-				Pilar pilar = new Pilar(x,y);
-				this.game.getCurrentMap().addElementAt(pilar, x, y);
-			}
-			//	Add hero
-			else if (mouseAction == GameWindowEditMouseActions.addHero){
-				Hero hero = new Hero(x,y);
-				//	Add hero
-				this.game.getCurrentMap().addHero(hero);
-			}
-			else {
-				//	No actions
-				return;
-			}
+			checkMouseAction(x,y);
 
 			//	Reset action
 			mouseAction = GameWindowEditMouseActions.none;
@@ -324,6 +262,76 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 
 			//	Print map on console
 			game.printGame();
+		}
+	}
+	/** 
+	 * Removes element at x and y
+	 * */
+	private void removeElement(int x, int y){
+		GameObject removed = this.game.getCurrentMap().removeElementAt(x, y);
+		//	Check if removed an ogre or a guard or hero
+		if (removed instanceof Ogre){
+			this.game.getCurrentMap().removeOgre((Ogre)removed);
+		} else if (removed instanceof Guard){
+			this.game.getCurrentMap().setGuard(null);
+		} else if (removed instanceof Hero){
+			this.game.getCurrentMap().setHero(null);
+		}
+	}
+	/** 
+	 * Checks mouse action
+	 * */
+	private void checkMouseAction(int x, int y){
+		//		Mouse Edit Action
+		//	Remove element
+		if (mouseAction == GameWindowEditMouseActions.removeElement){
+			removeElement(x,y);
+		} 
+		//	Add wall
+		else if (mouseAction == GameWindowEditMouseActions.addWall){
+			this.game.getCurrentMap().addElementAt(new Wall(x,y), x, y);
+		}
+		//	Add door
+		else if (mouseAction == GameWindowEditMouseActions.addDoor){
+			Door door = new Door(x,y);
+			this.game.getCurrentMap().addElementAt(door, x, y);
+		}
+		//	Add lever
+		else if (mouseAction == GameWindowEditMouseActions.addLever){
+			Lever lever = new Lever(x,y);
+			this.game.getCurrentMap().addElementAt(lever, x, y);
+		}
+		//	Add guard
+		else if (mouseAction == GameWindowEditMouseActions.addGuard){
+			Guard guard = new Rookie(x,y);
+			//	Add guard
+			this.game.getCurrentMap().addGuard(guard);
+		}
+		//	Add key
+		else if (mouseAction == GameWindowEditMouseActions.addKey){
+			Key key = new Key(x,y);
+			this.game.getCurrentMap().addElementAt(key, x, y);
+		}
+		//	Add ogre
+		else if (mouseAction == GameWindowEditMouseActions.addOgre){
+			Ogre ogre = new Ogre(x,y, true);
+			this.game.getCurrentMap().addOgre(ogre);
+			this.game.getCurrentMap().addElementAt(ogre, x, y);
+		}
+		//	Add pilar
+		else if (mouseAction == GameWindowEditMouseActions.addPilar){
+			Pilar pilar = new Pilar(x,y);
+			this.game.getCurrentMap().addElementAt(pilar, x, y);
+		}
+		//	Add hero
+		else if (mouseAction == GameWindowEditMouseActions.addHero){
+			Hero hero = new Hero(x,y);
+			//	Add hero
+			this.game.getCurrentMap().addHero(hero);
+		}
+		else {
+			//	No actions
+			return;
 		}
 	}
 
