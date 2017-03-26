@@ -16,14 +16,10 @@ import game.services.ImageService;
 import net.miginfocom.swing.MigLayout;
 
 /** 
- * It's the game panel, it's composed by the background where the game is draw and a table to represent mouse clicked events.
+ * It's the game panel, where the game is draw and where responds to clicks
  * */
-
 public class GameScreenPanel extends JPanel implements KeyListener, MouseListener {
 
-	private JTable table;
-
-	private GameTableModel gameTableModel;
 	private int cellDimensionX;
 	private int cellDimensionY;
 	private Game game;
@@ -38,7 +34,6 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 		this.addListeners();
 
 		//	Setup object
-		this.setGameTableModel(new GameTableModel(game.getGameMap().getMap()));
 		this.game = game;
 		this.isEditing = false;
 		this.cellDimensionX = 0;
@@ -68,15 +63,28 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 	 * Paints all game panel
 	 * */
 	public void paintPanel(Graphics g){
-		//	Calculate cell dimensions
-		cellDimensionX = this.getWidth()/gameTableModel.getColumnCount();
-		cellDimensionY = this.getHeight()/gameTableModel.getRowCount();
+		if (game.getCurrentMap() != null){
+			//	Calculate cell dimensions
+			cellDimensionX = this.getWidth()/game.getCurrentMap().getNumberOfRows();
+			cellDimensionY = this.getHeight()/game.getCurrentMap().getNumberLines();
 
-		//	Paint floor
-		this.paintFloor(g, cellDimensionX, cellDimensionY);
+			//	Paint floor
+			this.paintFloor(g, cellDimensionX, cellDimensionY);
 
-		//	Paint objects
-		this.paintObjects(g, cellDimensionX, cellDimensionY);
+			//	Paint objects
+			this.paintObjects(g, cellDimensionX, cellDimensionY);
+		}
+
+		if (game.isGameOver()){
+			// Final game sentence
+			if (game.getEndStatus() == EndStatus.DEFEAT) {
+				System.out.println("GAME OVER!!!!");
+				g.drawImage(ImageService.shared.getGameOverImage(), 0, 0, this);
+			} else {
+				System.out.println("YOU WON!!!!");
+				g.drawImage(ImageService.shared.getYouWonImage(), 0, 0, this);
+			}
+		}
 	}
 
 	/** 
@@ -88,8 +96,8 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 		int finalY = dimensionY / 2;
 
 		//	Loop trough map cells
-		for(x = 0; x < gameTableModel.getColumnCount() * 2 ; x++){
-			for(y = 0; y < gameTableModel.getRowCount()  * 2 ; y++){
+		for(y = 0; y < game.getCurrentMap().getNumberLines()* 2 ; y++){
+			for(x = 0; x < game.getCurrentMap().getNumberOfRows()  * 2 ; x++){
 				//	paints floor
 				g.drawImage(ImageService.shared.getFloorImage(), x * finalX, y * finalY, finalX, finalY, this);
 			}
@@ -102,9 +110,9 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 	private void paintObjects(Graphics g, int dimensionX, int dimensionY){
 		int x,y;
 		//		Loop throught data
-		for(y = 0; y < gameTableModel.getRowCount(); y++){
-			for(x = 0; x < gameTableModel.getColumnCount() ; x++){
-				Cell cell = gameTableModel.getCellAt(x,y);
+		for(y = 0; y < game.getCurrentMap().getNumberLines(); y++){
+			for(x = 0; x < game.getCurrentMap().getNumberOfRows() ; x++){
+				GameObject cell = game.getCurrentMap().getElementAt(x, y);
 
 				//	If it is wall
 				if (cell instanceof Wall){
@@ -118,7 +126,7 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 						g.drawImage(ImageService.shared.getHeroKeyImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
 					} 
 					//	If hero is with weapon
-					else if (hero.hasWeapon()){
+					else if (hero.isHasClub()){
 						g.drawImage(ImageService.shared.getHeroClubImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
 					}
 					//	Hero don't have nothing
@@ -178,23 +186,10 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 		//	Updates game
 		this.game.updateGame(str);
 		//	Updates map with new game
-		this.gameTableModel = new GameTableModel(this.game.getGameMap().getMap());
 		this.repaint();
 
 		//	Print map on console
-		System.out.println(game.printGame());
-
-		//	Check if game over
-		if (!game.isGameOver()) return;
-
-		// Final game sentence
-		if (game.getEndStatus() == EndStatus.DEFEAT) {
-			System.out.println("GAME OVER!!!!");
-			//JOptionPane.showMessageDialog(this, "Game Over!");
-		} else {
-			System.out.println("YOU WON!!!!");
-			//JOptionPane.showMessageDialog(this, "You won!");
-		}
+		game.printGame();
 	}
 
 	//	MARK: Keyboard delegates
@@ -206,6 +201,8 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if(game.isGameOver()) return;
+
 		if (!this.isEditing()){
 			String cmd = "";
 
@@ -249,48 +246,47 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 			int y = e.getY()/cellDimensionY;
 
 			//	Get cell
-			Cell cell = this.game.getGameMap().getMap().getCells()[y][x];
-			
+			GameObject cell = this.game.getCurrentMap().getElementAt(x,y);
+
 			System.out.println(mouseAction.name());
 			//	Mouse Edit Action
 			//	Remove element
 			if (mouseAction == GameWindowEditMouseActions.removeElement){
-				this.game.getGameMap().getMap().getCells()[y][x] = null;
+				this.game.getCurrentMap().removeElementAt(x, y);
 			} 
 			//	Add wall
 			else if (mouseAction == GameWindowEditMouseActions.addWall){
-				this.game.getGameMap().getMap().addWall(x, y);
+				this.game.getCurrentMap().addElementAt(new Wall(x,y), x, y);
 			}
 			//	Add door
 			else if (mouseAction == GameWindowEditMouseActions.addDoor){
 				Door door = new Door(x,y);
-				this.game.getGameMap().getMap().addCell(door);
+				this.game.getCurrentMap().addElementAt(door, x, y);
 			}
 			//	Add lever
 			else if (mouseAction == GameWindowEditMouseActions.addLever){
 				Lever lever = new Lever(x,y);
-				this.game.getGameMap().getMap().addCell(lever);
-				
+				this.game.getCurrentMap().addElementAt(lever, x, y);
 			}
 			//	Add guard
 			else if (mouseAction == GameWindowEditMouseActions.addGuard){
 				Guard guard = new Rookie(x,y);
-				this.game.getGameMap().getMap().addCell(guard);
+				this.game.getCurrentMap().addElementAt(guard, x, y);
 			}
 			//	Add key
 			else if (mouseAction == GameWindowEditMouseActions.addKey){
 				Key key = new Key(x,y);
-				this.game.getGameMap().getMap().addCell(key);
+				this.game.getCurrentMap().addElementAt(key, x, y);
 			}
 			//	Add ogre
 			else if (mouseAction == GameWindowEditMouseActions.addOgre){
 				Ogre ogre = new Ogre(x,y, false);
-				this.game.getGameMap().getMap().addCell(ogre);
+				this.game.getCurrentMap().addElementAt(ogre, x, y);
 			}
 			//	Add pilar
 			else if (mouseAction == GameWindowEditMouseActions.addPilar){
 				Pilar pilar = new Pilar(x,y);
-				this.game.getGameMap().getMap().addCell(pilar);
+				this.game.getCurrentMap().addElementAt(pilar, x, y);
 			}
 			else {
 				//	No actions
@@ -301,11 +297,10 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 			mouseAction = GameWindowEditMouseActions.none;
 
 			//	Updates screen with new game
-			this.gameTableModel = new GameTableModel(this.game.getGameMap().getMap());
 			this.repaint();
 
 			//	Print map on console
-			System.out.println(game.printGame());
+			game.printGame();
 		}
 	}
 
@@ -327,33 +322,6 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 
 
 
-	/**
-	 * @return the table
-	 */
-	public JTable getTable() {
-		return table;
-	}
-
-	/**
-	 * @param table the table to set
-	 */
-	public void setTable(JTable table) {
-		this.table = table;
-	}
-
-	/**
-	 * @return the gameTableModel
-	 */
-	public GameTableModel getGameTableModel() {
-		return gameTableModel;
-	}
-
-	/**
-	 * @param gameTableModel the gameTableModel to set
-	 */
-	public void setGameTableModel(GameTableModel gameTableModel) {
-		this.gameTableModel = gameTableModel;
-	}
 
 	/**
 	 * @return the mouseAction

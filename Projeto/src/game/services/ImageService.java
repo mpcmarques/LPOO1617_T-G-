@@ -27,6 +27,8 @@ public class ImageService {
 	private BufferedImage heroClubImage;
 	private BufferedImage heroKeyImage;
 	private BufferedImage pilarImage;
+	private BufferedImage youWonImage;
+	private BufferedImage gameOverImage;
 	
 	/** 
 	 * Constructor
@@ -47,6 +49,8 @@ public class ImageService {
 		this.setHeroImage(loadBufferedImage("/player.png"));
 		this.leverImage = loadBufferedImage("/lever.png");
 		this.setPilarImage(loadBufferedImage("/pilar.png"));
+		this.setYouWonImage(loadBufferedImage("/you_won.png"));
+		this.setGameOverImage(loadBufferedImage("/game_over.png"));
 	}
 	
 	/** 
@@ -311,6 +315,34 @@ public class ImageService {
 	 */
 	public void setPilarImage(BufferedImage pilarImage) {
 		this.pilarImage = pilarImage;
+	}
+
+	/**
+	 * @return the youWonImage
+	 */
+	public BufferedImage getYouWonImage() {
+		return youWonImage;
+	}
+
+	/**
+	 * @param youWonImage the youWonImage to set
+	 */
+	public void setYouWonImage(BufferedImage youWonImage) {
+		this.youWonImage = youWonImage;
+	}
+
+	/**
+	 * @return the gameOverImage
+	 */
+	public BufferedImage getGameOverImage() {
+		return gameOverImage;
+	}
+
+	/**
+	 * @param gameOverImage the gameOverImage to set
+	 */
+	public void setGameOverImage(BufferedImage gameOverImage) {
+		this.gameOverImage = gameOverImage;
 	}
 
 }

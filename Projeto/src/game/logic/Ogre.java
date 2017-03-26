@@ -2,24 +2,28 @@ package game.logic;
 
 public class Ogre extends GameObject {
 	private boolean isStunned;
+	private boolean isOnKey;
 	private int stunCounter;
-	private boolean hasClub;
+	private OgreClub club;
 	
 	/** 
 	 * Constructor
 	 * */
 	public Ogre(int x, int y, boolean hasClub) {
 		super(x,y);
+		this.setOnKey(false);
 		setStunned(false);
 		setStunCounter(0);
-		this.hasClub = hasClub;
+		if (hasClub) setClub(new OgreClub(x,y));
 	}
 	
 	@Override
 	public String getLetter() {
 		if(isStunned){
 			return "8";
-		} else {
+		} else if (isOnKey){
+			return "$";
+		}else{
 			return "O"; 
 		}
 	}
@@ -33,7 +37,7 @@ public class Ogre extends GameObject {
 	 * Adds club to ogre
 	 * */
 	public void addClub(){
-		this.setHasClub(true);
+		this.setClub(new OgreClub(getX(),getY()));
 	}
 
 	/**
@@ -81,16 +85,30 @@ public class Ogre extends GameObject {
 	}
 
 	/**
-	 * @return the hasClub
+	 * @return the club
 	 */
-	public boolean hasClub() {
-		return hasClub;
+	public OgreClub getClub() {
+		return club;
 	}
 
 	/**
-	 * @param hasClub the hasClub to set
+	 * @param club the club to set
 	 */
-	public void setHasClub(boolean hasClub) {
-		this.hasClub = hasClub;
+	public void setClub(OgreClub club) {
+		this.club = club;
+	}
+
+	/**
+	 * @return the isOnKey
+	 */
+	public boolean isOnKey() {
+		return isOnKey;
+	}
+
+	/**
+	 * @param isOnKey the isOnKey to set
+	 */
+	public void setOnKey(boolean isOnKey) {
+		this.isOnKey = isOnKey;
 	}
 }

@@ -9,12 +9,14 @@ public class Main {
 		//	Creates the first level
 		// Start a new game
 		Game game = new Game(new GameMap(DefaultMaps.map1));
-		game.getGameMap().randomGuardType();
-		game.getGameMap().setGuardDefaultMoves();
+		game.getCurrentMap().randomGuardType();
+		game.getCurrentMap().setGuardDefaultMoves();
+		//	Add second map
+		game.addGameMap(new GameMap(DefaultMaps.map2));
 
 		// Print map
 		game.printGame();
-
+		
 		// Start user input scanner
 		Scanner user_input = new Scanner( System.in );
 		String typed;	
@@ -26,12 +28,6 @@ public class Main {
 			typed = user_input.next();
 			//  Update game
 			game.updateGame(typed);
-
-			//	If first map is completed, change to map 2
-			if (game.isGamemapCompleted()){
-				game.changeMap(new GameMap(DefaultMaps.map2));
-			}
-
 			//	Print game
 			game.printGame();
 		}

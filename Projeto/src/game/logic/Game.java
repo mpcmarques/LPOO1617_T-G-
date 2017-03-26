@@ -1,13 +1,13 @@
 package game.logic;
 
+import java.util.ArrayList;
+
 import game.services.RandomService;
 
 public class Game extends Object {
-	private GameMap gameMap;
+	private ArrayList<GameMap> maps;
 	private EndStatus endStatus;
 	private GameState state;
-	private boolean isGamemapCompleted;
-	private int numberOfOgres;
 
 	// Game instance
 	static Game instance;
@@ -17,10 +17,9 @@ public class Game extends Object {
 	 * */
 	public Game(GameMap gameMap){
 		setState(GameState.started);
-		setGameMap(gameMap);
+		maps = new ArrayList<GameMap>();
+		maps.add(gameMap);
 		instance = this;
-		this.setGamemapCompleted(false);
-		setNumberOfOgres(0);
 	}
 
 	/** 
@@ -28,27 +27,51 @@ public class Game extends Object {
 	 * */
 	public void updateGame(String typed){
 		//	Updates game map
-		gameMap.updateGame(typed);
+		getCurrentMap().updateGame(typed);
+	}
+	
+	/** 
+	 * Returns current map running in the game
+	 * */
+	public GameMap getCurrentMap(){
+		if (maps.size() != 0) return maps.get(0);
+		else return null;
+	}
+	
+	/** 
+	 * Prints game on console
+	 * */
+	public void printGame(){
+		if (getCurrentMap() != null){
+			System.out.println(getCurrentMap());
+		} 
 	}
 
 	/** 
-	 * Prints game on screen
+	 * Finish current map
 	 * */
-	public String printGame(){
-		System.out.println(gameMap);
-		return getGameMap().toString();
+	public void finishCurrentMap(){
+		this.maps.remove(getCurrentMap());
+		//	If there is no maps, game is over
+		if (maps.size() == 0) {
+			//	End game
+			gameCompleted();
+		}
 	}
-
+	
 	/** 
-	 * Changes map
+	 * Returns true if game is over
 	 * */
-	public void changeMap(GameMap map){
-		this.setGameMap(map);
-		this.isGamemapCompleted = false;
-	}
-
 	public boolean isGameOver(){
 		return this.getState() == GameState.over;
+	}
+	
+	/** 
+	 * Add game map
+	 * @param Map to be added
+	 * */
+	public void addGameMap(GameMap map){
+		maps.add(map);
 	}
 
 	public void gameOver(){
@@ -79,21 +102,6 @@ public class Game extends Object {
 		this.state = state;
 	}
 
-
-	/**
-	 * @return the gameMap
-	 */
-	public GameMap getGameMap() {
-		return gameMap;
-	}
-
-	/**
-	 * @param gameMap the gameMap to set
-	 */
-	public void setGameMap(GameMap gameMap) {
-		this.gameMap = gameMap;
-	}
-
 	/**
 	 * @return the endStatus
 	 */
@@ -106,33 +114,5 @@ public class Game extends Object {
 	 */
 	public void setEndStatus(EndStatus endStatus) {
 		this.endStatus = endStatus;
-	}
-
-	/**
-	 * @return the numberOfOgres
-	 */
-	public int getNumberOfOgres() {
-		return numberOfOgres;
-	}
-
-	/**
-	 * @param numberOfOgres the numberOfOgres to set
-	 */
-	public void setNumberOfOgres(int numberOfOgres) {
-		this.numberOfOgres = numberOfOgres;
-	}
-
-	/**
-	 * @return the isGamemapCompleted
-	 */
-	public boolean isGamemapCompleted() {
-		return isGamemapCompleted;
-	}
-
-	/**
-	 * @param isGamemapCompleted the isGamemapCompleted to set
-	 */
-	public void setGamemapCompleted(boolean isGamemapCompleted) {
-		this.isGamemapCompleted = isGamemapCompleted;
 	}
 }

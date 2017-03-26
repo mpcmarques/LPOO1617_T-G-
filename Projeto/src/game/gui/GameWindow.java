@@ -16,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
+import javax.swing.UIManager;
 
 public class GameWindow extends JFrame { 
 
@@ -35,6 +37,8 @@ public class GameWindow extends JFrame {
 	JButton btnNewButton;
 	JButton btnAddOgre;
 	JButton btnAddPilar;
+	JButton btnAddNewColumn;
+	JButton btnNewGame;
 
 	/**
 	 * Create the frame.
@@ -48,7 +52,6 @@ public class GameWindow extends JFrame {
 
 		//	Creates game panel
 		GameScreenPanel panel = new GameScreenPanel(game);
-		//setContentPane(panel);
 		setGamePanel(panel);
 		//	Create game
 		setGame(game);
@@ -62,12 +65,23 @@ public class GameWindow extends JFrame {
 				editGame();
 			}
 		});
+		
+		btnNewGame = new JButton("New game");
+		btnNewGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Show config
+				//TODO
+			}
+		});
+		btnNewGame.setFocusable(false);
+		getContentPane().add(btnNewGame, "cell 0 0");
 		btnEditGame.setFocusable(false);
-		getContentPane().add(btnEditGame, "cell 0 0,alignx left,aligny center");
+		getContentPane().add(btnEditGame, "cell 1 0,alignx left,aligny center");
 		getContentPane().add(panel, "cell 4 0 1 16,grow");
 
 		panel.requestFocusInWindow();
 		panel.setFocusable(true);
+		panel.setVisible(true);
 
 		JLabel lblGeneral = new JLabel("General");
 		lblGeneral.setHorizontalAlignment(SwingConstants.CENTER);
@@ -122,19 +136,26 @@ public class GameWindow extends JFrame {
 		btnAddHero.setEnabled(false);
 		getContentPane().add(btnAddHero, "cell 1 5,alignx left");
 
-		this.btnAddNewRow = new JButton("Add New Row");
+		this.btnAddNewRow = new JButton("Add New Line");
 		btnAddNewRow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//	Add New Row
-
+				// Add new line
+				addLine();
 			}
 		});
 		btnAddNewRow.setEnabled(false);
 		btnAddNewRow.setFocusable(false);
 		getContentPane().add(btnAddNewRow, "cell 0 6,alignx left");
 
-		JButton btnAddNewColumn = new JButton("Add New Column");
+		this.btnAddNewColumn = new JButton("Add New Column");
+		btnAddNewColumn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//	Adds new row
+				addRow();
+			}
+		});
 		btnAddNewColumn.setEnabled(false);
+		btnAddNewColumn.setFocusable(false);
 		getContentPane().add(btnAddNewColumn, "cell 1 6,alignx left");
 
 		JLabel lblFirstLevel = new JLabel("First Level");
@@ -205,20 +226,31 @@ public class GameWindow extends JFrame {
 	}
 
 	/** 
-	 * Updates game panel with new game screen
+	 * Adds new row to game map
 	 * */
-	private void updateGamePanel(String str){
-		//	Updates game
-		this.game.updateGame(str);
-		//	Updates map with new game
-		//this.gamePanel.setMap(game.getGameMap().getMap());
-		//this.gamePanel.repaint();
+	private void addLine(){
+		game.getCurrentMap().addLine();
+		//	Repaint map
+		gamePanel.repaint();
 
-		//	Printmap on console
-		System.out.println(game.printGame());
+	}
+	/** 
+	 * Adds new row to the map
+	 * */
+	private void addRow(){
+		game.getCurrentMap().addRow();
+		//	Repaint map
+		gamePanel.repaint();
 	}
 
-	//	Edit game 
+	/** 
+	 * Show game config window
+	 * */
+	private void showConfigWindow(){
+		// Show game window
+		
+		
+	}
 	/** 
 	 * Enables game editing
 	 * */
@@ -243,6 +275,8 @@ public class GameWindow extends JFrame {
 		this.btnNewButton.setEnabled(value);
 		this.btnAddOgre.setEnabled(value);
 		this.btnAddPilar.setEnabled(value);
+		this.btnAddNewRow.setEnabled(value);
+		this.btnAddNewColumn.setEnabled(value);
 	}
 	/** 
 	 * Apply editing changes

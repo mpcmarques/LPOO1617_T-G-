@@ -7,27 +7,20 @@ import game.services.RandomService;
 public class GameMap extends Object {
 	private boolean isCompleted;
 	private ArrayList<ArrayList<GameObject>> elements;
+	private ArrayList<Ogre> ogres;
+	private boolean canGuardsAndOgresMove;
 
 	//	Objects
 	private Hero hero;
 	private Guard guard;
-
-	/** 
-	 * Default constructor, create a empty map
-	 * */
-	/*public GameMap(int numberCellsForLine, int numberLines){
-		// Initialize variables
-		this.setCompleted(false);
-		this.setNumberCellsForLine(numberCellsForLine);
-		this.setNumberLines(numberLines);
-		cells = new ArrayList<ArrayList<Cell>>();
-	}*/
 
 	/**
 	 * @brief Constructor create a GameMap based on a char
 	 * */
 	public GameMap(char[][] map){
 		this.setCompleted(false);
+		this.ogres = new ArrayList<Ogre>();
+		this.canGuardsAndOgresMove = true;
 
 		//	Populates map with objects
 		populateMapWithObjects(map);
@@ -54,6 +47,31 @@ public class GameMap extends Object {
 
 			//	Add line to map
 			elements.add(line);
+		}
+	}
+
+	/** 
+	 * Adds a line to the map
+	 * */
+	public void addLine(){
+		ArrayList<GameObject> line = new ArrayList<GameObject>();
+		int i;
+		//	Add cells
+		for(i=0; i < this.getNumberOfRows(); i++){
+			line.add(null);
+		}
+		//	Add line to map
+		elements.add(line);
+	}
+	
+	/** 
+	 * Adds a row to the map
+	 * */
+	public void addRow(){
+		int i;
+		//	for each row add a cell
+		for(i = 0; i < this.getNumberLines(); i++){
+			elements.get(i).add(null);
 		}
 	}
 
@@ -88,9 +106,47 @@ public class GameMap extends Object {
 			//	Add guard
 			setGuard(new Rookie(x,y));
 			return this.guard;
+		case 'O':
+			//	Add ogre
+			Ogre ogre = new Ogre(x,y, false);
+			addOgre(ogre);
+			return ogre;
+		case '*':
+			//	Add club
+			return new Club(x,y);
 		default:
 			//	Add empty cell
 			return null;
+		}
+	}
+
+	/** 
+	 * @brief Adds an ogre
+	 * */
+	public void addOgre(Ogre ogre){
+		ogres.add(ogre);
+	}
+
+	/** 
+	 * @brief Changes guard type
+	 * @param type GuardType
+	 * */
+	public void changeGuardType(GuardTypes type){
+		if (guard != null){
+			switch(type){
+			case Drunken:
+				guard = new Drunken(guard.getX(),guard.getY());
+				addElementAt(this.guard, guard.getX(), guard.getY());
+				break;
+			case Rookie:
+				guard = new Rookie(guard.getX(),guard.getY());
+				addElementAt(this.guard, guard.getX(), guard.getY());
+				break;
+			case Suspicious:
+				guard = new Suspicious(guard.getX(),guard.getY());
+				addElementAt(this.guard, guard.getX(), guard.getY());
+				break;
+			}
 		}
 	}
 
@@ -100,8 +156,9 @@ public class GameMap extends Object {
 	public void completed(){
 		//	Set completed
 		this.setCompleted(true);
-		//	Call game level completion handler
-		Game.instance.setGamemapCompleted(true);
+
+		//	Call game end map
+		Game.instance.finishCurrentMap();
 	}
 
 	/** 
@@ -109,6 +166,15 @@ public class GameMap extends Object {
 	 * */
 	public void pressedLever(){
 		this.openAllDoors();
+	}
+
+	/** 
+	 * Add club to ogres
+	 * */
+	public void addClubToOgres(){
+		for(Ogre ogre: ogres){
+			ogre.addClub();
+		}
 	}
 
 	/** 
@@ -145,15 +211,97 @@ public class GameMap extends Object {
 		if (this.getGuard() != null){
 			guardLogic();
 		}
+
+		//	Ogre logic
+		ogreLogic();
+	}
+
+	/** 
+	 * Hero will move, method is called before hero moves, before hero move logic
+	 * @return boolean Hero can make this move
+	 * */
+	public boolean heroWillMove(int x, int y){
+		//	Get hero coordinates
+		Coordinate2d heroPosition = getHero().getCoordinates();
+
+		//	Cell element that will move to
+		GameObject obj = getElementAt(heroPosition.getX() + x, heroPosition.getY()+y);
+
+		//	If moved next to an ogre and has weapon, stun him
+		Ogre nearOgre = isOgreNear(getHero().getX()+x, getHero().getY()+y);
+		if(nearOgre != null){
+			//	If hero has weapon, stun ogre
+			if(getHero().isHasClub()) {
+				nearOgre.setStunned(true);
+			} 
+		}
+
+		//	Check if element that is going to move to is null
+		if (obj != null){
+			boolean toReturn;
+
+			// Check if can move to object before doing any action
+			if (obj.canMoveTo()){ 
+				toReturn = true;
+			} else {
+				toReturn = false;
+			}
+			//	Do element action before moving
+			elementDoAction(obj);
+
+			return toReturn;
+		} 
+		return true;
+	}
+
+	public void moveHero(int x, int y){
+		//	BEFORE MOVING
+		// Check if out of bounds
+		Coordinate2d heroPosition = hero.getCoordinates();
+
+		if (isAllowedToGoTo(heroPosition.getX() + x,heroPosition.getY() + y)){
+			if(heroWillMove(x,y)) {
+				// MOVE
+				// Clean previous cell
+				moveElement(hero, heroPosition.getX() + x, heroPosition.getY() + y);
+			}
+		}
+	}
+
+	/** 
+	 * Ogre logic
+	 * */
+	private void ogreLogic(){
+		//	Move ogres
+		if (this.canGuardsAndOgresMove)moveOgres();
+
+		//	If moved next to an ogre and hero doesnt have weapon, game over
+		Ogre nearOgre = isOgreNear(getHero().getX(), getHero().getY());
+		if(nearOgre != null){
+			//	If hero has weapon, stun ogre, else, lose game
+			if(getHero().isHasClub()) {
+				nearOgre.setStunned(true);
+			} else {
+				// END GAME, GAME Over
+				Game.instance.gameOver();
+				return;
+			}
+		}
+
+		//	If moved adjacent to a ogre club, game is over
+		if(isOgreClubNear() == true) {
+			// END GAME, GAME Over
+			Game.instance.gameOver();
+		}
 	}
 
 	/** 
 	 * Guard logic
 	 * */
 	private void guardLogic(){
-		
+
 		//	Moves guard
-		if (guard.getMovePositions() != null){
+		if (guard.getMovePositions() != null && this.canGuardsAndOgresMove){
 			moveGuardLogic();
 		}
 
@@ -200,25 +348,50 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * 
+	 * Check if ogre is adjacent to x and y position
 	 * */
-	public boolean isNearWall(int x, int y){
-		// Check if object is above
-		if (getElementAt(x,y-1) != null && getElementAt(x,y-1) instanceof Wall){
+	public Ogre isOgreNear(int x, int y){
+		for(Ogre ogre: getOgres()){
+			if (ogre != null){
+				// Check if the guard is above hero
+				if (ogre.getX() == x && ogre.getY() == y-1){
+					return ogre;
+				}
+				// Check if the guard is down
+				else if (ogre.getX() == x && ogre.getY() == y+1){
+					return ogre;
+				}
+				// Check if the guard is on the right
+				else if (ogre.getX() == x+1 && ogre.getY() == y){
+					return ogre;
+				}
+				//	Check if the guard is on the left
+				else if (ogre.getX() == x-1 && ogre.getY() == y){
+					return ogre;
+				}
+			}
+		}
+		return null;
+	}
+
+	public boolean isOgreClubNear(){
+		// Check if the guard is above hero
+		if (getElementAt(getHero().getX(), getHero().getY()-1) instanceof OgreClub){
 			return true;
 		}
-		//	Check if object is down
-		else if (getElementAt(x,y+1) != null && getElementAt(x,y+1)  instanceof Wall){
+		// Check if the guard is down
+		else if (getElementAt(getHero().getX(), getHero().getY()+1) instanceof OgreClub){
 			return true;
 		}
-		else if (getElementAt(x+1,y) != null && getElementAt(x+1,y)  instanceof Wall){
+		// Check if the guard is on the right
+		else if (getElementAt(getHero().getX()+1, getHero().getY()) instanceof OgreClub){
 			return true;
 		}
-		else if (getElementAt(x-1,y) != null && getElementAt(x-1,y)  instanceof Wall){
+		//	Check if the guard is on the left
+		else if (getElementAt(getHero().getX()-1, getHero().getY()) instanceof OgreClub){
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	/** 
@@ -280,8 +453,8 @@ public class GameMap extends Object {
 		int x,y;
 		x = getGuard().getMovePositions().get(getGuard().getMoveCounter()).getX();
 		y = getGuard().getMovePositions().get(getGuard().getMoveCounter()).getY();
-		
-		if (moveElement(guard.getX(), guard.getY(), x, y)){
+
+		if (moveElement(guard, x, y)){
 			// AFTER MOVING
 			// If is not reverse, add counter
 			if (!reverse) {
@@ -305,9 +478,7 @@ public class GameMap extends Object {
 					getGuard().setMoveCounter(getGuard().getMoveCounter() - 1);
 				}
 			}
-		} else {
-			System.out.println("Guard can't move!");
-		}
+		} 
 	}
 
 	/** 
@@ -316,7 +487,7 @@ public class GameMap extends Object {
 	public void randomGuardType(){
 		if (this.getGuard() != null) {
 			GuardTypes guardType = GuardTypes.values()[RandomService.getRandomInt(0, 2)];
-			
+
 			switch(guardType.ordinal()){
 			case 2:
 				setGuard(new Suspicious(guard.getX(),guard.getY()));
@@ -381,33 +552,6 @@ public class GameMap extends Object {
 
 
 	/** 
-	 * Hero will move, method is called before hero moves, before hero move logic
-	 * @return boolean Hero can make this move
-	 * */
-	public boolean heroWillMove(int x, int y){
-
-		//	Check if moving to a wall
-		Coordinate2d heroPosition = getHero().getCoordinates();
-
-		//	Cell element that will move to
-		GameObject obj = getElementAt(heroPosition.getX() + x, heroPosition.getY()+y);
-
-		//	Check if element that is going to move to is null
-		if (obj != null){
-			//	Do element action before moving
-			elementDoAction(obj);
-
-			// Can move to element
-			if (obj.canMoveTo()){ 
-				return true;
-			} else {
-				return false;
-			}
-		} 
-		return true;
-	}
-
-	/** 
 	 * Do element action
 	 * */
 	public void elementDoAction(GameObject element){
@@ -422,6 +566,7 @@ public class GameMap extends Object {
 					door.openDoor();
 					//	Remove key from hero
 					getHero().setHasKey(false);
+					return;
 				}
 			} else {
 				//	Complete level
@@ -437,25 +582,154 @@ public class GameMap extends Object {
 			//	Get club
 			getHero().setHasClub(true);
 		}
+		//	Check if moving to a key
+		else if(element instanceof Key){
+			//	Get key
+			getHero().setHasKey(true);
+		}
 	}
 
-	public void moveHero(int x, int y){
-		//	BEFORE MOVING
-		// Check if out of bounds
-		Coordinate2d heroPosition = hero.getCoordinates();
-
-		if (heroPosition.getX() + x >= 0 
-				&& heroPosition.getX() + x <= getNumberOfRows()
-				&& heroPosition.getY() + y >= 0 
-				&& heroPosition.getY() + y <= getNumberLines()){
-
-			if(heroWillMove(x,y)) {
-				// MOVE
-				// Clean previous cell
-				moveElement(hero.getX(), hero.getY(), heroPosition.getX() + x, heroPosition.getY() + y);
+	/** 
+	 * Move all ogres randomly
+	 * */
+	public void moveOgres(){
+		for (Ogre ogre: getOgres()){
+			//	If ogre is stunned, he doenst move, but swing bat
+			if (ogre.isStunned()) {
+				//	Decrease stun counter
+				ogre.decreaseStunCounter();
+				//	Swing club
+				if (ogre.getClub() != null){
+					swingClub(ogre);
+				}
+			} else {
+				moveOgre(ogre);
 			}
 		}
 	}
+
+	/** 
+	 * Move a single ogre
+	 * @param ogre Ogre that will move randomly
+	 * */
+	public void moveOgre(Ogre ogre){
+		int i,x = 0,y = 0;
+
+		// Get random option
+		i = RandomService.getRandomInt(1, 4);
+
+		//	Move up
+		if (i == 1){
+			y = -1;
+		}
+		//	Move down
+		else if (i == 2){
+			y = 1;
+		}
+		//	Move left
+		else if (i == 3){
+			x = -1;
+		}
+		//	Move right
+		else if (i == 4){
+			x = 1;
+		}
+
+		GameObject element = getElementAt(ogre.getX() + x,ogre.getY() + y);
+
+		if (element == null || element instanceof Ogre || element instanceof OgreClub){
+			//	If moving out of a key, add key to previous cell
+			if (ogre.isOnKey()){
+				//	Ogre is not on key anymore
+				ogre.setOnKey(false);
+				//	Add key to previous cell
+				addElementAt(new Key(ogre.getX(),ogre.getY()), ogre.getX(),ogre.getY());
+				//	Add ogre on next cell
+				addElementAt(ogre, ogre.getX()+x,ogre.getY()+y);
+			} else {
+				moveElement(ogre, ogre.getX()+x, ogre.getY()+y);
+			}
+			//	Swing club
+			if (ogre.getClub() != null){
+				swingClub(ogre);
+			}
+			//	If instance of key
+		} else if (element instanceof Key){
+			// Check if moving to a key
+			ogre.setOnKey(true);
+			//	Move ogre
+			moveElement(ogre, ogre.getX()+x, ogre.getY()+y);
+			//	Swing club
+			if (ogre.getClub() != null){
+				swingClub(ogre);
+			}
+		} else {
+			//	Use recursively
+			moveOgre(ogre);
+		}
+	}
+
+	/** 
+	 * Swing ogre club
+	 * */
+	public void swingClub(Ogre ogre){
+		int i,x = 0,y = 0;
+
+		// Get random option
+		i = RandomService.getRandomInt(1, 4);
+
+		//	Club up
+		if (i == 1){
+			y = -1;
+		}
+		//	Club down
+		else if (i == 2){
+			y = 1;
+		}
+		//	Club <-
+		else if (i == 4){
+			x = -1;
+		}
+		//	Club ->
+		else if (i == 3){
+			x = 1;
+		}
+
+		GameObject element = getElementAt(ogre.getX() + x,ogre.getY() + y);
+
+		if (element == null || element instanceof OgreClub){
+			//	If moving out of a key, add key to previous cell
+			if (ogre.getClub().isOnKey()){
+				//	Ogre is not on key anymore
+				ogre.getClub().setOnKey(false);
+				//	Add key to previous cell
+				addElementAt(new Key(ogre.getClub().getX(),ogre.getClub().getY()), ogre.getClub().getX(),ogre.getY());
+				//	Add club to next cell
+				addElementAt(ogre.getClub(), ogre.getX() +x, ogre.getY()+y);
+			} else {
+				// Remove last club
+				if (getElementAt(ogre.getClub().getX(), ogre.getClub().getY()) instanceof OgreClub){
+					removeElementAt(ogre.getClub().getX(), ogre.getClub().getY());
+				}
+				//	Add club
+				addElementAt(ogre.getClub(), ogre.getX() +x, ogre.getY()+y);
+			}
+		} else if (element instanceof Key){
+			// Check if moving to a key
+			ogre.getClub().setOnKey(true);
+
+			// Remove last club
+			if (getElementAt(ogre.getClub().getX(), ogre.getClub().getY()) instanceof OgreClub){
+				removeElementAt(ogre.getClub().getX(), ogre.getClub().getY());
+			}
+			//	Add club
+			addElementAt(ogre.getClub(), ogre.getX() +x, ogre.getY()+y);
+		} else {
+			//	Use recursively
+			swingClub(ogre);
+		}
+	}
+
 
 	/** 
 	 * @return Element at x,y
@@ -463,9 +737,11 @@ public class GameMap extends Object {
 	 * @param y Line number
 	 * */
 	public GameObject getElementAt(int x, int y){
-		if (this.elements.get(y).get(x) != null){
-			return this.elements.get(y).get(x);
-		} else {
+		if ((x >= 0  && y >= 0 && x < this.getNumberOfRows() && y < this.getNumberLines() )
+				&& (this.elements.get(y).get(x) != null)){
+			return this.getElements().get(y).get(x);
+		}
+		else {
 			return null;
 		}
 	}
@@ -474,6 +750,8 @@ public class GameMap extends Object {
 	 * Remove game object at x,y
 	 * */
 	public GameObject removeElementAt(int x,int y){
+		if (!isAllowedToGoTo(x,y)) return null;
+		
 		GameObject toReturn = this.elements.get(y).set(x, null);
 		return toReturn;
 	}
@@ -482,25 +760,48 @@ public class GameMap extends Object {
 	 * Adds an element to the game
 	 * */
 	public void addElementAt(GameObject element, int x, int y){
+		if (!isAllowedToGoTo(x,y)) return;
+		
+		element.setCoordinates(new Coordinate2d(x,y));
 		this.elements.get(y).set(x, element);
 	}
-
+	
+	/** 
+	 * Check if cell can be added
+	 * */
+	private boolean isAllowedToGoTo(int x, int y){
+		if ((x >= 0 && x < getNumberOfRows() && y >= 0 && y < getNumberLines())) return true;
+		else return false;
+	}
+	
 	/** 
 	 * Move element
 	 * */
-	public boolean moveElement(int x0, int y0, int xF, int yF){
-		if (getElementAt(xF, yF) == null || 
+	public boolean moveElement(GameObject element, int xF, int yF){
+		if (isAllowedToGoTo(xF,yF) && (getElementAt(xF, yF) == null || 
 				getElementAt(xF , yF).canMoveTo()
-				){
+				)){
 			// MOVE
-			// Clean previous cell
-			GameObject obj = removeElementAt(x0, y0);
-			
-			//	Update object
-			obj.setCoordinates(new Coordinate2d(xF,yF));
+			// Get previous cell
+			GameObject obj = getElementAt(element.getX(), element.getY());
 
-			//	Show in next cell
-			addElementAt(obj, xF, yF);
+			//	If object is on screen
+			if(obj != null && obj == element){
+				//	Remove object on screen
+				removeElementAt(element.getX(), element.getY());
+				//	Show in next cell
+				addElementAt(obj, xF, yF);
+			} else {
+				//	Show in next cell
+				addElementAt(element, xF, yF);
+			}
+
+			//	Update object
+			if (obj != null) {
+				obj.setCoordinates(new Coordinate2d(xF,yF));
+				//	Show in next cell
+				addElementAt(obj, xF, yF);
+			}
 
 			return true;
 		} else {
@@ -590,9 +891,6 @@ public class GameMap extends Object {
 		this.isCompleted = completed;
 	}
 
-
-
-
 	/**
 	 * @return the numberLines
 	 */
@@ -644,5 +942,33 @@ public class GameMap extends Object {
 	 */
 	public void setHero(Hero hero) {
 		this.hero = hero;
+	}
+
+	/**
+	 * @return the ogres
+	 */
+	public ArrayList<Ogre> getOgres() {
+		return ogres;
+	}
+
+	/**
+	 * @param ogres the ogres to set
+	 */
+	public void setOgres(ArrayList<Ogre> ogres) {
+		this.ogres = ogres;
+	}
+
+	/**
+	 * @return the canGuardsAndOgresMove
+	 */
+	public boolean canGuardsAndOgresMove() {
+		return canGuardsAndOgresMove;
+	}
+
+	/**
+	 * @param canGuardsAndOgresMove the canGuardsAndOgresMove to set
+	 */
+	public void setCanGuardsAndOgresMove(boolean canGuardsAndOgresMove) {
+		this.canGuardsAndOgresMove = canGuardsAndOgresMove;
 	}
 }
