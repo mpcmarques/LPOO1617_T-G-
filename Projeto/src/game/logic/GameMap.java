@@ -1,7 +1,9 @@
 package game.logic;
 
 import java.util.ArrayList;
-
+/** 
+ * Class represents a GameMap
+ * */
 public class GameMap extends Object {
 	private boolean isCompleted;
 	private ArrayList<ArrayList<GameObject>> elements;
@@ -13,7 +15,8 @@ public class GameMap extends Object {
 	private Guard guard;
 
 	/**
-	 * @brief Constructor create a GameMap based on a char
+	 * Constructor create a GameMap based on a map char matrix
+	 * @param map Map to be created
 	 * */
 	public GameMap(char[][] map){
 		this.setCompleted(false);
@@ -25,7 +28,8 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * Populates map with objects
+	 * Imports map
+	 * @param map Map be imported
 	 * */
 	private void populateMapWithObjects(char[][] map){
 		int col, row;
@@ -75,6 +79,10 @@ public class GameMap extends Object {
 
 	/** 
 	 * Returns the element of a letter
+	 * @return GameObject of that letter representation
+	 * @param x GameObject x position
+	 * @param y GameObject y position
+	 * @param value GameObject letter representation
 	 * */
 	private GameObject elementForKey(char value, int x, int y){
 		//	Get cell value
@@ -119,7 +127,8 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * @brief Adds an ogre
+	 * Adds an ogre
+	 * @param ogre Ogre to be added
 	 * */
 	public void addOgre(Ogre ogre){
 		ogres.add(ogre);
@@ -164,7 +173,7 @@ public class GameMap extends Object {
 	}
 	
 	/** 
-	 * @brief Adds an hero to the map
+	 * Adds an hero to the map
 	 * @param hero Hero to be added
 	 * */
 	public void addHero(Hero hero){
@@ -177,7 +186,7 @@ public class GameMap extends Object {
 		setHero(hero);
 	}
 	/** 
-	 * @brief Removes an ogre
+	 * Removes an ogre
 	 * @param ogre Ogre to be added
 	 * */
 	public void removeOgre(Ogre ogre){
@@ -189,7 +198,8 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * @brief Adds a guard and shows in the map
+	 * Adds a guard and shows in the map
+	 * @param guard Guard to be added
 	 * */
 	public void addGuard(Guard guard){
 		//		Remove previous guard -> only allow 1 guard
@@ -201,7 +211,7 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * @brief Changes guard type
+	 * Changes guard type
 	 * @param type GuardType
 	 * */
 	public void changeGuardType(GuardTypes type){
@@ -224,7 +234,7 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * @brief Player finished game map, call game level completion handler
+	 * Player finished game map, function call game level completion handler
 	 * */
 	public void completed(){
 		//	Set completed
@@ -235,7 +245,7 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * @brief Player pressed a lever, opens all doors
+	 * Player pressed a lever, opens all doors
 	 * */
 	public void pressedLever(){
 		this.openAllDoors();
@@ -251,7 +261,8 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * @brief Updates game, need to call the super method to walk hero in subclasses.
+	 * Updates game, need to call the super method to walk hero in subclasses.
+	 * @param typed Typed string
 	 * */
 	public void updateGame(String typed){
 		// Checked typed key
@@ -292,6 +303,8 @@ public class GameMap extends Object {
 	/** 
 	 * Hero will move, method is called before hero moves, before hero move logic
 	 * @return boolean Hero can make this move
+	 * @param x Hero delta x position
+	 * @param y Hero delta y position
 	 * */
 	public boolean heroWillMove(int x, int y){
 		//	Get hero coordinates
@@ -326,7 +339,11 @@ public class GameMap extends Object {
 		} 
 		return true;
 	}
-
+	/** 
+	 * Move hero
+	 * @param x Delta x
+	 * @param y Delta y
+	 * */
 	public void moveHero(int x, int y){
 		//	BEFORE MOVING
 		// Check if out of bounds
@@ -394,7 +411,8 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * @returns boolean Returns true if guard is adjacent
+	 * Check if guard is near
+	 * @return True if guard is adjacent
 	 * */
 	public boolean isGuardNear(){
 		if(getGuard() == null){
@@ -422,6 +440,9 @@ public class GameMap extends Object {
 
 	/** 
 	 * Check if ogre is adjacent to x and y position
+	 * @return Ogre near ogre
+	 * @param x XPosition to check if ogre is near 
+	 * @param y YPosition to check if ogre is near
 	 * */
 	public Ogre isOgreNear(int x, int y){
 		for(Ogre ogre: getOgres()){
@@ -446,7 +467,10 @@ public class GameMap extends Object {
 		}
 		return null;
 	}
-
+	/** 
+	 * Returns true if ogre club is near hero
+	 * @return True if ogre club is near hero
+	 * */
 	public boolean isOgreClubNear(){
 		// Check if the guard is above hero
 		if (getElementAt(getHero().getX(), getHero().getY()-1) instanceof OgreClub){
@@ -517,8 +541,8 @@ public class GameMap extends Object {
 	}
 
 	/**	
-	 * @brief Moves guard
-	 * @parameter reverse Should reverse
+	 * Moves guard
+	 * @param reverse Should reverse
 	 * */
 	public void moveGuard(boolean reverse){
 		//	BEFORE MOVING
@@ -625,7 +649,8 @@ public class GameMap extends Object {
 
 
 	/** 
-	 * Do element action
+	 * Do a action if game object needs a action, function is called when a hero is moving to a game object
+	 * @param element GameObject to make action
 	 * */
 	public void elementDoAction(GameObject element){
 		//		Check if moving to door
@@ -749,8 +774,9 @@ public class GameMap extends Object {
 
 	/** 
 	 * Swing ogre club
+	 * @param ogre Ogre that will swing club
 	 * */
-	public void swingClub(Ogre ogre){
+	private void swingClub(Ogre ogre){
 		int i,x = 0,y = 0;
 
 		// Get random option
@@ -810,8 +836,9 @@ public class GameMap extends Object {
 	}
 
 
-	/** 
-	 * @return Element at x,y
+	/**
+	 * Gets game object at x and y position, returns null if ther is no game object
+	 * @return GameObject at x,y
 	 * @param x Column number
 	 * @param y Line number
 	 * */
@@ -827,6 +854,9 @@ public class GameMap extends Object {
 
 	/** 
 	 * Remove game object at x,y
+	 * @return GameObject removed
+	 * @param x X position
+	 * @param y Y position
 	 * */
 	public GameObject removeElementAt(int x,int y){
 		if (!isAllowedToGoTo(x,y)) return null;
@@ -837,6 +867,9 @@ public class GameMap extends Object {
 
 	/** 
 	 * Adds an element to the game
+	 * @param element GameObject to be added
+	 * @param x X Position that will be added
+	 * @param y Y Position that will be added
 	 * */
 	public void addElementAt(GameObject element, int x, int y){
 		if (!isAllowedToGoTo(x,y)) return;
@@ -846,7 +879,10 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * Check if cell can be added
+	 * Check if x and y is out of bounds
+	 * @return true if x and y is not out of bounds
+	 * @param x X coordinate
+	 * @param y y Coordinate
 	 * */
 	private boolean isAllowedToGoTo(int x, int y){
 		if ((x >= 0 && x < getNumberOfRows() && y >= 0 && y < getNumberLines())) return true;
@@ -854,7 +890,11 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * Move element
+	 * Move game object
+	 * @param xF Final x
+	 * @param yF Final y
+	 * @param element GameObject that will be moved
+	 * @return True if game object can be moved
 	 * */
 	public boolean moveElement(GameObject element, int xF, int yF){
 		if (isAllowedToGoTo(xF,yF) && (getElementAt(xF, yF) == null || 
@@ -892,7 +932,7 @@ public class GameMap extends Object {
 
 
 	/** 
-	 * @brief Open all doors
+	 * Open all doors
 	 * */
 	public void openAllDoors(){
 		//	Loop through cells
@@ -910,7 +950,8 @@ public class GameMap extends Object {
 	}
 
 	/** 
-	 * @brief Returns true if there is a open exit door
+	 * Returns true if there is a open exit door
+	 * @return True if there is a open exit door
 	 * */
 	public boolean isExitDoorsOpen(){
 		// Loop through lines
@@ -957,6 +998,7 @@ public class GameMap extends Object {
 
 
 	/**
+	 * Return true if the game map is completed
 	 * @return the completed
 	 */
 	public boolean isCompleted() {
@@ -964,6 +1006,7 @@ public class GameMap extends Object {
 	}
 
 	/**
+	 * Set game map completed
 	 * @param completed the completed to set
 	 */
 	public void setCompleted(boolean completed) {
@@ -971,17 +1014,22 @@ public class GameMap extends Object {
 	}
 
 	/**
+	 * Get number of lines
 	 * @return the numberLines
 	 */
 	public int getNumberLines() {
 		return elements.size();
 	}
-
+	/** 
+	 * Get number of rows
+	 * @return int Number of rows
+	 * */
 	public int getNumberOfRows(){
 		return elements.get(0).size();
 	}
 
 	/**
+	 * Get the guard
 	 * @return the guard
 	 */
 	public Guard getGuard() {
@@ -989,6 +1037,7 @@ public class GameMap extends Object {
 	}
 
 	/**
+	 * Set guard
 	 * @param guard the guard to set
 	 */
 	public void setGuard(Guard guard) {
@@ -996,6 +1045,7 @@ public class GameMap extends Object {
 	}
 
 	/**
+	 * Returns the game objects in the map
 	 * @return the elements
 	 */
 	public ArrayList<ArrayList<GameObject>> getElements() {
@@ -1003,6 +1053,7 @@ public class GameMap extends Object {
 	}
 
 	/**
+	 * Set game objects
 	 * @param elements the elements to set
 	 */
 	public void setElements(ArrayList<ArrayList<GameObject>> elements) {
@@ -1010,6 +1061,7 @@ public class GameMap extends Object {
 	}
 
 	/**
+	 * Returns the hero
 	 * @return the hero
 	 */
 	public Hero getHero() {
@@ -1017,6 +1069,7 @@ public class GameMap extends Object {
 	}
 
 	/**
+	 * Set hero
 	 * @param hero the hero to set
 	 */
 	public void setHero(Hero hero) {
@@ -1024,6 +1077,7 @@ public class GameMap extends Object {
 	}
 
 	/**
+	 * Return the ogres ArrayList
 	 * @return the ogres
 	 */
 	public ArrayList<Ogre> getOgres() {
@@ -1031,6 +1085,7 @@ public class GameMap extends Object {
 	}
 
 	/**
+	 * Set ogres
 	 * @param ogres the ogres to set
 	 */
 	public void setOgres(ArrayList<Ogre> ogres) {
@@ -1038,6 +1093,7 @@ public class GameMap extends Object {
 	}
 
 	/**
+	 * Returns true if guards and ogres can move
 	 * @return the canGuardsAndOgresMove
 	 */
 	public boolean canGuardsAndOgresMove() {
@@ -1045,6 +1101,7 @@ public class GameMap extends Object {
 	}
 
 	/**
+	 * Set if guard and ogres can move
 	 * @param canGuardsAndOgresMove the canGuardsAndOgresMove to set
 	 */
 	public void setCanGuardsAndOgresMove(boolean canGuardsAndOgresMove) {

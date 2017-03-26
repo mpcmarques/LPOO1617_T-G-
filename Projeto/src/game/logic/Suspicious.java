@@ -1,8 +1,16 @@
 package game.logic;
 
+/** 
+ * Class represents a suspicious guard in the game
+ * */
 public class Suspicious extends Guard {
 	private boolean isInReverse;
 	
+	/** 
+	 * 	Suspicious constructor
+	 * @param x Position x
+	 * @param y Position y
+	 * */
 	public Suspicious(int x, int y) {
 		super(x,y);
 		this.setInReverse(false);

@@ -6,7 +6,9 @@ package game.logic;
 public class Club extends GameObject{
 	
 	/** 
-	 * Constructor
+	 * Club constructor
+	 * @param x Position x
+	 * @param y Position y
 	 * */
 	Club(int x, int y) {
 		super(x, y);

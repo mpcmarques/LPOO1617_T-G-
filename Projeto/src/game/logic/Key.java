@@ -5,7 +5,9 @@ package game.logic;
  * */
 public class Key extends GameObject {
 	/** 
-	 * Constructor
+	 * Key constructor
+	 * @param x Position x
+	 * @param y Position y
 	 * */
 	public Key(int x, int y) {
 		super(x,y);

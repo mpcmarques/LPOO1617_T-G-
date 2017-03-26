@@ -1,10 +1,16 @@
 package game.logic;
-
+/** 
+ * Class represents a hero in the game
+ * */
 public class Hero extends GameObject{
 	private boolean hasKey;
 	private boolean hasClub;
 	
-	///	Constructor
+	/** 
+	 * Hero constructor
+	 * @param x Position x
+	 * @param y Position y
+	 * */
 	public Hero(int x, int y) {
 		super(x,y);
 		setHasKey(false);
@@ -27,6 +33,7 @@ public class Hero extends GameObject{
 	}
 
 	/**
+	 * Return true if hero has key
 	 * @return the hasKey
 	 */
 	public boolean hasKey() {
@@ -34,6 +41,7 @@ public class Hero extends GameObject{
 	}
 
 	/**
+	 * Set if hero has the key
 	 * @param hasKey the hasKey to set
 	 */
 	public void setHasKey(boolean hasKey) {
@@ -41,6 +49,7 @@ public class Hero extends GameObject{
 	}
 
 	/**
+	 * Return true if hero has the club
 	 * @return the hasClub
 	 */
 	public boolean isHasClub() {
@@ -48,6 +57,7 @@ public class Hero extends GameObject{
 	}
 
 	/**
+	 * Set club to the hero
 	 * @param hasClub the hasClub to set
 	 */
 	public void setHasClub(boolean hasClub) {

@@ -1,15 +1,20 @@
 package game.logic;
-
+/** 
+ * Class represents a 2d Coordinate (x,y)
+ * */
 public class Coordinate2d extends Object{
 	private int x, y;
 	
-	
-	//	MARK: Constructor
+	/** 
+	 * Coordinate2d constructor
+	 * @param x Position x
+	 * @param y Position y
+	 * */
 	public Coordinate2d(int x, int y){
 		setX(x);
 		setY(y);
 	}
-	
+
 	public boolean equals(Object obj){
 		return (obj instanceof Coordinate2d) &&
 				((Coordinate2d)obj).getX() == x &&
@@ -18,12 +23,14 @@ public class Coordinate2d extends Object{
 	}
 	
 	/**
+	 * Get coordinate x
 	 * @return the x
 	 */
 	public int getX() {
 		return x;
 	}
 	/**
+	 * Set coordinate x
 	 * @param x the x to set
 	 */
 	public void setX(int x) {
@@ -31,6 +38,7 @@ public class Coordinate2d extends Object{
 	}
 
 	/**
+	 * Get coordinate y
 	 * @return the y
 	 */
 	public int getY() {
@@ -38,6 +46,7 @@ public class Coordinate2d extends Object{
 	}
 
 	/**
+	 * Set coordinate y
 	 * @param y the y to set
 	 */
 	public void setY(int y) {

@@ -7,6 +7,8 @@ public class Wall extends GameObject {
 	
 	/** 
 	 * Constructor
+	 * @param x Position x 
+	 * @param y Position y 
 	 * */
 	public Wall(int x, int y) {
 		super(x,y);

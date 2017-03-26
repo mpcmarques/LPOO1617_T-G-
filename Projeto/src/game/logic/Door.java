@@ -7,7 +7,9 @@ public class Door extends GameObject {
 	private boolean isOpen;
 
 	/** 
-	 * Constructor
+	 * Door constructor
+	 * @param x Position x
+	 * @param y Position y
 	 * */
 	public Door(int x, int y) {
 		super(x,y);
@@ -31,6 +33,7 @@ public class Door extends GameObject {
 	}
 	
 	/** 
+	 * Return true if door is open
 	 * @return True if the door is open
 	 * */
 	public boolean isOpen() {
@@ -38,7 +41,8 @@ public class Door extends GameObject {
 	}
 	
 	/** 
-	 * Set door isOpen
+	 * Set door open or closed
+	 * @param isOpen Door is open
 	 * */
 	private void setOpen(boolean isOpen) {
 		this.isOpen = isOpen;

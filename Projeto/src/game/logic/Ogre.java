@@ -1,5 +1,7 @@
 package game.logic;
-
+/** 
+ * Class represents a ogre in the game
+ * */
 public class Ogre extends GameObject {
 	private boolean isStunned;
 	private boolean isOnKey;
@@ -7,7 +9,10 @@ public class Ogre extends GameObject {
 	private OgreClub club;
 	
 	/** 
-	 * Constructor
+	 * OgreClub constructor
+	 * @param x Position x
+	 * @param y Position y
+	 * @param hasClub Ogre has club
 	 * */
 	public Ogre(int x, int y, boolean hasClub) {
 		super(x,y);
@@ -41,7 +46,8 @@ public class Ogre extends GameObject {
 	}
 
 	/**
-	 * @return the isStunned
+	 * Return true if ogre is stunned
+	 * @return True if ogre is stunned
 	 */
 	public boolean isStunned() {
 		return isStunned;
@@ -60,7 +66,8 @@ public class Ogre extends GameObject {
 	}
 	
 	/**
-	 * @param isStunned the isStunned to set
+	 * Set ogre stunned
+	 * @param isStunned Is ogre stunned
 	 */
 	public void setStunned(boolean isStunned) {
 		if (isStunned){
@@ -71,13 +78,15 @@ public class Ogre extends GameObject {
 	}
 	
 	/**
-	 * @return the stunCounter
+	 * Get how many turns ogre is stunned
+	 * @return how many turns ogre is stunned
 	 */
 	public int getStunCounter() {
 		return stunCounter;
 	}
 
 	/**
+	 * Set ogre stun counter
 	 * @param stunCounter the stunCounter to set
 	 */
 	public void setStunCounter(int stunCounter) {
@@ -85,6 +94,7 @@ public class Ogre extends GameObject {
 	}
 
 	/**
+	 * Get ogre club
 	 * @return the club
 	 */
 	public OgreClub getClub() {
@@ -92,6 +102,7 @@ public class Ogre extends GameObject {
 	}
 
 	/**
+	 * Set ogre club
 	 * @param club the club to set
 	 */
 	public void setClub(OgreClub club) {
@@ -99,6 +110,7 @@ public class Ogre extends GameObject {
 	}
 
 	/**
+	 * Return true if ogre is on key
 	 * @return the isOnKey
 	 */
 	public boolean isOnKey() {

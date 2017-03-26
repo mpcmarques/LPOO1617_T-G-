@@ -1,7 +1,9 @@
 package game.logic;
 
 import java.util.ArrayList;
-
+/** 
+ * Class represents a dungeon keep game
+ * */
 public class Game extends Object {
 	private ArrayList<GameMap> maps;
 	private EndStatus endStatus;
@@ -11,7 +13,8 @@ public class Game extends Object {
 	static Game instance;
 
 	/** 
-	 * Constructor
+	 * Game constructor
+	 * @param gameMap GameMap
 	 * */
 	public Game(GameMap gameMap){
 		setState(GameState.started);
@@ -22,6 +25,7 @@ public class Game extends Object {
 
 	/** 
 	 * Updates game with typed string
+	 * @param typed Typed string
 	 * */
 	public void updateGame(String typed){
 		//	Updates game map
@@ -30,6 +34,7 @@ public class Game extends Object {
 	
 	/** 
 	 * Returns current map running in the game
+	 * @return GameMap Current GameMap
 	 * */
 	public GameMap getCurrentMap(){
 		if (maps.size() != 0) return maps.get(0);
@@ -59,6 +64,7 @@ public class Game extends Object {
 	
 	/** 
 	 * Returns true if game is over
+	 * @return boolean True if gamestate is over
 	 * */
 	public boolean isGameOver(){
 		return this.getState() == GameState.over;
@@ -66,18 +72,22 @@ public class Game extends Object {
 	
 	/** 
 	 * Add game map
-	 * @param Map to be added
+	 * @param map Map to be added
 	 * */
 	public void addGameMap(GameMap map){
 		maps.add(map);
 	}
-
+	/** 
+	 * Ends the game with game over
+	 * */
 	public void gameOver(){
 		// END GAME, GAME Over
 		setState(GameState.over);
 		setEndStatus(EndStatus.DEFEAT);
 	}
-
+	/** 
+	 * Ends the game with game win
+	 * */
 	public void gameCompleted(){
 		// END GAME, GAME Over
 		setState(GameState.over);
@@ -87,6 +97,7 @@ public class Game extends Object {
 	//	MARK: Getters and Setters
 
 	/**
+	 * Get game state
 	 * @return the state
 	 */
 	public GameState getState() {
@@ -94,6 +105,7 @@ public class Game extends Object {
 	}
 
 	/**
+	 * Set game state
 	 * @param state the state to set
 	 */
 	public void setState(GameState state) {
@@ -101,6 +113,7 @@ public class Game extends Object {
 	}
 
 	/**
+	 * Return the game end status
 	 * @return the endStatus
 	 */
 	public EndStatus getEndStatus() {
@@ -108,6 +121,7 @@ public class Game extends Object {
 	}
 
 	/**
+	 * Set game end status
 	 * @param endStatus the endStatus to set
 	 */
 	public void setEndStatus(EndStatus endStatus) {

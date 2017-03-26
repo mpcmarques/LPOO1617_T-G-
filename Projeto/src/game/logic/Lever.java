@@ -5,7 +5,9 @@ package game.logic;
 public class Lever extends GameObject{
 
 	/** 
-	 * Constructor
+	 * Lever constructor
+	 * @param x Position x
+	 * @param y Position y
 	 * */
 	public Lever(int x, int y) {
 		super(x,y);

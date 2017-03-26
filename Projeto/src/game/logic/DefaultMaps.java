@@ -1,5 +1,7 @@
 package game.logic;
-
+/** 
+ * Class represents the game default maps
+ * */
 public class DefaultMaps {
 	public static char[][]  map1 = {
 			{'X','X','X','X','X','X','X','X','X','X'},

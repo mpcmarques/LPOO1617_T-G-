@@ -8,7 +8,7 @@ public class RandomService {
 	private static Random random = new Random();
 	
 	/** 
-	 * @brief Get a random number between min and max
+	 * Get a random number between min and max
 	 * @return int Random value
 	 * @param min Minimum number
 	 * @param max Maximum number

@@ -8,7 +8,9 @@ public class Drunken extends Guard {
 	private int sleepTime;
 
 	/** 
-	 * Constructor
+	 * Drunken guard constructor
+	 * @param x Position x
+	 * @param y Position y
 	 * */
 	public Drunken(int x, int y) {
 		super(x,y);
@@ -17,6 +19,7 @@ public class Drunken extends Guard {
 	}
 
 	/**
+	 * Return true if guard is sleeping
 	 * @return the isSleeping
 	 */
 	public boolean isSleeping() {
@@ -24,6 +27,7 @@ public class Drunken extends Guard {
 	}
 
 	/**
+	 * Set drunken guard sleeping
 	 * @param isSleeping the isSleeping to set
 	 */
 	public void setSleeping(boolean isSleeping) {
@@ -51,6 +55,7 @@ public class Drunken extends Guard {
 	}
 
 	/**
+	 * Get drunken guard sleep time
 	 * @return the sleepTime
 	 */
 	public int getSleepTime() {
@@ -58,6 +63,7 @@ public class Drunken extends Guard {
 	}
 
 	/**
+	 * Set drunken guard sleep time
 	 * @param sleepTime the sleepTime to set
 	 */
 	public void setSleepTime(int sleepTime) {
