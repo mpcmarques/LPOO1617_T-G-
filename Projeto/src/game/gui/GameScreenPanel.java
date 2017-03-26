@@ -302,6 +302,7 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 			this.game.getCurrentMap().setHero(null);
 		}
 	}
+	
 	/** 
 	 * Checks mouse action
 	 * */

@@ -133,7 +133,7 @@ public class GameMap extends Object {
 	public void addOgre(Ogre ogre){
 		ogres.add(ogre);
 	}
-	
+
 	/** 
 	 * Check if game map is playable
 	 * @return True if game map is playable
@@ -141,7 +141,7 @@ public class GameMap extends Object {
 	public boolean isPlayable(){
 		return ((this.getHero() != null) && hasDoor() && hasKeyOrLever());
 	}
-	
+
 	/**
 	 * Check if there is a door in the map
 	 * @return True if map has a door
@@ -156,7 +156,7 @@ public class GameMap extends Object {
 		}
 		return false;
 	}
-	
+
 	/** 
 	 * Check if there is a key or a lever in the map
 	 * @return True if there is a key or a lever in the map
@@ -171,7 +171,7 @@ public class GameMap extends Object {
 		}
 		return false;
 	}
-	
+
 	/** 
 	 * Adds an hero to the map
 	 * @param hero Hero to be added
@@ -736,42 +736,57 @@ public class GameMap extends Object {
 		GameObject element = getElementAt(ogre.getX() + x,ogre.getY() + y);
 
 		if (element == null || element instanceof Ogre || element instanceof OgreClub){
-			//	If moving out of a key, add key to previous cell
-			if (ogre.isOnKey()){
-				//	Ogre is not on key anymore
-				ogre.setOnKey(false);
-				//	Add key to previous cell
-				addElementAt(new Key(ogre.getX(),ogre.getY()), ogre.getX(),ogre.getY());
-				//	Add ogre on next cell
-				addElementAt(ogre, ogre.getX()+x,ogre.getY()+y);
-			} else {
-				// Remove last ogre
-				if (getElementAt(ogre.getX(), ogre.getY()) instanceof Ogre){
-					removeElementAt(ogre.getX(), ogre.getY());
-				}
-				//	Add ogre
-				addElementAt(ogre, ogre.getX() +x, ogre.getY()+y);
-			}
-			//	Swing club
-			if (ogre.getClub() != null){
-				swingClub(ogre);
-			}
-			//	If instance of key
+			//	Ogre can move 
+			this.ogreMoveCompletionHandler(ogre, x, y);
 		} else if (element instanceof Key){
-			// Check if moving to a key
-			ogre.setOnKey(true);
-			//	Move ogre
-			moveElement(ogre, ogre.getX()+x, ogre.getY()+y);
-			//	Swing club
-			if (ogre.getClub() != null){
-				swingClub(ogre);
-			}
+			// Ogre is moving to a key
+			this.ogreMovingToKeyCompletionHandler(ogre, x, y);
 		} else {
 			//	Use recursively
 			moveOgre(ogre);
 		}
 	}
 
+	/** 
+	 * Ogre is moving to a key
+	 * */
+	private void ogreMovingToKeyCompletionHandler(Ogre ogre, int x, int y){
+		// Check if moving to a key
+		ogre.setOnKey(true);
+		//	Move ogre
+		moveElement(ogre, ogre.getX()+x, ogre.getY()+y);
+		//	Swing club
+		if (ogre.getClub() != null){
+			swingClub(ogre);
+		}
+	}
+
+	/** 
+	 * Move an ogre
+	 * @param ogre Ogre that will move
+	 * */
+	private void ogreMoveCompletionHandler(Ogre ogre, int x, int y){
+		//		If moving out of a key, add key to previous cell
+		if (ogre.isOnKey()){
+			//	Ogre is not on key anymore
+			ogre.setOnKey(false);
+			//	Add key to previous cell
+			addElementAt(new Key(ogre.getX(),ogre.getY()), ogre.getX(),ogre.getY());
+			//	Add ogre on next cell
+			addElementAt(ogre, ogre.getX()+x,ogre.getY()+y);
+		} else {
+			// Remove last ogre
+			if (getElementAt(ogre.getX(), ogre.getY()) instanceof Ogre){
+				removeElementAt(ogre.getX(), ogre.getY());
+			}
+			//	Add ogre
+			addElementAt(ogre, ogre.getX() +x, ogre.getY()+y);
+		}
+		//	Swing club
+		if (ogre.getClub() != null){
+			swingClub(ogre);
+		}
+	}
 	/** 
 	 * Swing ogre club
 	 * @param ogre Ogre that will swing club
