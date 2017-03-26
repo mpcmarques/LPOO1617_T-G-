@@ -119,40 +119,15 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 				}
 				//	If it is a hero
 				else if (cell instanceof Hero){
-					Hero hero = (Hero)cell;
-					//	If hero is with key
-					if (hero.hasKey()){
-						g.drawImage(ImageService.shared.getHeroKeyImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
-					} 
-					//	If hero is with weapon
-					else if (hero.isHasClub()){
-						g.drawImage(ImageService.shared.getHeroClubImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
-					}
-					//	Hero don't have nothing
-					else {
-						g.drawImage(ImageService.shared.getHeroImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
-					}
+					paintHero(g,(Hero)cell, x,y, dimensionX, dimensionY);
 				}
 				//	If it is a door
 				else if (cell instanceof Door){
-					Door door = (Door)cell;
-					//	Check door sprite
-					if (door.isOpen()){
-						g.drawImage(ImageService.shared.getOpenDoorImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
-					} else {
-						g.drawImage(ImageService.shared.getClosedDoorImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
-					}
+					paintDoor(g,(Door)cell, x,y, dimensionX, dimensionY);
 				}
 				//	If it is guard
 				else if (cell instanceof Guard){
-					Guard guard = (Guard)cell;
-					//	Check if guard is sleeping
-					if (guard instanceof Drunken && ((Drunken)guard).isSleeping()){
-						g.drawImage(ImageService.shared.getGuardSleepingImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
-					} else {
-						//	Guard is not sleeping
-						g.drawImage(ImageService.shared.getGuardImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
-					}
+					paintGuard(g,(Guard)cell, x,y, dimensionX, dimensionY);
 				}
 				//	If it is lever
 				else if (cell instanceof Lever){
@@ -164,11 +139,7 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 				}
 				//	If it is ogre
 				else if (cell instanceof Ogre){
-					if (((Ogre)cell).isStunned()){
-						g.drawImage(ImageService.shared.getOgreStunnedImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
-					}else {
-						g.drawImage(ImageService.shared.getOgreImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
-					}
+					paintOgre(g, (Ogre)cell, x ,y, dimensionX, dimensionY);
 				}
 				//	If it is ogre club
 				else if (cell instanceof OgreClub){
@@ -178,11 +149,64 @@ public class GameScreenPanel extends JPanel implements KeyListener, MouseListene
 				else if (cell instanceof Club){
 					g.drawImage(ImageService.shared.getClubImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
 				}
-				//	If it is plar
+				//	If it is pilar
 				else if (cell instanceof Pilar){
 					g.drawImage(ImageService.shared.getPilarImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
 				}
 			}
+		}
+	}
+	/** 
+	 * Paints hero
+	 * */
+	private void paintHero(Graphics g, Hero hero, int x, int y, int dimensionX, int dimensionY){
+		//	If hero is with key
+		if (hero.hasKey()){
+			g.drawImage(ImageService.shared.getHeroKeyImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
+		} 
+		//	If hero is with weapon
+		else if (hero.isHasClub()){
+			g.drawImage(ImageService.shared.getHeroClubImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
+		}
+		//	Hero don't have nothing
+		else {
+			g.drawImage(ImageService.shared.getHeroImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
+		}
+	}
+	
+	/** 
+	 * Paint door
+	 * */
+	private void paintDoor(Graphics g, Door door, int x, int y, int dimensionX, int dimensionY){
+		//	Check door sprite
+		if (door.isOpen()){
+			g.drawImage(ImageService.shared.getOpenDoorImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
+		} else {
+			g.drawImage(ImageService.shared.getClosedDoorImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
+		}
+	}
+	
+	/**
+	 * Paint guard
+	 *  */
+	private void paintGuard(Graphics g, Guard guard, int x, int y , int dimensionX, int dimensionY){;
+		//	Check if guard is sleeping
+		if (guard instanceof Drunken && ((Drunken)guard).isSleeping()){
+			g.drawImage(ImageService.shared.getGuardSleepingImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
+		} else {
+			//	Guard is not sleeping
+			g.drawImage(ImageService.shared.getGuardImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
+		}
+	}
+	
+	/** 
+	 * Paint ogre
+	 * */
+	private void paintOgre(Graphics g, Ogre ogre, int x, int y , int dimensionX, int dimensionY){
+		if (ogre.isStunned()){
+			g.drawImage(ImageService.shared.getOgreStunnedImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
+		}else {
+			g.drawImage(ImageService.shared.getOgreImage(), x * dimensionX, y * dimensionY, dimensionX, dimensionY, this);
 		}
 	}
 

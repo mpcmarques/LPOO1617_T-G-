@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 public class ImageService {
 	//	Shared instance
 	static public ImageService shared = new ImageService();
-	
+
 	//	Images
 	private BufferedImage wallImage;
 	private BufferedImage heroImage;
@@ -31,11 +31,17 @@ public class ImageService {
 	private BufferedImage gameOverImage;
 	private BufferedImage ogreClubImage;
 	private BufferedImage ogreStunnedImage;
-	
+
 	/** 
 	 * Constructor
 	 * */
 	ImageService(){
+		loadImages();
+	}
+	/** 
+	 * Loads images
+	 * */
+	private void loadImages(){
 		//	Load images
 		this.floorImage = loadBufferedImage("/floor.png");
 		this.setWallImage(loadBufferedImage("/wall.png"));
@@ -56,7 +62,7 @@ public class ImageService {
 		this.ogreClubImage = loadBufferedImage("/ogre_club.png");
 		this.setOgreStunnedImage(loadBufferedImage("/ogre_stunned.png"));
 	}
-	
+
 	/** 
 	 * @brief Loads a image
 	 * @return BufferedImage Image loaded

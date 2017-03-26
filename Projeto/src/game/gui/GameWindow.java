@@ -163,24 +163,32 @@ public class GameWindow extends JFrame {
 	 * Adds buttons actions
 	 * */
 	private void addButtonsActionListeners(){
-		btnEditGame.addActionListener(new ActionListener() {
+		
+		btnAddHero.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//	Edit game
-				editGame();
+				//	Add Hero
+				gamePanel.setMouseAction(GameWindowEditMouseActions.addHero);
 			}
 		});
-		btnRemoveElement.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//	Remove element
-				gamePanel.setMouseAction(GameWindowEditMouseActions.removeElement);
-			}
-		});
-		btnAddDoor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//	Add door
-				gamePanel.setMouseAction(GameWindowEditMouseActions.addDoor);
-			}
-		});
+		
+
+		//	Adds first level buttons actions
+		addFirstLevelButtonsActions();
+		
+		//	Adds second level buttons actions
+		addSecondLevelButtonsActions();
+		
+		//	Add general buttons action listeners
+		addGeneralButtonsActionListeners();
+		
+		//	Add view elements buttons action listeners
+		addViewElementsButtonsActionListeners();
+	}
+	
+	/** 
+	 * Adds view elements
+	 * */
+	private void addViewElementsButtonsActionListeners(){
 		btnAddDoor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//	Add door
@@ -199,12 +207,6 @@ public class GameWindow extends JFrame {
 				gamePanel.setMouseAction(GameWindowEditMouseActions.addWall);
 			}
 		});
-		btnAddHero.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//	Add Hero
-				gamePanel.setMouseAction(GameWindowEditMouseActions.addHero);
-			}
-		});
 		btnAddNewRow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Add new line
@@ -217,6 +219,36 @@ public class GameWindow extends JFrame {
 				addRow();
 			}
 		});
+	}
+	
+	/** 
+	 * Adds general buttons action listeners
+	 * */
+	private void addGeneralButtonsActionListeners(){
+		btnEditGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//	Edit game
+				editGame();
+			}
+		});
+		btnRemoveElement.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//	Remove element
+				gamePanel.setMouseAction(GameWindowEditMouseActions.removeElement);
+			}
+		});
+		btnApply.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Apply game changes
+				applyGameChanges();
+			}
+		});
+	}
+	
+	/** 
+	 * Adds first level button action listeners
+	 * */
+	private void addFirstLevelButtonsActions(){
 		btnAddLever.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//	Add lever
@@ -225,10 +257,16 @@ public class GameWindow extends JFrame {
 		});
 		btnAddGuard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//	Add lever
+				//	Add guard
 				gamePanel.setMouseAction(GameWindowEditMouseActions.addGuard);
 			}
 		});
+	}
+	
+	/** 
+	 * Adds second level buttons action listeners
+	 * */
+	private void addSecondLevelButtonsActions(){
 		btnAddOgre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//	Add ogre
@@ -241,14 +279,9 @@ public class GameWindow extends JFrame {
 				gamePanel.setMouseAction(GameWindowEditMouseActions.addKey);
 			}
 		});
-		btnApply.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Apply game changes
-				applyGameChanges();
-			}
-		});
 	}
-
+	
+	
 	/** 
 	 * Adds new row to game map
 	 * */
