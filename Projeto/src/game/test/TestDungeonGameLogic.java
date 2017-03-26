@@ -608,6 +608,35 @@ public class TestDungeonGameLogic {
 		assertTrue(gameMap.getHero().isHasClub());
 		assertEquals("A", gameMap.getHero().getLetter());
 	}
+	
+	/** 
+	 * Check if two coordinates 2d are equal
+	 * */
+	@Test public void testCoodinate2dEquals(){
+		Coordinate2d c1 = new Coordinate2d(0,0);
+		Coordinate2d c2 = new Coordinate2d(0,0);
+		assertEquals(c1,c2);
+	}
+	
+	/** 
+	 * Test drunken guard
+	 * */
+	@Test public void testDrunkenGuard(){
+		Drunken guard = new Drunken(0,0);
+		
+		assertFalse(guard.isSleeping());
+		assertEquals(0, guard.getSleepTime());
+		assertEquals("G", guard.getLetter());
+		assertFalse(guard.canMoveTo());
+		
+		// Get guard drunk
+		guard.setSleeping(true);
+		
+		//	Check
+		assertTrue(guard.isSleeping());
+		assertTrue(0 < guard.getSleepTime());
+		assertEquals("g", guard.getLetter());
+	}
 
 	/** 
 	 * Check if hero stun ogre successfully
