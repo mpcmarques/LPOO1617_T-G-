@@ -11,6 +11,32 @@
 
 ![alt-text](scheme.png)
 
+### Identification / Listing of the main functionalities
+
+* Initial: Allows player to login.
+* Login: Player can choose to login or sign up.
+* Level selection: Player can choose available levels, playable levels need to be unlocked. Menu bar with options to go back to login screen, configure game and play selected level.
+* Game: Menu with options to go back to level selection screen or restart level. Bar showing crystal health, wave number and player gold.
+* Finished: Shows the achieved score, remaining crystal health and gold. Menu bar with options to go back to login screen, level selection screen, restart level or play next level.
+* Alert: Default alert presentation, shown if player entered an invalid e-mail address for example.
+
+### GUI Mock-ups
+
+#### Initial
+![alt-text](InitialScreen.png)
+#### Login
+![alt-text](loginScreen.png)
+#### Sign Up
+![alt-text](signUpScreen.png)
+#### Level selection
+![alt-text](levelSelectionScreen.png)
+#### Game Screen
+![alt-text](GameScreen.png)
+#### Level Finished Alert
+![alt-text](levelFinishedAlert.png)
+#### Alert
+![alt-text](Alert.png)
+
 ## Test design 
 
 #### Expected final test cases
