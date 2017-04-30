@@ -45,7 +45,7 @@
 - test_game_ended(): 
 >Check if game ended successfully.
 - test_player_selected_buildable_area(): 
->Check if game only allow player to build towers in buildable.
+>Check if game only allow player to build towers in buildable areas.
 - test_player_area_selection_animation(): 
 >Check if area selection animation is being presented without errors.
 - test_player_build_tower(): 
