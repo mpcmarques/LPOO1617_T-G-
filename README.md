@@ -5,7 +5,7 @@
 ## Architeture Design
 #### Package and class diagram (UML)
 ##### Package
-![alt-text](Package%20Structure.png)
+![alt-text](package_structure.png)
 
 #### Design of behavioural aspects
 ##### Player behaviour
