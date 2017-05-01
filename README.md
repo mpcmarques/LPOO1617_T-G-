@@ -6,6 +6,7 @@
 #### Package and class diagram (UML)
 ##### Package
 ![alt-text](package_structure.png)
+##### Class
 
 #### Design of behavioural aspects
 ##### Player behaviour
