@@ -4,6 +4,9 @@
 
 ## Architeture Design
 #### Package and class diagram (UML)
+##### Package
+![alt-text](Package Structure.png)
+
 #### Design of behavioural aspects
 #### Design Patterns
 
