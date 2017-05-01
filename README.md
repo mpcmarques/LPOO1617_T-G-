@@ -13,6 +13,7 @@
 ![alt-text](design_behavioural_aspect.png)
 
 #### Design Patterns
+The game is made in the MVC pattern. Will be implemented service classes with singleton pattern, this classes will handle the data service and another utilities, making sure that just one instance of this class is instanciated.
 
 ## GUI Design
 
