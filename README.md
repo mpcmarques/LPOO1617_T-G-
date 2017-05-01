@@ -8,6 +8,9 @@
 ![alt-text](Package%20Structure.png)
 
 #### Design of behavioural aspects
+##### Player behaviour
+![alt-text](design_behavioural_aspect.png)
+
 #### Design Patterns
 
 ## GUI Design
