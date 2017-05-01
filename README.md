@@ -7,6 +7,7 @@
 ##### Package
 ![alt-text](package_structure.png)
 ##### Class
+![alt-text](type_hierarchy.png)
 
 #### Design of behavioural aspects
 ![alt-text](design_behavioural_aspect.png)
