@@ -1,7 +1,5 @@
 package com.mateus.towerdefense.model.entities;
 
-import com.mateus.towerdefense.model.entities.EntityModel;
-
 /**
  * Represents an object that a player can't build on top.
  */

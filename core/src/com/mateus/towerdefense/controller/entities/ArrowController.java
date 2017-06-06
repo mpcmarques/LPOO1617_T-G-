@@ -27,8 +27,9 @@ public class ArrowController extends SteerableEntityController {
 
     /**
      * Arrow Controller constructor.
-     * @param world The world that the body will be created.
-     * @param model The arrow model that the controller will manage.
+     *
+     * @param world  The world that the body will be created.
+     * @param model  The arrow model that the controller will manage.
      * @param target The target of the arrow.
      */
     public ArrowController(World world, ArrowModel model, SteerableEntityController target) {
@@ -62,6 +63,7 @@ public class ArrowController extends SteerableEntityController {
 
     /**
      * Updates the arrow controller.
+     *
      * @param delta Delta time.
      */
     @Override
@@ -69,9 +71,9 @@ public class ArrowController extends SteerableEntityController {
         super.update(delta);
 
         // arrow logic
-        ArrowModel arrowModel = (ArrowModel)getModel();
+        ArrowModel arrowModel = (ArrowModel) getModel();
 
-        if (arrowModel.arrived()){
+        if (arrowModel.arrived()) {
 
             // send hit message to monster
             MessageManager.getInstance().dispatchMessage(0,
@@ -81,7 +83,7 @@ public class ArrowController extends SteerableEntityController {
 
             // delete arrow
             setFlaggedToDelete(true);
-        } else if (((MonsterModel)target.getModel()).isDead()){
+        } else if (((MonsterModel) target.getModel()).isDead()) {
             // delete arrow
             setFlaggedToDelete(true);
         }

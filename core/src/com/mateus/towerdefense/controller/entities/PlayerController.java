@@ -21,47 +21,51 @@ public class PlayerController extends EntityController {
 
     /**
      * PlayerController Constructor.
+     *
      * @param world Box2d world.
      * @param model PlayerModel that the controller will control.
      */
-    public PlayerController( World world, PlayerModel model) {
+    public PlayerController(World world, PlayerModel model) {
         super(world, model,
-                Gdx2dBody.createSensor(world,model.getX(), model.getY(), 0.6f, 0.6f, false,
+                Gdx2dBody.createSensor(world, model.getX(), model.getY(), 0.6f, 0.6f, false,
                         Constants.BIT_PLAYER,
                         (short) (Constants.BIT_TOWER | Constants.BIT_WALL)));
 
         MessageManager.getInstance().addListeners(this,
-                MessageType.BUILD_MODE , MessageType.PLAYER_DAMAGE, MessageType.KILLED_MOB
+                MessageType.BUILD_MODE, MessageType.PLAYER_DAMAGE, MessageType.KILLED_MOB
         );
     }
 
     /**
      * Add gold to the player.
+     *
      * @param gold amount to be added.
      */
-    public void addGold(int gold){
-        ((PlayerModel)this.getModel()).addGold(gold);
+    public void addGold(int gold) {
+        ((PlayerModel) this.getModel()).addGold(gold);
     }
 
     /**
      * Change model and body position.
+     *
      * @param x X position.
      * @param y Y position.
      */
-    public void setPosition(float x, float y){
-        this.getBody().setTransform(x,y, getModel().getRotation());
+    public void setPosition(float x, float y) {
+        this.getBody().setTransform(x, y, getModel().getRotation());
         this.getBody().setAwake(true);
-        this.getModel().setPosition(x,y);
+        this.getModel().setPosition(x, y);
     }
 
     /**
      * Handles a telegram message.
+     *
      * @param msg Message to be handled.
      * @return true if the message was handled.
      */
     @Override
     public boolean handleMessage(Telegram msg) {
-        switch (msg.message){
+        switch (msg.message) {
             case MessageType.BUILD_MODE:
                 handleBuildModeMessage(msg);
                 break;
@@ -77,9 +81,10 @@ public class PlayerController extends EntityController {
 
     /**
      * Handle a received damage message.
+     *
      * @param msg that will be handled.
      */
-    private  void handlePlayerDamageMessage(Telegram msg){
+    private void handlePlayerDamageMessage(Telegram msg) {
         PlayerModel playerModel = (PlayerModel) getModel();
         int damage = (Integer) msg.extraInfo;
         playerModel.setLife(playerModel.getLife() - damage);
@@ -87,13 +92,14 @@ public class PlayerController extends EntityController {
 
     /**
      * Handle a build mode message.
+     *
      * @param msg that will be handled.
      */
-    private void handleBuildModeMessage(Telegram msg){
+    private void handleBuildModeMessage(Telegram msg) {
         PlayerModel playerModel = (PlayerModel) getModel();
 
-        if(!playerModel.isInBuildMode()) {
-            if (msg.extraInfo instanceof TowerModel){
+        if (!playerModel.isInBuildMode()) {
+            if (msg.extraInfo instanceof TowerModel) {
                 playerModel.setTowerToBuild((TowerModel) msg.extraInfo);
             }
         }

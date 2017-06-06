@@ -3,10 +3,20 @@ package com.mateus.towerdefense.utility;
 import com.badlogic.gdx.physics.box2d.*;
 
 /**
- * Created by mateuspedroza on 04/05/17.
+ * Class creates box2d bodies.
  */
 public class Gdx2dBody {
-
+    /**
+     * Creates a round body
+     * @param world World that will have this body
+     * @param x X position
+     * @param y Y position
+     * @param radius Radius of the body
+     * @param isStatic If the body is static
+     * @param cBits Collision bits
+     * @param mBits Mask bits
+     * @return Body created
+     */
     public static Body createRound(World world, float x, float y, float radius, boolean isStatic, short cBits, short mBits){
         Body body;
 
@@ -45,6 +55,18 @@ public class Gdx2dBody {
         return body;
     }
 
+    /**
+     * Creates a round body
+     * @param world World that will have this body
+     * @param x X position
+     * @param y Y position
+     * @param width Width of the body
+     * @param height Height of the body
+     * @param isStatic If the body is static
+     * @param cBits Collision bits
+     * @param mBits Mask bits
+     * @return Body created
+     */
     static public Body createBox(World world, float x, float y, float width, float height, boolean isStatic, short cBits, short mBits){
         Body body;
 
@@ -82,6 +104,18 @@ public class Gdx2dBody {
         return body;
     }
 
+    /**
+     * Creates a sensor
+     * @param world World that will have this body
+     * @param x X position
+     * @param y Y position
+     * @param width Width of the body
+     * @param height Height of the body
+     * @param isStatic If the body is static
+     * @param cBits Collision bits
+     * @param mBits Mask bits
+     * @return Body created
+     */
     public static Body createSensor(World world, float x, float y, float width, float height, boolean isStatic, short cBits, short mBits){
         Body body;
 

@@ -29,7 +29,7 @@ public class GameView extends AbstractStage {
     /**
      * If it is true, will debug the view.
      */
-    private final boolean DEBUG_MODE = true;
+    private final boolean DEBUG_MODE = false;
 
     /**
      * The model drawn by this screen
@@ -83,10 +83,11 @@ public class GameView extends AbstractStage {
 
     /**
      * GameView Constructor.
-     * @param game Game the view will show.
-     * @param model Game model.
+     *
+     * @param game       Game the view will show.
+     * @param model      Game model.
      * @param controller Game controller.
-     * @param map Game map.
+     * @param map        Game map.
      */
     public GameView(TowerDefenseGame game, GameModel model, GameController controller, TiledMap map) {
         super(game);
@@ -143,6 +144,7 @@ public class GameView extends AbstractStage {
 
     /**
      * Updates the view.
+     *
      * @param delta Delta time.
      */
     @Override
@@ -174,6 +176,7 @@ public class GameView extends AbstractStage {
 
     /**
      * Draw ai debugging if DEBUG_MODE is true.
+     *
      * @param delta Delta time.
      */
     private void debugAI(float delta) {
@@ -181,7 +184,7 @@ public class GameView extends AbstractStage {
         shapeRenderer.setProjectionMatrix(getCamera().combined);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        for (TowerModel towerModel: model.getTowerModels()){
+        for (TowerModel towerModel : model.getTowerModels()) {
             shapeRenderer.circle(towerModel.getX(), towerModel.getY(),
                     towerModel.getRange()
             );
@@ -216,13 +219,13 @@ public class GameView extends AbstractStage {
         }
 
         // monsters
-        for (MonsterModel monsterModel: getModel().getMonsterModels()){
+        for (MonsterModel monsterModel : getModel().getMonsterModels()) {
             monsterView.update(monsterModel);
             monsterView.draw(getGame().getBatch());
         }
 
         // arrows
-        for (ArrowModel arrowModel: getModel().getArrowModels()){
+        for (ArrowModel arrowModel : getModel().getArrowModels()) {
             arrowView.update(arrowModel);
             arrowView.draw(getGame().getBatch());
         }
@@ -254,6 +257,7 @@ public class GameView extends AbstractStage {
 
     /**
      * Returns the controller of the game view.
+     *
      * @return The controller of the game view.
      */
     public GameController getController() {

@@ -1,12 +1,24 @@
 package com.mateus.towerdefense.model.entities;
 
 /**
- * Created by mateuspedroza on 01/06/17.
+ * The player model.
  */
 public class PlayerModel extends EntityModel {
+    /**
+     * If the player can build.
+     */
     private boolean canBuild;
+    /**
+     * Player gold.
+     */
     private int gold;
+    /**
+     * Player tower that will build.
+     */
     private TowerModel towerToBuild;
+    /**
+     * Player life.
+     */
     private int life;
 
     /**
@@ -25,46 +37,85 @@ public class PlayerModel extends EntityModel {
         this.life = life;
     }
 
+    /**
+     * Set if the player can build.
+     * @param canBuild Player can build.
+     */
     public void setCanBuild(boolean canBuild) {
         if (isInBuildMode())
             this.canBuild = canBuild;
     }
 
+    /**
+     *
+     * @return True if the player can build.
+     */
     public boolean canBuild() {
         return this.canBuild;
     }
 
+    /**
+     * Removes gold from the player.
+     * @param gold Gold to be removed.
+     */
     public void removeGold(int gold) {
         this.gold -= gold;
         if (this.gold <= 0)
             this.gold = 0;
     }
 
+    /**
+     *
+     * @return Player life.
+     */
     public int getLife() {
         return life;
     }
 
+    /**
+     * Set a new player's life.
+     * @param life New player's life.
+     */
     public void setLife(int life) {
         this.life = life;
         if (this.life < 0) this.life = 0;
     }
 
+    /**
+     * Add gold to the player.
+     * @param gold Amount of gold to be added.
+     */
     public void addGold(int gold) {
         this.gold += gold;
     }
 
+    /**
+     * @return The player's gold.
+     */
     public int getGold() {
         return gold;
     }
 
+    /**
+     *
+     * @return If the player is in build mode.
+     */
     public boolean isInBuildMode() {
         return this.towerToBuild != null;
     }
 
+    /**
+     *
+     * @return The tower that the player will build.
+     */
     public TowerModel getTowerToBuild() {
         return towerToBuild;
     }
 
+    /**
+     * Set a tower to the player build.
+     * @param towerToBuild The tower that the player will build.
+     */
     public void setTowerToBuild(TowerModel towerToBuild) {
         this.towerToBuild = towerToBuild;
     }

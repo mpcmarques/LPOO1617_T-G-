@@ -32,7 +32,15 @@ public class SteerableEntityController extends EntityController implements Steer
     private RadiusProximity radiusProximity;
     private static final SteeringAcceleration<Vector2> steeringOutput = new SteeringAcceleration<Vector2>(new Vector2());
 
-
+    /**
+     * Steerable Entity Controller constructor.
+     *
+     * @param world             World that the entity belongs to.
+     * @param model             Entity model.
+     * @param body              The body this will be controlled.
+     * @param boundingRadius    The entity bounding radius.
+     * @param independentFacing If the entity is independent facing.
+     */
     SteerableEntityController(World world, EntityModel model, Body body, float boundingRadius, boolean independentFacing) {
         super(world, model, body);
 
@@ -43,6 +51,7 @@ public class SteerableEntityController extends EntityController implements Steer
 
     /**
      * Updates the controller.
+     *
      * @param delta Delta time.
      */
     @Override
@@ -85,6 +94,7 @@ public class SteerableEntityController extends EntityController implements Steer
 
     /**
      * Apply the steering output.
+     *
      * @param time Delta time.
      */
     private void applySteering(float time) {
@@ -140,6 +150,7 @@ public class SteerableEntityController extends EntityController implements Steer
 
     /**
      * Handles a telegram message.
+     *
      * @param msg Message.
      * @return If the massage was handled.
      */
@@ -150,103 +161,169 @@ public class SteerableEntityController extends EntityController implements Steer
 
     /**
      * Reports a nearby neighbor.
+     *
      * @param neighbor Neighbor that is nearby.
-     * @return  If the report was handled.
+     * @return If the report was handled.
      */
     @Override
     public boolean reportNeighbor(Steerable<Vector2> neighbor) {
         return false;
     }
 
+    /**
+     * @return The body linear velocity.
+     */
     @Override
     public Vector2 getLinearVelocity() {
         return getBody().getLinearVelocity();
     }
 
+    /**
+     * @return The body angular velocity.
+     */
     @Override
     public float getAngularVelocity() {
         return getBody().getAngularVelocity();
     }
 
+    /**
+     * @return The entity bounding radius.
+     */
     @Override
     public float getBoundingRadius() {
         return boundingRadius;
     }
 
+    /**
+     * @return If the entity is tagged.
+     */
     @Override
     public boolean isTagged() {
         return tagged;
     }
 
+    /**
+     * @param tagged Set the entity tagged.
+     */
     @Override
     public void setTagged(boolean tagged) {
         this.tagged = tagged;
     }
 
+    /**
+     * @return The zero linear speed threshold.
+     */
     @Override
     public float getZeroLinearSpeedThreshold() {
         return 0.001f;
     }
 
+    /**
+     * Set the zero linear speed threshold.
+     *
+     * @param value Value to be set.
+     */
     @Override
     public void setZeroLinearSpeedThreshold(float value) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @return The max linear speed.
+     */
     @Override
     public float getMaxLinearSpeed() {
         return maxLinearSpeed;
     }
 
+    /**
+     * @param maxLinearSpeed The max linear speed.
+     */
     @Override
     public void setMaxLinearSpeed(float maxLinearSpeed) {
         this.maxLinearSpeed = maxLinearSpeed;
     }
 
+    /**
+     * @return The max linear accelaration.
+     */
     @Override
     public float getMaxLinearAcceleration() {
         return maxLinearAcceleration;
     }
 
+    /**
+     * Set the max linear acceleration.
+     *
+     * @param maxLinearAcceleration The new max linear acceleration.
+     */
     @Override
     public void setMaxLinearAcceleration(float maxLinearAcceleration) {
         this.maxLinearAcceleration = maxLinearAcceleration;
     }
 
+    /**
+     * @return The max angular speed.
+     */
     @Override
     public float getMaxAngularSpeed() {
         return maxAngularSpeed;
     }
 
+    /**
+     * Set the max angular speed.
+     *
+     * @param maxAngularSpeed The new angular speed.
+     */
     @Override
     public void setMaxAngularSpeed(float maxAngularSpeed) {
         this.maxAngularSpeed = maxAngularSpeed;
     }
 
+    /**
+     * @return The max angular acceleration.
+     */
     @Override
     public float getMaxAngularAcceleration() {
         return maxAngularAcceleration;
     }
 
+    /**
+     * Set the max angular acceleration.
+     *
+     * @param maxAngularAcceleration The new max angular acceleration.
+     */
     @Override
     public void setMaxAngularAcceleration(float maxAngularAcceleration) {
         this.maxAngularAcceleration = maxAngularAcceleration;
     }
 
+    /**
+     * @return The body position.
+     */
     @Override
     public Vector2 getPosition() {
         return getBody().getPosition();
     }
 
+    /**
+     * @return The body orientation.
+     */
     @Override
     public float getOrientation() {
         return getBody().getAngle();
     }
 
+    /**
+     * Set a new orientation.
+     *
+     * @param orientation New body orientation.
+     */
     @Override
     public void setOrientation(float orientation) {
         getBody().setTransform(getPosition(), orientation);
     }
+
 
     @Override
     public float vectorToAngle(Vector2 vector) {
@@ -258,28 +335,49 @@ public class SteerableEntityController extends EntityController implements Steer
         return Box2dSteeringUtils.angleToVector(outVector, angle);
     }
 
+    /**
+     * @return A new box2d location.
+     */
     @Override
     public Location<Vector2> newLocation() {
         return new Box2dLocation();
     }
 
+    /**
+     * Set a new steering behavior.
+     *
+     * @param steeringBehavior The new steering behavior.
+     */
     public void setSteeringBehavior(SteeringBehavior<Vector2> steeringBehavior) {
         this.steeringBehavior = steeringBehavior;
     }
 
-
+    /**
+     * Set radius proximity.
+     *
+     * @param radiusProximity The new radius proximity.
+     */
     public void setRadiusProximity(RadiusProximity radiusProximity) {
         this.radiusProximity = radiusProximity;
     }
 
+    /**
+     * @return The radius proximity.
+     */
     public RadiusProximity getRadiusProximity() {
         return radiusProximity;
     }
 
+    /**
+     * @return The steering behavior.
+     */
     public SteeringBehavior<Vector2> getSteeringBehavior() {
         return steeringBehavior;
     }
 
+    /**
+     * @return The steering output.
+     */
     public static SteeringAcceleration<Vector2> getSteeringOutput() {
         return steeringOutput;
     }

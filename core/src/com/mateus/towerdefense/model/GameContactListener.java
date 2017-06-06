@@ -4,7 +4,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mateus.towerdefense.model.entities.*;
 
 /**
- * Game contact listener handle contact between entities.
+ * Game contact listener handles contact between entities.
  */
 public class GameContactListener implements ContactListener {
 

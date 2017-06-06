@@ -10,26 +10,14 @@ import com.mateus.towerdefense.controller.entities.EntityController;
 import com.mateus.towerdefense.controller.GameController;
 
 /**
- * Created by mateuspedroza on 02/06/17.
+ * Transform tiled map layers into usable stuff, like bodies and objects.
  */
-public class TiledMapConversor {
-
-    public static Vector2 findCrystalPosition(TiledMap map, String layer){
-        // crystal
-        MapObject crystalObject = map.getLayers().get(layer).getObjects().get(0);
-        if (crystalObject instanceof RectangleMapObject) {
-            float crystalX = (((RectangleMapObject) crystalObject).getRectangle().getX()) * Constants.PPM;
-            float crystalY = (((RectangleMapObject) crystalObject).getRectangle().getY()) * Constants.PPM;
-            float height = (((RectangleMapObject) crystalObject).getRectangle().getHeight()) * 1 / 16f;
-            float width = (((RectangleMapObject) crystalObject).getRectangle().getWidth()) * 1 / 16f;
-
-            return new Vector2(crystalX + width, crystalY + height);
-        }
-        return null;
-    }
+public class TiledMapParser {
 
     /**
-     * Create collision bodies based on a tiled map layer.
+     * Creates the collision bodies based on the tiled map layer.
+     * @param gameController The game controller.
+     * @param map Tiled map.
      */
     public static void createCollision(GameController gameController, TiledMap map) {
 
@@ -45,6 +33,11 @@ public class TiledMapConversor {
         }
     }
 
+    /**
+     * Creates the path based on the tiled map layer.
+     * @param map Tiled map.
+     * @return The path the monsters should walk.
+     */
     public static Array<Vector2> createWaypoints(TiledMap map) {
         Array<Vector2> wayPoints = new Array<Vector2>();
 

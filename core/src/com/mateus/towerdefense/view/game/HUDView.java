@@ -56,10 +56,11 @@ public class HUDView extends AbstractScene2dStage {
 
     /**
      * HUDView Constructor
-     * @param game the game this view belongs to.
+     *
+     * @param game  the game this view belongs to.
      * @param model the game model.
      */
-    HUDView(TowerDefenseGame game, GameModel model){
+    HUDView(TowerDefenseGame game, GameModel model) {
         super(game);
 
         this.model = model;
@@ -76,7 +77,7 @@ public class HUDView extends AbstractScene2dStage {
     /**
      * Add and setup table.
      */
-    private void setupTable(){
+    private void setupTable() {
         // table
         getTable().defaults().pad(8);
         getTable().defaults().expand().fillX();
@@ -90,7 +91,7 @@ public class HUDView extends AbstractScene2dStage {
         innerTable.defaults().pad(2);
         innerTable.defaults().expand().fill();
         innerTable.setBackground(getSkin().getDrawable("list"));
-        innerTable.setColor(0.8f,0.4f,0,1);
+        innerTable.setColor(0.8f, 0.4f, 0, 1);
         innerTable.setDebug(DEBUG_MODE);
         getTable().add(innerTable);
         getTable().row();
@@ -99,7 +100,7 @@ public class HUDView extends AbstractScene2dStage {
     /**
      * Add table widgets.
      */
-    private void setupWidgets(){
+    private void setupWidgets() {
         // wave delay counter
         waveDelayLabel = new Label("Time to wave: 0", getSkin());
         waveDelayLabel.setAlignment(Align.center);
@@ -147,13 +148,13 @@ public class HUDView extends AbstractScene2dStage {
     /**
      * Setup HUD button listeners.
      */
-    private void setupListeners(){
+    private void setupListeners() {
         /* BUTTON LISTENER */
         buildButton.addListener(new InputListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                TowerModel towerModel =   new TowerModel(0, 0, 4, 10, 1.2f, 50);
+                TowerModel towerModel = new TowerModel(0, 0, 4, 10, 1.2f, 50);
 
                 if (model.getPlayerModel().getGold() >= towerModel.getPrice()) {
                     buttonPressedSound.play();
@@ -167,6 +168,7 @@ public class HUDView extends AbstractScene2dStage {
 
     /**
      * Update the view.
+     *
      * @param delta Delta time.
      */
     @Override
@@ -182,37 +184,43 @@ public class HUDView extends AbstractScene2dStage {
 
     /**
      * Set wave delay label text.
+     *
      * @param waveDelay Time to wave.
      */
-    private void setWaveDelayLabel(int waveDelay){
+    private void setWaveDelayLabel(int waveDelay) {
         waveDelayLabel.setText("Time to wave: " + waveDelay);
     }
 
     /**
      * Set life number label text.
+     *
      * @param life Life of the player.
      */
-    private void setLifeNumberLabel(int life){
+    private void setLifeNumberLabel(int life) {
         this.lifeNumberLabel.setText("" + life);
     }
+
     /**
      * Set money label text.
+     *
      * @param money Money to be shown.
      */
-    private void setMoneyLabel(int money){
+    private void setMoneyLabel(int money) {
         moneyLabel.setText("" + money);
     }
 
     /**
      * Set waves remaining label text.
+     *
      * @param waves Number of waves to be shown.
      */
-    private void setWavesRemainingLabel(int waves){
+    private void setWavesRemainingLabel(int waves) {
         this.waveProgressLabel.setText(waves + " remaining");
     }
 
     /**
      * Returns the game model.
+     *
      * @return The game model of the view.
      */
     public GameModel getModel() {
@@ -221,6 +229,7 @@ public class HUDView extends AbstractScene2dStage {
 
     /**
      * Creates a skin to be used in the view.
+     *
      * @return Skin to be used in the view.
      */
     @Override

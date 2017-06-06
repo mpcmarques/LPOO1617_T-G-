@@ -1,7 +1,7 @@
 package com.mateus.towerdefense.model.entities;
 
 /**
- * Created by mateuspedroza on 02/06/17.
+ * The tower model.
  */
 public class TowerModel extends EntityModel {
 
@@ -41,22 +41,41 @@ public class TowerModel extends EntityModel {
         if(currentAttackSeconds <= 0) this.currentAttackSeconds = 0;
     }
 
+    /**
+     *
+     * @return If the tower can attack.
+     */
     public boolean towerCanAttack(){
         return  currentAttackSeconds == 0;
     }
 
+    /**
+     * Reset tower attack waiting time.
+     */
     public void resetCurrentAttackSeconds() {
         this.currentAttackSeconds = attackDelay;
     }
 
+    /**
+     *
+     * @return Tower range.
+     */
     public float getRange() {
         return range;
     }
 
+    /**
+     *
+     * @return Tower attack damage.
+     */
     public int getAttackDamage() {
         return attackDamage;
     }
 
+    /**
+     *
+     * @return Tower price.
+     */
     public int getPrice() {
         return price;
     }

@@ -6,7 +6,7 @@ import com.mateus.towerdefense.TowerDefenseGame;
 import com.mateus.towerdefense.utility.Constants;
 
 /**
- * Created by mateuspedroza on 02/06/17.
+ * The arrow view (Arrow in this game is a missile)
  */
 public class ArrowView extends EntityView {
     /**
@@ -20,6 +20,12 @@ public class ArrowView extends EntityView {
 
     }
 
+    /**
+     * Creates a sprite for the view.
+     * @param game the game this view belongs to. Needed to access the
+     *             asset manager to get textures.
+     * @return The sprite that will be created.
+     */
     @Override
     public Sprite createSprite(TowerDefenseGame game) {
         Sprite sprite = new Sprite((Texture) game.getAssetManager().get("projectiles/missile.png"));

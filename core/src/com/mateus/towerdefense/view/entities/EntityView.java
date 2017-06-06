@@ -6,12 +6,10 @@ import com.mateus.towerdefense.TowerDefenseGame;
 import com.mateus.towerdefense.model.entities.EntityModel;
 
 /**
- * A abstract view capable of holding a sprite with a certain
- * position and rotation.
- *
+ * A abstract view capable of holding a sprite with a certain position and rotation.
  * This view is able to update its data based on a entity model.
  */
-abstract class EntityView{
+abstract class EntityView {
     private Sprite sprite;
     private boolean visible;
     private TowerDefenseGame game;
@@ -22,7 +20,7 @@ abstract class EntityView{
      * @param game the game this view belongs to. Needed to access the
      *             asset manager to get textures.
      */
-    EntityView(TowerDefenseGame game){
+    EntityView(TowerDefenseGame game) {
         this.game = game;
         this.sprite = createSprite(game);
         this.visible = true;
@@ -40,19 +38,17 @@ abstract class EntityView{
      *
      * @param batch The sprite batch to be used for drawing.
      */
-    public void draw(SpriteBatch batch){
+    public void draw(SpriteBatch batch) {
         if (sprite != null && visible)
             this.sprite.draw(batch);
     }
 
     /**
-     * Abstract method that creates the view sprite. Concrete
-     * implementation should extend this method to create their
-     * own sprites.
+     * Abstract method that creates the view sprite. Concrete implementation should extend this method to create their own sprites.
      *
      * @param game the game this view belongs to. Needed to access the
      *             asset manager to get textures.
-     * @return the sprite representing this view.
+     * @return The sprite representing this view.
      */
     public abstract Sprite createSprite(TowerDefenseGame game);
 
@@ -62,7 +58,6 @@ abstract class EntityView{
      * @param model the model used to update this view
      */
     public void update(EntityModel model) {
-        //sprite.setPosition(model.getX() / Constants.PPM * 2, model.getY() / Constants.PPM*2);
         if (sprite != null) {
             sprite.setCenter(model.getX(), model.getY());
             sprite.setOriginCenter();
@@ -72,6 +67,7 @@ abstract class EntityView{
 
     /**
      * Set the view sprite.
+     *
      * @param sprite Sprite to be set.
      */
     public void setSprite(Sprite sprite) {
@@ -80,6 +76,7 @@ abstract class EntityView{
 
     /**
      * Get the view sprite.
+     *
      * @return The view sprite.
      */
     public Sprite getSprite() {
@@ -89,15 +86,16 @@ abstract class EntityView{
     /**
      * @return If the view is visible.
      */
-    public boolean isVisible(){
+    public boolean isVisible() {
         return this.visible;
     }
 
     /**
      * Set the view visible.
+     *
      * @param visible View should be visible.
      */
-    public void setVisible(boolean visible){
+    public void setVisible(boolean visible) {
         this.visible = visible;
     }
 }

@@ -15,20 +15,20 @@ import com.mateus.towerdefense.model.entities.MonsterModel;
 public class MonsterView extends AnimatedEntityView {
 
     /**
-    * Sound when damaged
+     * Sound when damaged
      */
     private Sound damageSound;
-    private Sound walkingsound;
 
     /**
      * MonsterView Constructor
-     * @param game TowerDefenseGame of the monster
-     * @param texture Texture of the monster
+     *
+     * @param game      TowerDefenseGame of the monster
+     * @param texture   Texture of the monster
      * @param frameCols Number of cols of the monster animation sprite sheet.
      * @param frameRows Number of rows of the monster animation sprite sheet.
      */
     public MonsterView(TowerDefenseGame game, Texture texture, int frameCols, int frameRows) {
-        super(game,texture,frameCols,frameRows);
+        super(game, texture, frameCols, frameRows);
 
 
         Sprite skeletonSprite = new Sprite(getAnimation().getKeyFrame(0));
@@ -37,21 +37,20 @@ public class MonsterView extends AnimatedEntityView {
 
 
         this.damageSound = game.getAssetManager().get("audio/mob_damage.ogg");
-
-        this.walkingsound = game.getAssetManager().get("audio/walk.wav");
     }
 
     /**
      * Updates the view
+     *
      * @param model Model that will update the view
      */
     @Override
     public void update(EntityModel model) {
         super.update(model);
 
-        MonsterModel monsterModel = (MonsterModel)model;
+        MonsterModel monsterModel = (MonsterModel) model;
 
-        if (monsterModel.isReceivedDamage()){
+        if (monsterModel.isReceivedDamage()) {
             // play sound
             this.damageSound.play();
             monsterModel.setReceivedDamage(false);
@@ -60,9 +59,10 @@ public class MonsterView extends AnimatedEntityView {
 
     /**
      * Creates an animation
-     * @param game the game this view belongs to. Needed to access the
-     *             asset manager to get textures.
-     * @param texture Texture of the animation
+     *
+     * @param game      the game this view belongs to. Needed to access the
+     *                  asset manager to get textures.
+     * @param texture   Texture of the animation
      * @param frameCols Number of cols of the animation sprite sheet.
      * @param frameRows Number of rows of the animation sprite sheet.
      * @return The animation that will be used.
@@ -88,6 +88,7 @@ public class MonsterView extends AnimatedEntityView {
 
     /**
      * Creates the view sprite.
+     *
      * @param game the game this view belongs to. Needed to access the
      *             asset manager to get textures.
      * @return Sprite that will be used on the MonsterView.

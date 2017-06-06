@@ -23,9 +23,10 @@ public class TowerController extends SteerableEntityController {
 
     /**
      * Tower Controller constructor.
-     * @param world World that the controller belongs to.
-     * @param model Model that will be controlled.
-     * @param monsters Array of monsters.
+     *
+     * @param world          World that the controller belongs to.
+     * @param model          Model that will be controlled.
+     * @param monsters       Array of monsters.
      * @param gameController The game controller.
      */
     public TowerController(World world, TowerModel model, Array<SteerableEntityController> monsters, GameController gameController) {
@@ -33,8 +34,8 @@ public class TowerController extends SteerableEntityController {
                 model,
                 Gdx2dBody.createBox(world, model.getX(), model.getY(), 0.5f, 0.5f, true,
                         Constants.BIT_TOWER,
-                        (short)(Constants.BIT_PLAYER | Constants.BIT_TOWER)),
-                1,false
+                        (short) (Constants.BIT_PLAYER | Constants.BIT_TOWER)),
+                1, false
         );
 
         this.gameController = gameController;
@@ -42,23 +43,25 @@ public class TowerController extends SteerableEntityController {
         this.setRadiusProximity(new RadiusProximity<Vector2>(this, monsters, model.getRange()));
     }
 
-    public void update(float delta){
+    @Override
+    public void update(float delta) {
         super.update(delta);
 
         // update tower attack delay
-        ((TowerModel)getModel()).passAttackDelayTime(delta);
+        ((TowerModel) getModel()).passAttackDelayTime(delta);
     }
 
     /**
      * Reports a nearby neighbor.
+     *
      * @param neighbor Reported neighbor.
      * @return If the neighbor was handled.
      */
     @Override
     public boolean reportNeighbor(Steerable<Vector2> neighbor) {
-        if(neighbor instanceof MonsterController && ((TowerModel)getModel()).towerCanAttack()){
+        if (neighbor instanceof MonsterController && ((TowerModel) getModel()).towerCanAttack()) {
             // attack
-            attack((MonsterController)neighbor, ((TowerModel)getModel()).getAttackDamage());
+            attack((MonsterController) neighbor, ((TowerModel) getModel()).getAttackDamage());
             return true;
         }
         return false;
@@ -66,14 +69,15 @@ public class TowerController extends SteerableEntityController {
 
     /**
      * Attack a monster.
+     *
      * @param target The monster.
      * @param damage The damage the attack will make.
      */
-    private void attack(SteerableEntityController target, int damage){
+    private void attack(SteerableEntityController target, int damage) {
 
         // create arrow
         ArrowController arrowController = new ArrowController(getWorld(),
-                new ArrowModel(getPosition().x, getPosition().y, 0,damage),
+                new ArrowModel(getPosition().x, getPosition().y, 0, damage),
                 target);
 
         // add arrow to stage
@@ -86,6 +90,6 @@ public class TowerController extends SteerableEntityController {
         //arrowShootSound.play();
 
         // reset wait
-        ((TowerModel)getModel()).resetCurrentAttackSeconds();
+        ((TowerModel) getModel()).resetCurrentAttackSeconds();
     }
 }

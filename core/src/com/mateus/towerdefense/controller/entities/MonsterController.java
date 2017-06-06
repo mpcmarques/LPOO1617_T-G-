@@ -28,6 +28,7 @@ public class MonsterController extends SteerableEntityController {
 
     /**
      * MonsterController constructor.
+     *
      * @param world The world this controller belongs to.
      * @param model The model of the controller.
      * @param path  The path the monster will follow.
@@ -60,6 +61,7 @@ public class MonsterController extends SteerableEntityController {
 
     /**
      * If you need to do any additional calculation with the steering, use this method.
+     *
      * @param steeringOutput Steering acceleration calculated.
      */
     @Override
@@ -81,6 +83,7 @@ public class MonsterController extends SteerableEntityController {
 
     /**
      * Handles a telegram message.
+     *
      * @param msg Message.
      * @return If the massage was handled.
      */
@@ -103,6 +106,7 @@ public class MonsterController extends SteerableEntityController {
 
     /**
      * Updates the controller.
+     *
      * @param delta Delta time.
      */
     @Override

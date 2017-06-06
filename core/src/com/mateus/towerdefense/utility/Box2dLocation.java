@@ -3,11 +3,17 @@ package com.mateus.towerdefense.utility;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.ai.utils.Location;
 
+/**
+ * Auxiliar class is need for a box2d ai implementation.
+ */
 public class Box2dLocation implements Location<Vector2> {
 
     private Vector2 position;
     private float orientation;
 
+    /**
+     * Creates a box2d location.
+     */
     public Box2dLocation () {
         this.position = new Vector2();
         this.orientation = 0;

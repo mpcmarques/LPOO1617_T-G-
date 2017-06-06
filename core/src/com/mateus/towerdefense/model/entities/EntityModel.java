@@ -1,10 +1,8 @@
 package com.mateus.towerdefense.model.entities;
 
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
 
 /**
- * Created by mateuspedroza on 01/06/17.
+ * The base entity model.
  */
 public class EntityModel{
     /**

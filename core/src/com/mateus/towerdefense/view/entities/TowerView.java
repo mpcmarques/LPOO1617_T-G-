@@ -1,7 +1,5 @@
 package com.mateus.towerdefense.view.entities;
 
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mateus.towerdefense.TowerDefenseGame;
@@ -10,18 +8,19 @@ import com.mateus.towerdefense.model.entities.TowerModel;
 import com.mateus.towerdefense.utility.Constants;
 
 /**
- * Created by mateuspedroza on 02/06/17.
+ * The view of a tower.
  */
 public class TowerView extends EntityView {
 
-    private Sound arrowShootSound;
     private Sprite rangeSprite;
 
+    /**
+     * Tower View Constructor.
+     *
+     * @param game The game that will hold the view.
+     */
     public TowerView(TowerDefenseGame game) {
         super(game);
-
-        // arrow sounds
-        this.arrowShootSound = game.getAssetManager().get("audio/arrow_shoot.ogg");
 
         // range sprite
         this.rangeSprite = new Sprite((Texture) game.getAssetManager().get("circle.png"));
@@ -32,7 +31,7 @@ public class TowerView extends EntityView {
     public void update(EntityModel model) {
         super.update(model);
 
-        if (model instanceof  TowerModel) {
+        if (model instanceof TowerModel) {
             TowerModel towerModel = (TowerModel) model;
 
             this.rangeSprite.setSize(towerModel.getRange(), towerModel.getRange());

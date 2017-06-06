@@ -1,5 +1,8 @@
 package com.mateus.towerdefense.utility;
 
+/**
+ * Telegram message types.
+ */
 public final class MessageType {
     private MessageType(){}
 
@@ -13,5 +16,5 @@ public final class MessageType {
     public static final int BUILD_MODE = 7;
     public static final int HIT = 8;            /* EXTRA INFO IS DAMAGE */
     public static final int KILLED_MOB = 9;     /* EXTRA INFO IS GOLD EARNED */
-    public static final int PLAYER_DAMAGE = 10;
+    public static final int PLAYER_DAMAGE = 10; /* EXTRA INFO IS DAMAGE */
 }

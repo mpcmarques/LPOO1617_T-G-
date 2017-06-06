@@ -31,10 +31,11 @@ public class GameModel {
 
     /**
      * GameModel constructor.
+     *
      * @param playerModel The player model.
-     * @param wayPoints The monster's path.
+     * @param wayPoints   The monster's path.
      */
-    public GameModel(PlayerModel playerModel, Array<Vector2> wayPoints){
+    public GameModel(PlayerModel playerModel, Array<Vector2> wayPoints) {
         this.playerModel = playerModel;
         this.entities = new Array<EntityModel>();
         this.waveModels = new Array<WaveModel>();
@@ -42,7 +43,8 @@ public class GameModel {
         this.status = GameStatus.RUNNING;
     }
 
-    /** GETTERS **/
+    /* GETTERS */
+
     /**
      * @return The monster's path.
      */
@@ -51,12 +53,11 @@ public class GameModel {
     }
 
     /**
-     *
      * @return Monster models.
      */
     public Array<MonsterModel> getMonsterModels() {
         Array<MonsterModel> monsterModels = new Array<MonsterModel>();
-        for (EntityModel model: entities){
+        for (EntityModel model : entities) {
             if (model instanceof MonsterModel)
                 monsterModels.add((MonsterModel) model);
         }
@@ -72,17 +73,19 @@ public class GameModel {
 
     /**
      * Adds a wave model.
+     *
      * @param waveModel Wave model to be added.
      */
-    public void addWaveModel(WaveModel waveModel){
+    public void addWaveModel(WaveModel waveModel) {
         this.waveModels.add(waveModel);
     }
 
     /**
-     *  Returns the time to the next spawn.
-     * @return  Time to the next spawn.
+     * Returns the time to the next spawn.
+     *
+     * @return Time to the next spawn.
      */
-    public float getWaveDelay(){
+    public float getWaveDelay() {
         if (waveModels.size != 0)
             return waveModels.first().getTimeToSpawn();
         else
@@ -98,9 +101,10 @@ public class GameModel {
 
     /**
      * Adds an entity model.
+     *
      * @param entity Entity model to be added.
      */
-    public void addEntityModel(EntityModel entity){
+    public void addEntityModel(EntityModel entity) {
         this.entities.add(entity);
     }
 
@@ -116,7 +120,7 @@ public class GameModel {
      */
     public Array<TowerModel> getTowerModels() {
         Array<TowerModel> towerModels = new Array<TowerModel>();
-        for (EntityModel model: entities){
+        for (EntityModel model : entities) {
             if (model instanceof TowerModel)
                 towerModels.add((TowerModel) model);
         }
@@ -126,9 +130,9 @@ public class GameModel {
     /**
      * @return The arrow models.
      */
-    public Array<ArrowModel> getArrowModels(){
+    public Array<ArrowModel> getArrowModels() {
         Array<ArrowModel> arrowModels = new Array<ArrowModel>();
-        for (EntityModel model: entities){
+        for (EntityModel model : entities) {
             if (model instanceof ArrowModel)
                 arrowModels.add((ArrowModel) model);
         }
@@ -151,6 +155,7 @@ public class GameModel {
 
     /**
      * Set the game status.
+     *
      * @param status The game new status.
      */
     public void setStatus(GameStatus status) {

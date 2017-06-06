@@ -9,7 +9,7 @@ import com.mateus.towerdefense.controller.GameController;
 import com.mateus.towerdefense.model.GameModel;
 import com.mateus.towerdefense.model.entities.PlayerModel;
 import com.mateus.towerdefense.model.entities.WaveModel;
-import com.mateus.towerdefense.utility.TiledMapConversor;
+import com.mateus.towerdefense.utility.TiledMapParser;
 import com.mateus.towerdefense.view.base.AbstractScreen;
 
 /**
@@ -52,20 +52,21 @@ public class GameScreen extends AbstractScreen {
 
     /**
      * Creates a new game to be used by the screen.
+     *
      * @return The game model the screen will use.
      */
-    private GameController createNewGame(TiledMap map){
+    private GameController createNewGame(TiledMap map) {
         PlayerModel playerModel = new PlayerModel(0, 0, 0, 100, 20);
 
-        GameModel gameModel = new GameModel(playerModel, TiledMapConversor.createWaypoints(map));
+        GameModel gameModel = new GameModel(playerModel, TiledMapParser.createWaypoints(map));
         gameModel.addWaveModel(new WaveModel(2, 15));
         gameModel.addWaveModel(new WaveModel(4, 30));
         gameModel.addWaveModel(new WaveModel(8, 45));
 
-        GameController  gameController = new GameController(gameModel);
-        TiledMapConversor.createCollision(gameController, map);
+        GameController gameController = new GameController(gameModel);
+        TiledMapParser.createCollision(gameController, map);
 
-        return  gameController;
+        return gameController;
     }
 
     /**
