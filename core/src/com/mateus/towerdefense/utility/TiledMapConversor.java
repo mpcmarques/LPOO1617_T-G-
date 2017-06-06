@@ -29,24 +29,20 @@ public class TiledMapConversor {
     }
 
     /**
-     * Create walls based on tiled walls map layer
+     * Create collision bodies based on a tiled map layer.
      */
-    private Array<EntityController> createWalls(GameController gameController, TiledMap map) {
-        Array<EntityController> walls = new Array<EntityController>();
-        // get spawn location
-        for (MapObject mapObject : map.getLayers().get("walls").getObjects()) {
-            float x = (((RectangleMapObject) mapObject).getRectangle().x) * 2 / 16f;
-            float y = (((RectangleMapObject) mapObject).getRectangle().y) * 2 / 16f;
-            float height = (((RectangleMapObject) mapObject).getRectangle().getHeight()) * 1 / 16f;
-            float width = (((RectangleMapObject) mapObject).getRectangle().getWidth()) * 1 / 16f;
+    public static void createCollision(GameController gameController, TiledMap map) {
 
-            // create wall
-            //RectangleActor TODO
-            Body body = Gdx2dBody.createBox(gameController.getWorld(), x + width, y + height, width, height, true, Constants.BIT_WALL, (short) (Constants.BIT_WALL | Constants.BIT_MONSTER));
-            //WallController wallController = new WallController(body);
-           // walls.add(wallController);
+        // get layer
+        for (MapObject mapObject : map.getLayers().get("collision").getObjects()) {
+            float x = (((RectangleMapObject) mapObject).getRectangle().x) * Constants.PPM;
+            float y = (((RectangleMapObject) mapObject).getRectangle().y) * Constants.PPM;
+            float height = (((RectangleMapObject) mapObject).getRectangle().getHeight()) * Constants.PPM/2;
+            float width = (((RectangleMapObject) mapObject).getRectangle().getWidth()) * Constants.PPM/2;
+
+            // create collision
+            gameController.createCollisionBody(x +width, y + height, width, height);
         }
-        return walls;
     }
 
     public static Array<Vector2> createWaypoints(TiledMap map) {

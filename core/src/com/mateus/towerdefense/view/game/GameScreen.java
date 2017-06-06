@@ -62,7 +62,10 @@ public class GameScreen extends AbstractScreen {
         gameModel.addWaveModel(new WaveModel(4, 30));
         gameModel.addWaveModel(new WaveModel(8, 45));
 
-        return  new GameController(gameModel);
+        GameController  gameController = new GameController(gameModel);
+        TiledMapConversor.createCollision(gameController, map);
+
+        return  gameController;
     }
 
     /**

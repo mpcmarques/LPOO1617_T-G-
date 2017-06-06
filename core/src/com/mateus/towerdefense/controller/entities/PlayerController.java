@@ -26,9 +26,9 @@ public class PlayerController extends EntityController {
      */
     public PlayerController( World world, PlayerModel model) {
         super(world, model,
-                Gdx2dBody.createSensor(world,model.getX(), model.getY(), 1, 1, false,
+                Gdx2dBody.createSensor(world,model.getX(), model.getY(), 0.6f, 0.6f, false,
                         Constants.BIT_PLAYER,
-                        (short) (Constants.BIT_TOWER | Constants.BIT_PLAYER)));
+                        (short) (Constants.BIT_TOWER | Constants.BIT_WALL)));
 
         MessageManager.getInstance().addListeners(this,
                 MessageType.BUILD_MODE , MessageType.PLAYER_DAMAGE, MessageType.KILLED_MOB

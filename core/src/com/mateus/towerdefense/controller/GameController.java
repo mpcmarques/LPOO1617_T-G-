@@ -11,6 +11,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mateus.towerdefense.controller.entities.*;
 import com.mateus.towerdefense.model.entities.*;
+import com.mateus.towerdefense.utility.Constants;
+import com.mateus.towerdefense.utility.Gdx2dBody;
 import com.mateus.towerdefense.utility.MessageType;
 import com.mateus.towerdefense.model.*;
 
@@ -89,8 +91,10 @@ public class GameController {
             world.getBodies(bodies);
 
             for (Body body : bodies) {
-                ((EntityModel) body.getUserData()).setPosition(body.getPosition().x, body.getPosition().y);
-                ((EntityModel) body.getUserData()).setRotation(body.getAngle());
+                if (body.getUserData() != null) {
+                    ((EntityModel) body.getUserData()).setPosition(body.getPosition().x, body.getPosition().y);
+                    ((EntityModel) body.getUserData()).setRotation(body.getAngle());
+                }
             }
 
             // end game
@@ -174,6 +178,20 @@ public class GameController {
         this.model.addEntityModel(towerController.getModel());
 
         this.entityControllers.add(towerController);
+    }
+
+    /**
+     * Creates a collision body on x and y with the height and width. A collision body
+     * is a body that is used to avoid a player to build on top of it.
+     * @param x X position.
+     * @param y Y position.
+     * @param width Width of the body.
+     * @param height Height of the body.
+     */
+    public void createCollisionBody(float x, float y, float width, float height){
+        Body body = Gdx2dBody.createBox(getWorld(), x , y , width, height, true, Constants.BIT_WALL,  Constants.BIT_PLAYER);
+        CollisionModel collisionModel = new CollisionModel(x, y, width, height);
+        body.setUserData(collisionModel);
     }
 
     /**

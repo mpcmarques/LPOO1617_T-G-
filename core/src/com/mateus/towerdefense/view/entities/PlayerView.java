@@ -11,7 +11,7 @@ import com.mateus.towerdefense.model.entities.PlayerModel;
 import com.mateus.towerdefense.utility.Constants;
 
 /**
- * Created by mateuspedroza on 01/06/17.
+ * The view of the player.
  */
 public class PlayerView extends EntityView{
 

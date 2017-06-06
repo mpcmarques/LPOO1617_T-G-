@@ -10,6 +10,7 @@ public class GameContactListener implements ContactListener {
 
     /**
      * Called when a body begin contact with another body.
+     *
      * @param contact Contact that happened.
      */
     @Override
@@ -21,12 +22,22 @@ public class GameContactListener implements ContactListener {
         EntityModel entityModelA = (EntityModel) fixtureA.getBody().getUserData();
         EntityModel entityModelB = (EntityModel) fixtureB.getBody().getUserData();
 
-        if (entityModelA instanceof PlayerModel) {
-            if (entityModelB instanceof TowerModel) {
-                if (((PlayerModel) entityModelA).isInBuildMode())
-                    ((PlayerModel) fixtureA.getBody().getUserData()).setCanBuild(false);
-            }
-        } else if ((entityModelA instanceof ArrowModel && entityModelB instanceof MonsterModel)) {
+        /* Player */
+        if (entityModelA instanceof PlayerModel && entityModelB instanceof TowerModel) {
+                ((PlayerModel) fixtureA.getBody().getUserData()).setCanBuild(false);
+        }
+        else if (entityModelA instanceof  TowerModel && entityModelB instanceof  PlayerModel){
+                ((PlayerModel) fixtureB.getBody().getUserData()).setCanBuild(false);
+        }
+        else if (entityModelA instanceof CollisionModel && entityModelB instanceof PlayerModel){
+                ((PlayerModel) fixtureB.getBody().getUserData()).setCanBuild(false);
+        }
+        else if (entityModelA instanceof PlayerModel && entityModelB instanceof CollisionModel) {
+                ((PlayerModel) fixtureA.getBody().getUserData()).setCanBuild(false);
+        }
+
+        /* ARROW */
+        else if ((entityModelA instanceof ArrowModel && entityModelB instanceof MonsterModel)) {
 
             handleArrowHit((ArrowModel) entityModelA, (MonsterModel) entityModelB);
 
@@ -39,6 +50,7 @@ public class GameContactListener implements ContactListener {
 
     /**
      * Called when a body ends contact with another body.
+     *
      * @param contact Contact that happened.
      */
     @Override
@@ -50,17 +62,24 @@ public class GameContactListener implements ContactListener {
         EntityModel entityModelA = (EntityModel) fixtureA.getBody().getUserData();
         EntityModel entityModelB = (EntityModel) fixtureB.getBody().getUserData();
 
-        if (entityModelA instanceof PlayerModel) {
-            if (entityModelB instanceof TowerModel) {
-                if (((PlayerModel) entityModelA).isInBuildMode())
-                    ((PlayerModel) fixtureA.getBody().getUserData()).setCanBuild(true);
-            }
+        if (entityModelA instanceof PlayerModel && entityModelB instanceof TowerModel) {
+                ((PlayerModel) fixtureA.getBody().getUserData()).setCanBuild(true);
+        }
+        else if (entityModelA instanceof  TowerModel && entityModelB instanceof  PlayerModel){
+                ((PlayerModel) fixtureB.getBody().getUserData()).setCanBuild(true);
+        }
+        else if (entityModelA instanceof CollisionModel && entityModelB instanceof PlayerModel){
+                ((PlayerModel) fixtureB.getBody().getUserData()).setCanBuild(true);
+        }
+        else if (entityModelA instanceof PlayerModel && entityModelB instanceof CollisionModel) {
+                ((PlayerModel) fixtureA.getBody().getUserData()).setCanBuild(true);
         }
     }
 
     /**
      * Handles an arrow monster collision.
-     * @param arrow Arrow that hit the monster.
+     *
+     * @param arrow   Arrow that hit the monster.
      * @param monster Monster that was hit by the arrow.
      */
     private void handleArrowHit(ArrowModel arrow, MonsterModel monster) {

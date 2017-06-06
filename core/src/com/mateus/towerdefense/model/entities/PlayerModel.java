@@ -26,7 +26,8 @@ public class PlayerModel extends EntityModel {
     }
 
     public void setCanBuild(boolean canBuild) {
-        this.canBuild = canBuild;
+        if (isInBuildMode())
+            this.canBuild = canBuild;
     }
 
     public boolean canBuild() {

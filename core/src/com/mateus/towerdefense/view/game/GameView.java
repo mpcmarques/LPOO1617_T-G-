@@ -29,7 +29,7 @@ public class GameView extends AbstractStage {
     /**
      * If it is true, will debug the view.
      */
-    private final boolean DEBUG_MODE = true;
+    private final boolean DEBUG_MODE = false;
 
     /**
      * The model drawn by this screen
