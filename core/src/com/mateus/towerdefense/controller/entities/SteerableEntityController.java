@@ -125,12 +125,6 @@ public class SteerableEntityController extends EntityController implements Steer
         }
 
         if (anyAccelerations) {
-            // body.activate();
-
-            // TODO:
-            // Looks like truncating speeds here after applying forces doesn't work as expected.
-            // We should likely cap speeds form inside an InternalTickCallback, see
-            // http://www.bulletphysics.org/mediawiki-1.5.8/index.php/Simulation_Tick_Callbacks
 
             // Cap the linear speed
             Vector2 velocity = getBody().getLinearVelocity();

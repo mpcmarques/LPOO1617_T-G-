@@ -80,14 +80,10 @@ public class TowerController extends SteerableEntityController {
                 new ArrowModel(getPosition().x, getPosition().y, 0, damage),
                 target);
 
-        // add arrow to stage
-        //getStage().addActor(arrow);
+
         gameController.addEntityController(arrowController);
         gameController.getModel().addEntityModel(arrowController.getModel());
 
-
-        // shoot sound TODO
-        //arrowShootSound.play();
 
         // reset wait
         ((TowerModel) getModel()).resetCurrentAttackSeconds();
