@@ -154,6 +154,7 @@ public class GameController {
     public void handleTouchDown(float x, float y) {
         PlayerModel playerModel = (PlayerModel) playerController.getModel();
         if (playerModel.isInBuildMode() && playerModel.canBuild()) {
+            playerModel.setDidBuild(true);
             TowerModel towerModel = playerModel.getTowerToBuild();
             towerModel.setPosition(x,y);
 

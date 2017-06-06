@@ -1,5 +1,6 @@
 package com.mateus.towerdefense.view.entities;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -19,6 +20,11 @@ public class PlayerView extends EntityView{
     private PlayerModel model;
 
     /**
+     * Building sound.
+     */
+    private Sound buildSound;
+
+    /**
      * Creates a view belonging to a game.
      *
      * @param game The game this view belongs to. Needed to access the
@@ -32,6 +38,8 @@ public class PlayerView extends EntityView{
         // range sprite
         this.rangeSprite = new Sprite((Texture) game.getAssetManager().get("circle.png"));
         this.rangeSprite.setAlpha(0.5f);
+
+        this.buildSound = game.getAssetManager().get("audio/build.mp3");
     }
 
     @Override
@@ -53,6 +61,11 @@ public class PlayerView extends EntityView{
                 towerSprite.setScale(Constants.PPM * 1.5f);
                 setSprite(towerSprite);
             }
+        }
+        // play build sound
+        if (((PlayerModel)model).isDidBuild()){
+            buildSound.play();
+            ((PlayerModel)model).setDidBuild(false);
         }
     }
 

@@ -1,4 +1,4 @@
-# Tower Defense
+# Tower Defense - LPOO Final Project Delivery
 ## Mateus Pedroza Cortes Marques - up201601876
 
 ### Documentation
@@ -21,7 +21,6 @@ Just clone this git repository and import the graddle project to your favorite I
 * Box2D to handle the game physics.
 * LibGDX-AI to handle the artificial intelligence.
 
-
 ##### Package structure:
 ![alt text](/images/packageStructure.png)
 
@@ -36,10 +35,7 @@ For utility functions I used static classes with static functions.
 ##### Major difficulties:
  The major difficulty and the most painful thing to work on was LibGDX-AI, it took me a lot of time to get it going since the documentation is horrible with no examples and most of the things you have to discover by reverse engineering.
     Another difficulty was using the MVC pattern instead of ECS because of unity testing, and made appear a lot of bugs. 
-    
-##### Overall time spent developing:
-   Since I made it all by myself, I didn't keep tracking, but it was almost all the time in the last weeks, so I think more than 100/200 hours.
-    
+      
 ##### Distribution among team members:
    I made it all by myself, since I am a TE student.
    
@@ -50,6 +46,6 @@ For utility functions I used static classes with static functions.
 - 3: Show remaining player life.
 - 4: Show player gold ( needed to build towers ).
 
-> When the time to the next wave ends, a wave of monsters if summoned, each monster that completes the path damages the player health.
+> When the time to the next wave ends, a wave of monsters is summoned, each monster that completes the path damages the player health.
 > Build towers along the path to kill the monsters before they complete their path and win the game!
     

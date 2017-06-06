@@ -2,6 +2,7 @@ package com.mateus.towerdefense.view.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -62,22 +63,22 @@ public class GameView extends AbstractStage {
     private TowerView towerView;
 
     /**
-     * Monster View
+     * Monster View.
      */
     private MonsterView monsterView;
 
     /**
-     * Arrow View
+     * Arrow View.
      */
     private ArrowView arrowView;
 
     /**
-     * Debug Renderer
+     * Debug Renderer.
      */
     private Box2DDebugRenderer debugRenderer;
 
     /**
-     * Background music
+     * Background music.
      */
     private Music backgroundMusic;
 

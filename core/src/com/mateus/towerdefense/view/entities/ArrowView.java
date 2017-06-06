@@ -17,7 +17,6 @@ public class ArrowView extends EntityView {
      */
     public ArrowView(TowerDefenseGame game) {
         super(game);
-
     }
 
     /**

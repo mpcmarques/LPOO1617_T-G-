@@ -1,5 +1,8 @@
 package com.mateus.towerdefense.view.entities;
 
+import com.badlogic.gdx.ai.msg.MessageManager;
+import com.badlogic.gdx.ai.msg.Telegram;
+import com.badlogic.gdx.ai.msg.Telegraph;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,16 +11,21 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mateus.towerdefense.TowerDefenseGame;
 import com.mateus.towerdefense.model.entities.EntityModel;
 import com.mateus.towerdefense.model.entities.MonsterModel;
+import com.mateus.towerdefense.utility.MessageType;
 
 /**
  * View of a Monster
  */
-public class MonsterView extends AnimatedEntityView {
+public class MonsterView extends AnimatedEntityView implements Telegraph {
 
     /**
-     * Sound when damaged
+     * Sound played when damaged.
      */
     private Sound damageSound;
+    /**
+     * Sound played when dead.
+     */
+    private Sound deadSound;
 
     /**
      * MonsterView Constructor
@@ -37,6 +45,9 @@ public class MonsterView extends AnimatedEntityView {
 
 
         this.damageSound = game.getAssetManager().get("audio/mob_damage.ogg");
+        this.deadSound = game.getAssetManager().get("audio/dead_sound.mp3");
+
+        MessageManager.getInstance().addListener(this, MessageType.KILLED_MOB);
     }
 
     /**
@@ -51,7 +62,7 @@ public class MonsterView extends AnimatedEntityView {
         MonsterModel monsterModel = (MonsterModel) model;
 
         if (monsterModel.isReceivedDamage()) {
-            // play sound
+
             this.damageSound.play();
             monsterModel.setReceivedDamage(false);
         }
@@ -96,5 +107,14 @@ public class MonsterView extends AnimatedEntityView {
     @Override
     public Sprite createSprite(TowerDefenseGame game) {
         return new Sprite();
+    }
+
+    @Override
+    public boolean handleMessage(Telegram msg) {
+        if (msg.message == MessageType.KILLED_MOB){
+            deadSound.play();
+            return true;
+        }
+        return  false;
     }
 }

@@ -21,6 +21,11 @@ public class PlayerModel extends EntityModel {
      */
     private int life;
 
+    /** Tracks if the player build,  used by the view.
+     *
+     */
+    private boolean didBuild;
+
     /**
      * Constructs a model with a position and a rotation.
      *
@@ -35,6 +40,7 @@ public class PlayerModel extends EntityModel {
         this.gold = startingGold;
         this.canBuild = true;
         this.life = life;
+        this.didBuild = false;
     }
 
     /**
@@ -44,6 +50,21 @@ public class PlayerModel extends EntityModel {
     public void setCanBuild(boolean canBuild) {
         if (isInBuildMode())
             this.canBuild = canBuild;
+    }
+
+    /**
+     * @return If the player build something.
+     */
+    public boolean isDidBuild() {
+        return didBuild;
+    }
+
+    /**
+     * Set if the player build something.
+     * @param didBuild If the player build something.
+     */
+    public void setDidBuild(boolean didBuild) {
+        this.didBuild = didBuild;
     }
 
     /**

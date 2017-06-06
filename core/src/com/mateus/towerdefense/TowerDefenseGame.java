@@ -76,7 +76,7 @@ public class TowerDefenseGame extends Game {
         getAssetManager().load("audio/build.mp3", Sound.class);
         getAssetManager().load("audio/menu_click.ogg", Sound.class);
         getAssetManager().load("audio/menu_theme.mp3", Music.class);
-
+        getAssetManager().load("audio/dead_sound.mp3", Sound.class);
     }
 
     /**

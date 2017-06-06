@@ -34,8 +34,8 @@ public class ArrowController extends SteerableEntityController {
      */
     public ArrowController(World world, ArrowModel model, SteerableEntityController target) {
         super(world, model,
-                Gdx2dBody.createRound(world, model.getX(), model.getY(), 0.2f, false, Constants.BIT_ARROW, Constants.BIT_MONSTER),
-                0.2f,
+                Gdx2dBody.createRound(world, model.getX(), model.getY(), 0.4f, false, Constants.BIT_ARROW, Constants.BIT_MONSTER),
+                0.4f,
                 false);
 
         // add steering behaviour
