@@ -49,7 +49,7 @@ public class PlayerView extends EntityView{
                 }
             } else {
                 Sprite towerSprite = new Sprite((Texture) getGame().getAssetManager().get("tower.png"));
-                towerSprite.setSize(1,1);
+                towerSprite.setScale(Constants.PPM * 1.5f);
                 setSprite(towerSprite);
             }
         }

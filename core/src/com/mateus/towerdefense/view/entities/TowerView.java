@@ -44,7 +44,7 @@ public class TowerView extends EntityView {
     public Sprite createSprite(TowerDefenseGame game) {
         Texture texture = game.getAssetManager().get("tower.png");
         Sprite sprite = new Sprite(texture);
-        sprite.setScale(Constants.PPM);
+        sprite.setScale(Constants.PPM * 1.5f);
         return sprite;
     }
 }

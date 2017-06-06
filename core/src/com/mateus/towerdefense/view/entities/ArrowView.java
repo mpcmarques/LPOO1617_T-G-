@@ -18,13 +18,12 @@ public class ArrowView extends EntityView {
     public ArrowView(TowerDefenseGame game) {
         super(game);
 
-        getSprite().scale(0.01f);
     }
 
     @Override
     public Sprite createSprite(TowerDefenseGame game) {
         Sprite sprite = new Sprite((Texture) game.getAssetManager().get("projectiles/missile.png"));
-        sprite.setSize(0.64f, 0.26f);
+        sprite.setScale(Constants.PPM);
         return sprite;
     }
 }
