@@ -21,8 +21,9 @@ public class PlayerView extends EntityView{
     /**
      * Creates a view belonging to a game.
      *
-     * @param game the game this view belongs to. Needed to access the
+     * @param game The game this view belongs to. Needed to access the
      *             asset manager to get textures.
+     * @param model The player model.
      */
     public PlayerView(TowerDefenseGame game, PlayerModel model) {
         super(game);

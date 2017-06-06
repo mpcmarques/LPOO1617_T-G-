@@ -47,10 +47,12 @@ public abstract class AnimatedEntityView extends EntityView {
     }
 
     /**
-     * Create the sprite animation
+     * Create the sprite animation.
      *
-     * @param game Tower defense game
-     * @return Sprite animation
+     * @param game      Tower defense game.
+     * @param frameCols Frame column number.
+     * @param frameRows Frame rows number.
+     * @return Sprite animation.
      */
     public abstract Animation<TextureRegion> createAnimation(TowerDefenseGame game, Texture texture, int frameCols, int frameRows);
 

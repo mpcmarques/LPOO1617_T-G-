@@ -10,6 +10,8 @@ public class CollisionModel extends EntityModel {
      *
      * @param x        The x-coordinate of this entity in meters.
      * @param y        The y-coordinate of this entity in meters.
+     * @param width     The model width.
+     * @param height    The model height.
      */
     public CollisionModel(float x, float y, float width, float height) {
         super(x, y, 0);
