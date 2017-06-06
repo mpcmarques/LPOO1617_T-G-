@@ -14,6 +14,7 @@ import com.mateus.towerdefense.model.entities.EntityModel;
 abstract class EntityView{
     private Sprite sprite;
     private boolean visible;
+    private TowerDefenseGame game;
 
     /**
      * Creates a view belonging to a game.
@@ -22,12 +23,17 @@ abstract class EntityView{
      *             asset manager to get textures.
      */
     EntityView(TowerDefenseGame game){
+        this.game = game;
         this.sprite = createSprite(game);
         this.visible = true;
-
-        //this.sprite.setOrigin(getWidth() / 2, getHeight() / 2);
     }
 
+    /**
+     * @return Current game.
+     */
+    public TowerDefenseGame getGame() {
+        return game;
+    }
 
     /**
      * Draws the sprite from this view using a sprite batch.

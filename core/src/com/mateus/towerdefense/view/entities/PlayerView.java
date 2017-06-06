@@ -16,6 +16,7 @@ import com.mateus.towerdefense.utility.Constants;
 public class PlayerView extends EntityView{
 
     private Sprite rangeSprite;
+    private PlayerModel model;
 
     /**
      * Creates a view belonging to a game.
@@ -23,8 +24,9 @@ public class PlayerView extends EntityView{
      * @param game the game this view belongs to. Needed to access the
      *             asset manager to get textures.
      */
-    public PlayerView(TowerDefenseGame game) {
+    public PlayerView(TowerDefenseGame game, PlayerModel model) {
         super(game);
+        this.model = model;
 
         // range sprite
         this.rangeSprite = new Sprite((Texture) game.getAssetManager().get("circle.png"));
@@ -39,17 +41,32 @@ public class PlayerView extends EntityView{
         this.setVisible(((PlayerModel)model).isInBuildMode());
 
         if (isVisible()) {
-            // TODO Range sprite
-            /*this.rangeSprite.setSize(1, 1);
-            this.rangeSprite.setCenter( playerModel.getX(), playerModel.getY());
-            this.rangeSprite.draw(batch);*/
             if (getSprite() != null) {
                 if (!((PlayerModel) model).canBuild()) {
                     getSprite().setColor(Color.RED);
                 } else {
                     getSprite().setColor(Color.WHITE);
                 }
+            } else {
+                Sprite towerSprite = new Sprite((Texture) getGame().getAssetManager().get("tower.png"));
+                towerSprite.setSize(1,1);
+                setSprite(towerSprite);
             }
+        }
+    }
+
+    @Override
+    public void draw(SpriteBatch batch) {
+        super.draw(batch);
+
+        if (model.getTowerToBuild() != null) {
+
+
+            this.rangeSprite.setSize(model.getTowerToBuild().getRange() * 2,
+                    model.getTowerToBuild().getRange() * 2
+            );
+            this.rangeSprite.setCenter(model.getX(), model.getY());
+            this.rangeSprite.draw(batch);
         }
     }
 

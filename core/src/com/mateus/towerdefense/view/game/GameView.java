@@ -95,7 +95,7 @@ public class GameView extends AbstractStage {
         this.controller = controller;
         this.tiledMapView = map;
 
-        this.playerView = new PlayerView(game);
+        this.playerView = new PlayerView(game, getModel().getPlayerModel());
         this.monsterView = new MonsterView(
                 game,
                 (Texture) game.getAssetManager().get("monsters/zombie_walk.png"),

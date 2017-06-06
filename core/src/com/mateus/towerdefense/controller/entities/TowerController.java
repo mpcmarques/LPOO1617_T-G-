@@ -31,7 +31,7 @@ public class TowerController extends SteerableEntityController {
     public TowerController(World world, TowerModel model, Array<SteerableEntityController> monsters, GameController gameController) {
         super(world,
                 model,
-                Gdx2dBody.createBox(world, model.getX(), model.getY(), 1f, 1f, true,
+                Gdx2dBody.createBox(world, model.getX(), model.getY(), 0.5f, 0.5f, true,
                         Constants.BIT_TOWER,
                         (short)(Constants.BIT_PLAYER | Constants.BIT_TOWER)),
                 1,false
