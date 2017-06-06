@@ -32,6 +32,7 @@ The game executable is in the root folder, download this repository and execute 
 
 ##### Major difficulties:
     The major difficulty and the most painfull thing to work on was Libgdx-AI, it took me a lot of time to get it going since the documentation is horrible with no examples and most of the things you have to discover by reverse engineering.
+    Another difficulty was using the MVC pattern instead of ECS because of unity testing, and made appear a lot of bugs. 
     
 ##### Overall time spent developing:
     Since I made it all by myself, I didn't keep tracking, but it was almost all the time in the last weeks, so I think more than 100/200 hours.
