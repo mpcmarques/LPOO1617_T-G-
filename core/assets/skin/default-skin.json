@@ -1,0 +1,6 @@
+{
+  com.badlogic.gdx.graphics.g2d.BitmapFont: {
+    font: {
+      file: neoletters-32.fnt
+    }
+  }

@@ -1,0 +1,12 @@
+com.mateus.towerdefense
+com.mateus.towerdefense.client
+com.mateus.towerdefense.controller
+com.mateus.towerdefense.controller.entities
+com.mateus.towerdefense.desktop
+com.mateus.towerdefense.model
+com.mateus.towerdefense.model.entities
+com.mateus.towerdefense.utility
+com.mateus.towerdefense.view.base
+com.mateus.towerdefense.view.entities
+com.mateus.towerdefense.view.game
+com.mateus.towerdefense.view.menu
