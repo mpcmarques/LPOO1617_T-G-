@@ -20,10 +20,10 @@ The game executable is in the root folder, download this repository and execute 
 
 
 ##### Package structure:
-![alt text](images/packageStructure.png)
+![alt text](/images/packageStructure.png)
 
 ##### Type Hierarchy:
-![alt text](images/TypeHierarchy.png)
+![alt text](/images/TypeHierarchy.png)
 
 ##### Design patterns used:
     The game was developed in the MVC arquitecture. 
