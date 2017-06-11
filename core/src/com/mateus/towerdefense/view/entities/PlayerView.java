@@ -36,7 +36,7 @@ public class PlayerView extends EntityView{
         this.model = model;
 
         // range sprite
-        this.rangeSprite = new Sprite((Texture) game.getAssetManager().get("circle.png"));
+        this.rangeSprite = new Sprite((Texture) game.getAssetManager().get("tower/circle.png"));
         this.rangeSprite.setAlpha(0.5f);
 
         this.buildSound = game.getAssetManager().get("audio/build.mp3");
@@ -57,7 +57,7 @@ public class PlayerView extends EntityView{
                     getSprite().setColor(Color.WHITE);
                 }
             } else {
-                Sprite towerSprite = new Sprite((Texture) getGame().getAssetManager().get("tower.png"));
+                Sprite towerSprite = new Sprite((Texture) getGame().getAssetManager().get("tower/tower.png"));
                 towerSprite.setScale(Constants.PPM * 1.5f);
                 setSprite(towerSprite);
             }

@@ -52,10 +52,6 @@ public class ArrowController extends SteerableEntityController {
         // set target
         this.target = target;
 
-        // arrow fixture properties
-        this.getBody().getFixtureList().first().setRestitution(1);
-        this.getBody().getFixtureList().first().setFriction(0.1f);
-
         // add listeners
         MessageManager.getInstance().addListeners(this,
                 MessageType.HIT);

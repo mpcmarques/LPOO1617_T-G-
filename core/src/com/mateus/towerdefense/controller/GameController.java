@@ -71,7 +71,6 @@ public class GameController {
             // step world
             world.step(delta, 6, 2);
 
-
             // wave logic
             waveLogic(delta);
 

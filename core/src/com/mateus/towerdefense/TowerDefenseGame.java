@@ -57,9 +57,10 @@ public class TowerDefenseGame extends Game {
      * Loads all game textures.
      */
     private void loadTextures() {
-        getAssetManager().load("monsters/log.png", Texture.class);
-        getAssetManager().load("tower.png", Texture.class);
-        getAssetManager().load("circle.png", Texture.class);
+        getAssetManager().load("tower/tower.png", Texture.class);
+        getAssetManager().load("tower/circle.png", Texture.class);
+        getAssetManager().load("tower/base.png", Texture.class);
+        getAssetManager().load("tower/top.png", Texture.class);
         getAssetManager().load("monsters/zombie_walk.png", Texture.class);
         getAssetManager().load("projectiles/missile.png", Texture.class);
     }

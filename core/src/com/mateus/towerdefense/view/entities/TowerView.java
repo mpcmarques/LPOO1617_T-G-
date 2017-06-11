@@ -14,6 +14,8 @@ public class TowerView extends EntityView {
 
     private Sprite rangeSprite;
 
+    private Sprite baseSprite;
+
     /**
      * Tower View Constructor.
      *
@@ -23,8 +25,11 @@ public class TowerView extends EntityView {
         super(game);
 
         // range sprite
-        this.rangeSprite = new Sprite((Texture) game.getAssetManager().get("circle.png"));
+        this.rangeSprite = new Sprite((Texture) game.getAssetManager().get("tower/circle.png"));
         this.rangeSprite.setAlpha(0.2f);
+
+        this.baseSprite = new Sprite((Texture) game.getAssetManager().get("tower/base.png"));
+        this.baseSprite.setScale(Constants.PPM / 1.3f);
     }
 
     @Override
@@ -34,16 +39,20 @@ public class TowerView extends EntityView {
         if (model instanceof TowerModel) {
             TowerModel towerModel = (TowerModel) model;
 
-            this.rangeSprite.setSize(towerModel.getRange(), towerModel.getRange());
+            this.rangeSprite.setSize(towerModel.getRange()*2, towerModel.getRange()*2);
             this.rangeSprite.setCenter(towerModel.getX(), towerModel.getY());
+            this.rangeSprite.draw(getGame().getBatch());
+
+            this.baseSprite.setCenter(towerModel.getX(), towerModel.getY());
+            this.baseSprite.draw(getGame().getBatch());
         }
     }
 
     @Override
     public Sprite createSprite(TowerDefenseGame game) {
-        Texture texture = game.getAssetManager().get("tower.png");
+        Texture texture = game.getAssetManager().get("tower/top.png");
         Sprite sprite = new Sprite(texture);
-        sprite.setScale(Constants.PPM * 1.5f);
+        sprite.setScale(Constants.PPM / 1.3f);
         return sprite;
     }
 }
