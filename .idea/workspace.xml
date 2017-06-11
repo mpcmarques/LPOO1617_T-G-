@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="42e8ea6b-1c81-49a7-b751-3b52286d1f2c" name="Default" comment="final">
+    <list default="true" id="42e8ea6b-1c81-49a7-b751-3b52286d1f2c" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/build/classes/main/com/mateus/towerdefense/view/entities/TowerView.class" afterPath="$PROJECT_DIR$/core/build/classes/main/com/mateus/towerdefense/view/entities/TowerView.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/core/.gradle/" />
@@ -71,60 +72,7 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GameView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/com/mateus/towerdefense/view/game/GameView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="32" column="44" lean-forward="false" selection-start-line="32" selection-start-column="44" selection-end-line="32" selection-end-column="44" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="method#act#0;class#GameView#0" expanded="false" />
-                <element signature="method#debugAI#0;class#GameView#0" expanded="false" />
-                <element signature="method#calculateNewMapViewport#0;class#GameView#0" expanded="false" />
-                <element signature="method#dispose#0;class#GameView#0" expanded="false" />
-                <element signature="e#7091#7092#0" expanded="false" />
-                <element signature="e#7119#7120#0" expanded="false" />
-                <element signature="e#7283#7284#0" expanded="false" />
-                <element signature="e#7316#7317#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TowerController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/com/mateus/towerdefense/controller/entities/TowerController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="115" column="59" lean-forward="false" selection-start-line="115" selection-start-column="59" selection-end-line="115" selection-end-column="59" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DesktopLauncher.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/desktop/src/com/mateus/towerdefense/desktop/DesktopLauncher.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="84">
-              <caret line="6" column="30" lean-forward="true" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ArrowController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/com/mateus/towerdefense/controller/entities/ArrowController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="798">
-              <caret line="52" column="29" lean-forward="false" selection-start-line="52" selection-start-column="29" selection-end-line="52" selection-end-column="29" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -2094,6 +2042,16 @@
               <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TowerDefense-final" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleGroupNode" />
+            </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
@@ -2583,7 +2541,14 @@
       <option name="project" value="LOCAL" />
       <updated>1497194698368</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="final">
+      <created>1497208324512</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1497208324512</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2597,7 +2562,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="27" y="23" width="1253" height="709" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32901135" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2608,7 +2572,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32901135" sideWeight="0.50289017" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32901135" sideWeight="0.49710983" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32901135" sideWeight="0.49710983" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -2643,7 +2607,8 @@
     <MESSAGE value="teste" />
     <MESSAGE value="finished adding sounds" />
     <MESSAGE value="added rotation" />
-    <option name="LAST_COMMIT_MESSAGE" value="added rotation" />
+    <MESSAGE value="final" />
+    <option name="LAST_COMMIT_MESSAGE" value="final" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2730,6 +2695,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
           <caret line="12" column="37" lean-forward="true" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2915,6 +2881,34 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="458">
           <caret line="79" column="0" lean-forward="true" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#GameController#0" expanded="false" />
+            <element signature="docComment;field#world#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;field#playerController#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;field#entityControllers#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;field#model#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#GameController#0;class#GameController#0" expanded="false" />
+            <element signature="method#GameController#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#update#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#waveLogic#0;class#GameController#0" expanded="false" />
+            <element signature="method#waveLogic#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#spawnWave#0;class#GameController#0" expanded="false" />
+            <element signature="method#spawnWave#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#handleMouseMoved#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#handleTouchDown#0;class#GameController#0" expanded="false" />
+            <element signature="method#handleTouchDown#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#buildTower#0;class#GameController#0" expanded="false" />
+            <element signature="method#buildTower#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#createCollisionBody#0;class#GameController#0" expanded="false" />
+            <element signature="method#createCollisionBody#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#addEntityController#0;class#GameController#0" expanded="false" />
+            <element signature="method#addEntityController#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#spawnMonster#0;class#GameController#0" expanded="false" />
+            <element signature="method#spawnMonster#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#getWorld#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#getPlayerController#0;class#GameController#0" expanded="false" />
+            <element signature="docComment;method#getEntityControllers#0;class#GameController#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2987,21 +2981,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/com/mateus/towerdefense/view/game/GameView.java">
+    <entry file="file://$PROJECT_DIR$/desktop/src/com/mateus/towerdefense/desktop/DesktopLauncher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="32" column="44" lean-forward="false" selection-start-line="32" selection-start-column="44" selection-end-line="32" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="method#act#0;class#GameView#0" expanded="false" />
-            <element signature="method#debugAI#0;class#GameView#0" expanded="false" />
-            <element signature="method#calculateNewMapViewport#0;class#GameView#0" expanded="false" />
-            <element signature="method#dispose#0;class#GameView#0" expanded="false" />
-            <element signature="e#7091#7092#0" expanded="false" />
-            <element signature="e#7119#7120#0" expanded="false" />
-            <element signature="e#7283#7284#0" expanded="false" />
-            <element signature="e#7316#7317#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="105">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3013,11 +2997,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/desktop/src/com/mateus/towerdefense/desktop/DesktopLauncher.java">
+    <entry file="file://$PROJECT_DIR$/core/src/com/mateus/towerdefense/view/game/GameView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="6" column="30" lean-forward="true" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
-          <folding />
+        <state relative-caret-position="21">
+          <caret line="32" column="44" lean-forward="false" selection-start-line="32" selection-start-column="44" selection-end-line="32" selection-end-column="44" />
+          <folding>
+            <element signature="method#act#0;class#GameView#0" expanded="false" />
+            <element signature="method#debugAI#0;class#GameView#0" expanded="false" />
+            <element signature="method#calculateNewMapViewport#0;class#GameView#0" expanded="false" />
+            <element signature="method#dispose#0;class#GameView#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
