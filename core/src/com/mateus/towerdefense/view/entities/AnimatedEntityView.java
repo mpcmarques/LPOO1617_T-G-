@@ -34,14 +34,13 @@ public abstract class AnimatedEntityView extends EntityView {
      * Updates the view.
      *
      * @param model the model used to update this view.
+     * @param deltaTime The current time.
      */
-    @Override
-    public void update(EntityModel model) {
+    public void update(EntityModel model, float deltaTime){
         super.update(model);
 
-        stateTime += Gdx.graphics.getDeltaTime();
+        stateTime += deltaTime;
 
-        // change texture region
         if (animation != null)
             getSprite().setRegion(animation.getKeyFrame(stateTime, true));
     }

@@ -162,7 +162,7 @@ public class GameView extends AbstractStage {
 
             getGame().getBatch().setProjectionMatrix(getCamera().combined);
             getGame().getBatch().begin();
-            drawEntities();
+            drawEntities(delta);
             getGame().getBatch().end();
 
             if (DEBUG_MODE) {
@@ -210,8 +210,9 @@ public class GameView extends AbstractStage {
 
     /**
      * Draws the entities to the screen.
+     * @param delta Delta time.
      */
-    private void drawEntities() {
+    private void drawEntities(float delta) {
         // update than draw entities
         // towers
         for (TowerModel towerModel : model.getTowerModels()) {
@@ -221,7 +222,7 @@ public class GameView extends AbstractStage {
 
         // monsters
         for (MonsterModel monsterModel : getModel().getMonsterModels()) {
-            monsterView.update(monsterModel);
+            monsterView.update(monsterModel, delta);
             monsterView.draw(getGame().getBatch());
         }
 
