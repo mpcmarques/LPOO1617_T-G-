@@ -33,11 +33,11 @@ All actors were divided between a model, a controller that handles physics an AI
 For utility functions I used static classes with static functions.
 
 ##### Major difficulties:
- The major difficulty and the most painful thing to work on was LibGDX-AI, it took me a lot of time to get it going since the documentation is horrible with no examples and most of the things you have to discover by reverse engineering.
-    Another difficulty was using the MVC pattern instead of ECS because of unity testing, and made appear a lot of bugs. 
+ The major difficulty and the most painful thing to work on was LibGDX-AI, it took me a lot of time to get it going since the documentation it's not that good with no examples and most of the things you have to discover by reverse engineering.
+    Another difficulty was using the MVC pattern instead of ECS due to make it easy unit testing, it made appear bugs in the view.
       
 ##### Distribution among team members:
-   I made it all by myself, since I am a TE student.
+   I made it all by myself.
    
 ### User Manual
 ![alt text](/images/manual.png)
