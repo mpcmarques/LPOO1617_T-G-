@@ -40,9 +40,9 @@ public class Gdx2dBody {
         // Create ground fixture
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.density = .5f;      // how heavy is the ground
-        fixtureDef.friction =  .5f;    // how slippery is the ground
-        fixtureDef.restitution =  .5f; // how bouncy is the ground
+        fixtureDef.density = 1f;      // how heavy is the ground
+        fixtureDef.friction =  1f;    // how slippery is the ground
+        fixtureDef.restitution =  1f; // how bouncy is the ground
         fixtureDef.filter.categoryBits =   cBits;     // It is
         fixtureDef.filter.maskBits =    mBits;       // Collides with
 
@@ -89,9 +89,9 @@ public class Gdx2dBody {
         // Create ground fixture
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = rectangle;
-        fixtureDef.density = .5f;      // how heavy is the ground
-        fixtureDef.friction =  .5f;    // how slippery is the ground
-        fixtureDef.restitution =  .5f; // how bouncy is the ground
+        fixtureDef.density = 1f;      // how heavy is the ground
+        fixtureDef.friction =  1f;    // how slippery is the ground
+        fixtureDef.restitution =  1f; // how bouncy is the ground
         fixtureDef.filter.categoryBits =   cBits;     // It is
         fixtureDef.filter.maskBits =    mBits;       // Collides with
 
@@ -149,5 +149,14 @@ public class Gdx2dBody {
         rectangle.dispose();
 
         return body;
+    }
+
+    /**
+     * Mark a body as a sensor.
+     * @param body Body to mark as a sensor.
+     */
+    public static void markAsSensor(Body body){
+        for (Fixture fix: body.getFixtureList())
+            fix.setSensor(true);
     }
 }

@@ -11,7 +11,7 @@ public class DesktopLauncher {
         config.title = "Tower Defense";
         config.height = 720;
         config.width = 1080;
-        //config.useHDPI = true;
+        config.useHDPI = true;
         //config.fullscreen = true; //force fullscreen
         new LwjglApplication(new TowerDefenseGame(), config);
     }

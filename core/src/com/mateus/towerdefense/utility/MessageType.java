@@ -6,7 +6,7 @@ package com.mateus.towerdefense.utility;
 public final class MessageType {
     private MessageType(){}
 
-    public static final int GO_DOWN = 0;
+    public static final int TARGET_MONSTER = 0;
     public static final int GO_UP = 1;
     public static final int GO_LEFT = 2;
     public static final int GO_RIGHT = 3;

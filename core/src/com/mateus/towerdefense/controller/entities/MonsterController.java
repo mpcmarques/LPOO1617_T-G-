@@ -37,7 +37,7 @@ public class MonsterController extends SteerableEntityController {
         super(world, model,
                 Gdx2dBody.createRound(world, model.getX(), model.getY(), 0.4f, false,
                         Constants.BIT_MONSTER,
-                        (short) (Constants.BIT_ARROW | Constants.BIT_MONSTER)),
+                        (short) (Constants.BIT_ARROW | Constants.BIT_MONSTER | Constants.BIT_TOWER_SENSOR)),
                 0.5f,
                 false);
 

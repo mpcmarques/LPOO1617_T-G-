@@ -10,6 +10,7 @@ public class TowerModel extends EntityModel {
     private float currentAttackSeconds;
     private int attackDamage;
     private int price;
+    private MonsterModel target;
 
     /**
      * Constructs a tower model with a position and a rotation.
@@ -62,6 +63,22 @@ public class TowerModel extends EntityModel {
      */
     public float getRange() {
         return range;
+    }
+
+    /**
+     * Set tower target.
+     * @param target Monster target.
+     */
+    public void setTarget(MonsterModel target) {
+        this.target = target;
+    }
+
+    /**
+     *
+     * @return The tower target.
+     */
+    public MonsterModel getTarget() {
+        return target;
     }
 
     /**

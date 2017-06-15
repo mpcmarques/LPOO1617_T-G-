@@ -30,7 +30,7 @@ public class GameView extends AbstractStage {
     /**
      * If it is true, will debug the view.
      */
-    private final boolean DEBUG_MODE = false;
+    private final boolean DEBUG_MODE = true;
 
     /**
      * The model drawn by this screen
@@ -167,7 +167,7 @@ public class GameView extends AbstractStage {
 
             if (DEBUG_MODE) {
                 debugRenderer.render(controller.getWorld(), ((OrthographicCamera) getCamera()).combined);
-                debugAI(delta);
+                //debugAI(delta);
             }
         } else {
             backgroundMusic.stop();

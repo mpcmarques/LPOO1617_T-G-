@@ -26,7 +26,7 @@ public class GameContactListener implements ContactListener {
         if (entityModelA instanceof PlayerModel && entityModelB instanceof TowerModel) {
                 ((PlayerModel) fixtureA.getBody().getUserData()).setCanBuild(false);
         }
-        else if (entityModelA instanceof  TowerModel && entityModelB instanceof  PlayerModel){
+        else if (entityModelA instanceof TowerModel && entityModelB instanceof  PlayerModel){
                 ((PlayerModel) fixtureB.getBody().getUserData()).setCanBuild(false);
         }
         else if (entityModelA instanceof CollisionModel && entityModelB instanceof PlayerModel){
@@ -34,6 +34,13 @@ public class GameContactListener implements ContactListener {
         }
         else if (entityModelA instanceof PlayerModel && entityModelB instanceof CollisionModel) {
                 ((PlayerModel) fixtureA.getBody().getUserData()).setCanBuild(false);
+        }
+
+        else if (entityModelA instanceof TowerRangeModel && entityModelB instanceof MonsterModel){
+            handleTowerTarget((TowerRangeModel)entityModelA, (MonsterModel)entityModelB);
+        }
+        else if (entityModelA instanceof  MonsterModel && entityModelB instanceof  TowerRangeModel){
+            handleTowerTarget((TowerRangeModel)entityModelB, (MonsterModel)entityModelA);
         }
 
         /* ARROW */
@@ -85,6 +92,15 @@ public class GameContactListener implements ContactListener {
     private void handleArrowHit(ArrowModel arrow, MonsterModel monster) {
         arrow.setArrived(true);
         monster.receivedDamage(arrow.getDamage());
+    }
+
+    /**
+     * Handles when a monster enters in the tower range radius.
+     * @param monsterModel Monster that entered in the tower range radius.
+     * @param towerRangeModel Tower Range model that belongs to the body.
+     */
+    private void handleTowerTarget(TowerRangeModel towerRangeModel, MonsterModel monsterModel){
+        towerRangeModel.getTowerModel().setTarget(monsterModel);
     }
 
     @Override
