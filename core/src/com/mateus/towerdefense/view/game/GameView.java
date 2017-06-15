@@ -221,8 +221,9 @@ public class GameView extends AbstractStage {
         }
 
         // monsters
+        monsterView.updateStateTime(delta);
         for (MonsterModel monsterModel : getModel().getMonsterModels()) {
-            monsterView.update(monsterModel, delta);
+            monsterView.update(monsterModel);
             monsterView.draw(getGame().getBatch());
         }
 

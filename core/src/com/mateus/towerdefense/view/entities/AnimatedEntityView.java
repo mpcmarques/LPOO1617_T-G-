@@ -30,15 +30,8 @@ public abstract class AnimatedEntityView extends EntityView {
         this.animation = createAnimation(game, texture, frameCols, frameRows);
     }
 
-    /**
-     * Updates the view.
-     *
-     * @param model the model used to update this view.
-     * @param deltaTime The current time.
-     */
-    public void update(EntityModel model, float deltaTime){
-        super.update(model);
 
+    public void updateStateTime(float deltaTime){
         stateTime += deltaTime;
 
         if (animation != null)

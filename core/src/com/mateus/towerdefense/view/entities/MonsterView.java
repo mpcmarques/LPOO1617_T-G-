@@ -50,14 +50,9 @@ public class MonsterView extends AnimatedEntityView implements Telegraph {
         MessageManager.getInstance().addListener(this, MessageType.KILLED_MOB);
     }
 
-    /**
-     * Updates the view
-     *
-     * @param model Model that will update the view
-     */
     @Override
-    public void update(EntityModel model, float delta) {
-        super.update(model, delta);
+    public void update(EntityModel model) {
+        super.update(model);
 
         MonsterModel monsterModel = (MonsterModel) model;
 
