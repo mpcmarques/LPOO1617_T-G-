@@ -31,14 +31,10 @@ public abstract class AnimatedEntityView extends EntityView {
     }
 
     /**
-     * Updates the view.
-     *
-     * @param model the model used to update this view.
-     * @param deltaTime The current time.
+     * Animate the animated entity view.
+     * @param deltaTime Time passed.
      */
-    public void update(EntityModel model, float deltaTime){
-        super.update(model);
-
+    public void animate(float deltaTime){
         stateTime += deltaTime;
 
         if (animation != null)
