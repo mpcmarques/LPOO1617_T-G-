@@ -49,3 +49,5 @@ For utility functions I used static classes with static functions.
 > When the time to the next wave ends, a wave of monsters is summoned, each monster that completes the path damages the player health.
 > Build towers along the path to kill the monsters before they complete their path and win the game!
     
+### Code coverage
+![alt text](/images/coverage.png)
