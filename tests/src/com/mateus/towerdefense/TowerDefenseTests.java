@@ -43,8 +43,6 @@ public class TowerDefenseTests {
         gameController.update(1);
 
         assertEquals(100, ((PlayerModel) gameController.getPlayerController().getModel()).getGold());
-        assertEquals(GameStatus.RUNNING, gameModel.getStatus());
-
     }
 
     /**
